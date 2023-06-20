@@ -2,9 +2,9 @@ import { client } from "@api/client";
 import App from "@components/app/app";
 import AuthWrapper from "@components/auth-wrapper";
 import ReactQueryWrapper from "@components/react-query-wrapper";
-import { authOptions } from "@lib/auth";
+import { auth } from "@lib/auth";
 import { ColorRecordType, twindConfig } from "@lib/twind";
-import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 export const metadata = {
   title: "App",
@@ -21,10 +21,15 @@ export const metadata = {
 };
 
 async function Page() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
+
+  if (!session) {
+    redirect("/auth");
+  }
 
   const response = await client("/tasks").get({
-    jwtToken: session?.user.access_token!,
+    // @ts-expect-error
+    jwtToken: session.user.access_token,
     queryParameters: {
       pageSize: 100,
     },
@@ -35,7 +40,8 @@ async function Page() {
       <ReactQueryWrapper>
         <App
           initialData={response?.data ?? []}
-          token={session?.user.access_token!}
+          // @ts-expect-error
+          token={session.user.access_token}
         />
       </ReactQueryWrapper>
     </AuthWrapper>

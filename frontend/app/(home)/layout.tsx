@@ -1,11 +1,10 @@
 import Footer from "@components/home/footer";
 import Header from "@components/home/header";
-import { authOptions } from "@lib/auth";
-import { getServerSession } from "next-auth";
+import { auth } from "@lib/auth";
 import type { PropsWithChildren } from "react";
 
 async function Layout({ children }: PropsWithChildren) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   return (
     <>

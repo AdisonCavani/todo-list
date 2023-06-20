@@ -1,20 +1,23 @@
-import type { NextAuthOptions, TokenSet } from "next-auth";
-import type { JWT } from "next-auth/jwt";
-import CognitoProvider, { CognitoProfile } from "next-auth/providers/cognito";
-import GoogleProvider, { GoogleProfile } from "next-auth/providers/google";
+// @ts-nocheck
+import NextAuth from "next-auth";
+import Cognito, { CognitoProfile } from "next-auth/providers/cognito";
+import Google, { GoogleProfile } from "next-auth/providers/google";
 
-export const authOptions: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET,
+export const {
+  handlers: { GET, POST },
+  auth,
+} = NextAuth({
+  secret: process.env.AUTH_SECRET,
 
   pages: {
     signIn: "/auth",
   },
 
   providers: [
-    CognitoProvider({
-      clientId: process.env.COGNITO_CLIENT_ID,
-      clientSecret: process.env.COGNITO_CLIENT_SECRET,
-      issuer: process.env.COGNITO_ISSUER,
+    Cognito({
+      clientId: process.env.AUTH_COGNITO_ID,
+      clientSecret: process.env.AUTH_COGNITO_SECRET,
+      issuer: process.env.AUTH_COGNITO_ISSUER,
 
       profile(profile: CognitoProfile) {
         return {
@@ -26,9 +29,9 @@ export const authOptions: NextAuthOptions = {
         };
       },
     }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
 
       profile(profile: GoogleProfile) {
         return {
@@ -83,43 +86,4 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-};
-
-// @ts-expect-error
-async function refreshAccessToken(token: JWT): Promise<JWT> {
-  try {
-    const response = await fetch(`${process.env.COGNITO_URL}/oauth2/token`, {
-      method: "POST",
-      headers: new Headers({
-        "content-type": "application/x-www-form-urlencoded",
-      }),
-      body: Object.entries({
-        grant_type: "refresh_token",
-        client_id: process.env.COGNITO_CLIENT_ID,
-        client_secret: process.env.COGNITO_CLIENT_SECRET,
-        refresh_token: token.refresh_token,
-      })
-        .map(([k, v]) => `${k}=${v}`)
-        .join("&"),
-    });
-
-    const tokens: TokenSet = await response.json();
-
-    if (!response.ok) throw tokens;
-
-    return {
-      ...token, // Keep the previous token properties
-      access_token: tokens.access_token!,
-      expires_at: Math.floor(Date.now() / 1000 + (tokens.expires_in as number)),
-      // Fall back to old refresh token, but note that
-      // many providers may only allow using a refresh token once.
-      refresh_token: tokens.refresh_token ?? token.refresh_token,
-    };
-  } catch (error) {
-    console.error("Error refreshing access token", error);
-    return {
-      ...token,
-      error: "RefreshAccessTokenError" as const,
-    };
-  }
-}
+});

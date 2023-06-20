@@ -5,13 +5,12 @@ import { MenuEntries } from "@lib/data";
 import { cn } from "@lib/utils";
 import styles from "@styles/header.module.css";
 import { IconChecklist, IconMenu } from "@tabler/icons-react";
-import type { Session } from "next-auth";
 import { useState } from "react";
 import HeaderLink from "./header-link";
 import MobileMenu from "./mobile-menu";
 
 type Props = {
-  session: Session | null;
+  session: any; // TODO: fix
 };
 
 function Header({ session }: Props) {

@@ -16,6 +16,7 @@ function useCreateTaskMutation() {
   return useMutation({
     mutationFn: (req: CreateTaskReq) =>
       client("/tasks").post({
+        // @ts-expect-error
         jwtToken: session.data?.user.access_token!,
         body: req,
       }),
@@ -79,6 +80,7 @@ function useUpdateTaskMutation() {
   return useMutation({
     mutationFn: (req: UpdateTaskReq) =>
       client("/tasks").patch({
+        // @ts-expect-error
         jwtToken: session.data?.user.access_token!,
         body: req,
       }),
@@ -115,6 +117,7 @@ function useDeleteTaskMutation() {
   return useMutation({
     mutationFn: (req: string) =>
       client("/tasks/{id}", req).delete({
+        // @ts-expect-error
         jwtToken: session.data?.user.access_token!,
       }),
     async onMutate(taskId) {

@@ -21,11 +21,11 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from "@ui/dropdown-menu";
-import type { User } from "next-auth";
 import { signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
 
-function ProfileMenu({ firstName, lastName, email }: User) {
+// TODO: fix
+function ProfileMenu({ firstName, lastName, email }: any) {
   const { toast } = useToast();
   const { setTheme } = useTheme();
   const initials = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
