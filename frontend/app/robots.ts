@@ -1,6 +1,8 @@
 import { MetadataRoute } from "next";
 
-export default function robots(): MetadataRoute.Robots {
+export const runtime = "edge";
+
+function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
@@ -10,3 +12,5 @@ export default function robots(): MetadataRoute.Robots {
     sitemap: "https://todo.k1ng.dev/sitemap.xml",
   };
 }
+
+export default robots;
