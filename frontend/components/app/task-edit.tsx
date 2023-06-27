@@ -42,9 +42,9 @@ import Task from "./task";
 const TaskEdit = forwardRef<HTMLLIElement, TaskDto>((task, ref) => {
   const { title, description, dueDate, priority } = task;
 
-  const { mutate: deleteTask, isLoading: deleteTaskLoading } =
+  const { mutate: deleteTask, isPending: deleteTaskLoading } =
     useDeleteTaskMutation();
-  const { mutate: updateTask, isLoading: updateTaskLoading } =
+  const { mutate: updateTask, isPending: updateTaskLoading } =
     useUpdateTaskMutation();
 
   const [dialogTitle, setDialogTitle] = useState<string>(title);

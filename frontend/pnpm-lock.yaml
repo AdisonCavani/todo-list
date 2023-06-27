@@ -42,8 +42,11 @@ dependencies:
     specifier: ^2.23.0
     version: 2.23.0(react@18.2.0)
   '@tanstack/react-query':
-    specifier: ^4.29.19
-    version: 4.29.19(react-dom@18.2.0)(react@18.2.0)
+    specifier: 5.0.0-alpha.71
+    version: 5.0.0-alpha.71(react-dom@18.2.0)(react@18.2.0)
+  md5:
+    specifier: ^2.3.0
+    version: 2.3.0
   next:
     specifier: ^13.4.7
     version: 13.4.7(@babel/core@7.22.5)(react-dom@18.2.0)(react@18.2.0)
@@ -106,6 +109,9 @@ devDependencies:
   '@tailwindcss/typography':
     specifier: ^0.5.9
     version: 0.5.9(tailwindcss@3.3.2)
+  '@types/md5':
+    specifier: ^2.3.2
+    version: 2.3.2
   '@types/mdx':
     specifier: ^2.0.5
     version: 2.0.5
@@ -5120,15 +5126,15 @@ packages:
       tailwindcss: 3.3.2
     dev: true
 
-  /@tanstack/query-core@4.29.19:
-    resolution: {integrity: sha512-uPe1DukeIpIHpQi6UzIgBcXsjjsDaLnc7hF+zLBKnaUlh7jFE/A+P8t4cU4VzKPMFB/C970n/9SxtpO5hmIRgw==}
+  /@tanstack/query-core@5.0.0-alpha.70:
+    resolution: {integrity: sha512-JOq9ciu8647Au8rX0O9737kJ1IBAupLcI77eFc9RaubiZPr6DIurOtI2Lc4hoaJNHIofNBQUnEyifzDIHORsdA==}
     dev: false
 
-  /@tanstack/react-query@4.29.19(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-XiTIOHHQ5Cw1WUlHaD4fmVUMhoWjuNJlAeJGq7eM4BraI5z7y8WkZO+NR8PSuRnQGblpuVdjClQbDFtwxTtTUw==}
+  /@tanstack/react-query@5.0.0-alpha.71(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-QwP90/rqxYucCIJ/QAfBpg4ODF4ozKZIp145CElZCBkvvONGxY2Y6Z1mBPQXrync9Nb1fB4DEEVfpxEDcktogg==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react: ^18.0.0
+      react-dom: ^18.0.0
       react-native: '*'
     peerDependenciesMeta:
       react-dom:
@@ -5136,10 +5142,10 @@ packages:
       react-native:
         optional: true
     dependencies:
-      '@tanstack/query-core': 4.29.19
+      '@tanstack/query-core': 5.0.0-alpha.70
+      client-only: 0.0.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
   /@testing-library/dom@9.3.1:
@@ -5349,6 +5355,10 @@ packages:
 
   /@types/lodash@4.14.195:
     resolution: {integrity: sha512-Hwx9EUgdwf2GLarOjQp5ZH8ZmblzcbTBC2wtQWNKARBSxM9ezRIAUpeDTgoQRAFB0+8CNWXVA9+MaSOzOF3nPg==}
+    dev: true
+
+  /@types/md5@2.3.2:
+    resolution: {integrity: sha512-v+JFDu96+UYJ3/UWzB0mEglIS//MZXgRaJ4ubUPwOM0gvLc/kcQ3TWNYwENEK7/EcXGQVrW8h/XqednSjBd/Og==}
     dev: true
 
   /@types/mdast@3.0.11:
@@ -6358,7 +6368,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001508
-      electron-to-chromium: 1.4.441
+      electron-to-chromium: 1.4.442
       node-releases: 2.0.12
       update-browserslist-db: 1.0.11(browserslist@4.21.9)
 
@@ -6512,6 +6522,10 @@ packages:
 
   /character-reference-invalid@2.0.1:
     resolution: {integrity: sha512-iBZ4F4wRbyORVsu0jPV7gXkOsGYjGHPmAyv+HiHG8gi5PtC9KI2j1+v8/tlibRvjoWX027ypmG/n0HtO5t7unw==}
+    dev: false
+
+  /charenc@0.0.2:
+    resolution: {integrity: sha512-yrLQ/yVUFXkzg7EDQsPieE/53+0RlaWTs+wBrvW36cyilJ2SaDWfl4Yj7MtLTXleV9uEKefbAGUPv2/iWSooRA==}
     dev: false
 
   /chokidar@3.5.3:
@@ -6873,6 +6887,10 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
     dev: true
+
+  /crypt@0.0.2:
+    resolution: {integrity: sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==}
+    dev: false
 
   /crypto-browserify@3.12.0:
     resolution: {integrity: sha512-fz4spIh+znjO2VjL+IdhEpRJ3YN6sMzITSBijk6FK2UvTqruSQW+/cCZTSNsMiZNvUeq0CqurF+dAbyiGOY6Wg==}
@@ -7283,8 +7301,8 @@ packages:
     dependencies:
       jake: 10.8.7
 
-  /electron-to-chromium@1.4.441:
-    resolution: {integrity: sha512-LlCgQ8zgYZPymf5H4aE9itwiIWH4YlCiv1HFLmmcBeFYi5E+3eaIFnjHzYtcFQbaKfAW+CqZ9pgxo33DZuoqPg==}
+  /electron-to-chromium@1.4.442:
+    resolution: {integrity: sha512-RkrZF//Ya+0aJq2NM3OdisNh5ZodZq1rdXOS96G8DdDgpDKqKE81yTbbQ3F/4CKm1JBPsGu1Lp/akkna2xO06Q==}
 
   /elliptic@6.5.4:
     resolution: {integrity: sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ==}
@@ -8898,6 +8916,10 @@ packages:
       call-bind: 1.0.2
       has-tostringtag: 1.0.0
 
+  /is-buffer@1.1.6:
+    resolution: {integrity: sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==}
+    dev: false
+
   /is-buffer@2.0.5:
     resolution: {integrity: sha512-i2R6zNFDwgEHJyQUtJEk0XFi1i0dPFn/oqjK3/vPCcDeJvW5NQ83V8QbicfF1SupOaB0h8ntgBC2YiE7dfyctQ==}
     engines: {node: '>=4'}
@@ -9652,6 +9674,14 @@ packages:
       inherits: 2.0.4
       safe-buffer: 5.2.1
     dev: true
+
+  /md5@2.3.0:
+    resolution: {integrity: sha512-T1GITYmFaKuO91vxyoQMFETst+O71VUPEU3ze5GNzDm0OWdP8v1ziTaAEPUr/3kLsY3Sftgz242A1SetQiDL7g==}
+    dependencies:
+      charenc: 0.0.2
+      crypt: 0.0.2
+      is-buffer: 1.1.6
+    dev: false
 
   /mdast-util-definitions@4.0.0:
     resolution: {integrity: sha512-k8AJ6aNnUkB7IE+5azR9h81O5EQ/cTDXtWdMq9Kk5KcEW/8ritU5CeLg/9HhOC++nALHBlaogJ5jz0Ybk3kPMQ==}
@@ -13030,14 +13060,6 @@ packages:
       detect-node-es: 1.1.0
       react: 18.2.0
       tslib: 2.6.0
-    dev: false
-
-  /use-sync-external-store@1.2.0(react@18.2.0):
-    resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    dependencies:
-      react: 18.2.0
     dev: false
 
   /util-deprecate@1.0.2:

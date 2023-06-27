@@ -1,7 +1,7 @@
-import { createHash } from "crypto";
 import SettingsCard from "@components/app/settings/card";
 import { auth } from "@lib/auth";
 import { ExternalLink } from "@ui/ext-link";
+import md5 from "md5";
 
 async function Page() {
   const session = await auth();
@@ -32,12 +32,7 @@ async function Page() {
         title="Your Avatar"
         summary="This is your avatar."
         avatarFallback={`${firstName} ${lastName}`}
-        avatarSrc={
-          image ??
-          `https://www.gravatar.com/avatar/${createHash("md5")
-            .update(email!)
-            .digest("hex")}`
-        }
+        avatarSrc={image ?? `https://www.gravatar.com/avatar/${md5(email!)}`}
         hint={
           <>
             If your using Google, read{" "}

@@ -41,8 +41,8 @@ function Form() {
   const [date, setDate] = useState<Date | null>(null);
   const [priority, setPriority] = useState<TaskPriorityEnum>();
 
-  const { mutate, isLoading } = useCreateTaskMutation();
-  const submitDisabled = title.trim().length === 0 || isLoading;
+  const { mutate, isPending } = useCreateTaskMutation();
+  const submitDisabled = title.trim().length === 0 || isPending;
 
   const { toast } = useToast();
 
@@ -300,7 +300,7 @@ function Form() {
           size="xs"
           variant="outline"
         >
-          {isLoading && <IconLoader2 className="h-4 w-4 animate-spin" />}
+          {isPending && <IconLoader2 className="h-4 w-4 animate-spin" />}
           Add
         </Button>
       </div>

@@ -2,10 +2,12 @@ import "@styles/globals.css";
 import NProgressWrapper from "@components/nprogress-wrapper";
 import NextThemeProvider from "@components/theme-provider";
 import { fontInter } from "@lib/font";
-import { ColorRecordType, twindConfig } from "@lib/twind";
+import { twindConfig, type ColorRecordType } from "@lib/twind";
 import { cn } from "@lib/utils";
 import Script from "next/script";
 import type { PropsWithChildren } from "react";
+
+export const runtime = "edge";
 
 export const metadata = {
   title: {
