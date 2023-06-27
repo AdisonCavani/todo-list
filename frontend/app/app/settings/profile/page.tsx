@@ -1,11 +1,10 @@
 import { createHash } from "crypto";
 import SettingsCard from "@components/app/settings/card";
-import { authOptions } from "@lib/auth";
+import { auth } from "@lib/auth";
 import { ExternalLink } from "@ui/ext-link";
-import { getServerSession } from "next-auth";
 
 async function Page() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const { email, firstName, lastName, image } = session!.user;
 
   return (
@@ -16,7 +15,7 @@ async function Page() {
         summary="This is your email address."
         hint="This value cannot be changed. It's your unique identifier."
         inputDisabled
-        inputValue={email}
+        inputValue={email!}
       />
 
       <SettingsCard
@@ -36,7 +35,7 @@ async function Page() {
         avatarSrc={
           image ??
           `https://www.gravatar.com/avatar/${createHash("md5")
-            .update(email)
+            .update(email!)
             .digest("hex")}`
         }
         hint={
