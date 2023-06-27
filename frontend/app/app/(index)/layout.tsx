@@ -1,14 +1,10 @@
-import Header from "@components/app/header";
-import { Toaster } from "@ui/toaster";
 import type { PropsWithChildren } from "react";
 
 function Layout({ children }: PropsWithChildren) {
   return (
-    <>
-      <Header />
+    <main className="flex h-full w-full grow flex-col px-6 py-8">
       {children}
-      <Toaster />
-    </>
+    </main>
   );
 }
 

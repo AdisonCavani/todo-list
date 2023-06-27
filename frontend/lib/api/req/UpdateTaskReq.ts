@@ -1,3 +1,5 @@
+import { TaskPriorityEnum } from "@api/dtos/TaskDto";
+
 type UpdateTaskReq = {
   id: string;
   title: string;
@@ -5,6 +7,7 @@ type UpdateTaskReq = {
   dueDate?: string | null | undefined;
   isCompleted?: boolean | undefined;
   isImportant?: boolean | undefined;
+  priority?: TaskPriorityEnum;
 };
 
 export type { UpdateTaskReq };

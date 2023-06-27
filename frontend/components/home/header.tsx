@@ -24,7 +24,7 @@ function Header({ session }: Props) {
         <ul
           className={cn(
             "relative flex h-full items-center gap-x-6 px-8 text-sm  font-semibold",
-            "after:absolute after:inset-x-0 after:bottom-0 after:h-[1px] after:bg-white/10"
+            "after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10"
           )}
         >
           <li>

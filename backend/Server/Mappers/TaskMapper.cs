@@ -24,7 +24,8 @@ public static class TaskMapper
             Description = taskEntity.Description,
             DueDate = taskEntity.DueDate,
             IsCompleted = taskEntity.IsCompleted,
-            IsImportant = taskEntity.IsImportant
+            IsImportant = taskEntity.IsImportant,
+            Priority = taskEntity.Priority
         };
     }
 
@@ -37,7 +38,8 @@ public static class TaskMapper
             Description = req.Description,
             DueDate = req.DueDate,
             UpdatedAt = DateTime.UtcNow,
-            UserId = userId
+            UserId = userId,
+            Priority = req.Priority
         };
     }
 
@@ -52,7 +54,8 @@ public static class TaskMapper
             IsCompleted = req.IsCompleted ?? false,
             IsImportant = req.IsImportant ?? false,
             UpdatedAt = DateTime.UtcNow,
-            UserId = userId
+            UserId = userId,
+            Priority = req.Priority
         };
     }
 }

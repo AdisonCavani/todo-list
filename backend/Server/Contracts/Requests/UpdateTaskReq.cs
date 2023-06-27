@@ -1,4 +1,6 @@
-﻿namespace Server.Contracts.Requests;
+﻿using Server.Contracts.Entities;
+
+namespace Server.Contracts.Requests;
 
 public class UpdateTaskReq
 {
@@ -8,4 +10,5 @@ public class UpdateTaskReq
     public DateOnly? DueDate { get; set; }
     public bool? IsCompleted { get; set; }
     public bool? IsImportant { get; set; }
+    public TaskPriorityEnum Priority { get; set; }
 }

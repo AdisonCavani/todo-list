@@ -1,10 +1,10 @@
 "use client";
 
 import { client } from "@api/client";
-import { TaskDto } from "@api/dtos/TaskDto";
-import { queryKeys } from "@hooks/query";
-import { SortingOptions, sortMethods } from "@lib/sort";
-import { TaskType } from "@lib/types";
+import type { TaskDto } from "@api/dtos/TaskDto";
+import { queryKeys } from "@lib/hooks/query";
+import { sortMethods, type SortingOptions } from "@lib/sort";
+import type { TaskType } from "@lib/types";
 import { useQuery } from "@tanstack/react-query";
 import {
   Accordion,
@@ -16,7 +16,7 @@ import { useState } from "react";
 import FlipMove from "react-flip-move";
 import Form from "./form";
 import Sort from "./sort";
-import Task from "./task";
+import TaskEdit from "./task-edit";
 
 type Props = {
   initialData: TaskDto[];
@@ -71,8 +71,8 @@ function App({ initialData, token }: Props) {
       {notFinishedTasks.length > 0 && (
         <ul className="relative flex flex-col gap-y-2">
           <FlipMove typeName={null}>
-            {notFinishedTasks.map((task: TaskType) => (
-              <Task key={task.renderId ?? task.id} {...task} />
+            {notFinishedTasks.map(({ renderId, ...task }: TaskType) => (
+              <TaskEdit key={renderId ?? task.id} {...task} />
             ))}
           </FlipMove>
         </ul>
@@ -92,8 +92,8 @@ function App({ initialData, token }: Props) {
             <AccordionContent>
               <ul className="relative flex flex-col gap-y-2">
                 <FlipMove typeName={null}>
-                  {finishedTasks.map((task: TaskType) => (
-                    <Task key={task.renderId ?? task.id} {...task} />
+                  {finishedTasks.map(({ renderId, ...task }: TaskType) => (
+                    <TaskEdit key={renderId ?? task.id} {...task} />
                   ))}
                 </FlipMove>
               </ul>

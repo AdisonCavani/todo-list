@@ -1,5 +1,5 @@
 import { useTheme } from "next-themes";
-import React, { useEffect } from "react";
+import { memo, useEffect } from "react";
 
 const Theme = ({ theme }: { theme: "light" | "dark" }) => {
   const { setTheme } = useTheme();
@@ -11,4 +11,4 @@ const Theme = ({ theme }: { theme: "light" | "dark" }) => {
   return null;
 };
 
-export default React.memo(Theme);
+export default memo(Theme);

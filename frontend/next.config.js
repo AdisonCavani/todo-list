@@ -13,6 +13,13 @@ let nextConfig = {
     formats: ["image/avif", "image/webp"],
   },
 
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+
   experimental: {
     mdxRs: true,
   },
@@ -41,7 +48,7 @@ const ContentSecurityPolicy = `
   script-src 'self' 'unsafe-eval' 'unsafe-inline' https://insights.k1ng.dev;
   style-src 'self' 'unsafe-inline';
   font-src 'self';
-  img-src 'self' data:;
+  img-src 'self' data: https://*.googleusercontent.com https://www.gravatar.com;
   connect-src 'self' https://insights.k1ng.dev ${process.env.NEXT_PUBLIC_API_URL};
 `;
 

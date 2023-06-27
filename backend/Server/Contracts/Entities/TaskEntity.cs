@@ -14,4 +14,5 @@ public class TaskEntity
     [JsonPropertyName("due_date")] public DateOnly? DueDate { get; set; }
     [JsonPropertyName("is_completed")] public bool IsCompleted { get; set; }
     [JsonPropertyName("is_important")] public bool IsImportant { get; set; }
+    [JsonPropertyName("priority")] public TaskPriorityEnum Priority { get; set; }
 }

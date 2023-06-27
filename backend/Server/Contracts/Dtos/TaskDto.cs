@@ -1,4 +1,6 @@
-﻿namespace Server.Contracts.Dtos;
+﻿using Server.Contracts.Entities;
+
+namespace Server.Contracts.Dtos;
 
 public class TaskDto
 {
@@ -10,4 +12,5 @@ public class TaskDto
     public DateOnly? DueDate { get; set; }
     public bool IsCompleted { get; set; }
     public bool? IsImportant { get; set; }
+    public TaskPriorityEnum Priority { get; set; }
 }

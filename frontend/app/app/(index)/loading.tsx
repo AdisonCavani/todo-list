@@ -39,7 +39,7 @@ function Loading() {
       </div>
 
       <ul className="flex flex-col gap-y-2">
-        {[...Array(8).keys()].map((index) => (
+        {[...Array(7).keys()].map((index) => (
           <li
             key={index}
             className="flex flex-row items-center gap-x-2 rounded-md bg-secondary px-4 shadow-ms"

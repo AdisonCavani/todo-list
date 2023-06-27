@@ -45,3 +45,6 @@ public/worker-*.js.map
 
 # storybook
 storybook-static
+
+# vs-code
+.vscode/launch.json

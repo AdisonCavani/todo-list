@@ -2,7 +2,7 @@ import { client } from "@api/client";
 import type { TaskDto } from "@api/dtos/TaskDto";
 import type { CreateTaskReq } from "@api/req/CreateTaskReq";
 import type { UpdateTaskReq } from "@api/req/UpdateTaskReq";
-import { useToast } from "@hooks/use-toast";
+import { useToast } from "@lib/hooks/use-toast";
 import { TaskType } from "@lib/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
@@ -31,6 +31,7 @@ function useCreateTaskMutation() {
         updatedAt: new Date().toISOString(),
         isCompleted: false,
         isImportant: false,
+        priority: data.priority ?? 0,
         ...data,
       };
 

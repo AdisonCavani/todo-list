@@ -23,6 +23,12 @@ function sortTasksByDueDate(a: TaskDto, b: TaskDto): number {
 }
 
 function sortTasksByImportance(a: TaskDto, b: TaskDto): number {
+  // Priority
+  if (a.priority > b.priority) return 1;
+
+  if (b.priority > a.priority) return -1;
+
+  // Importance
   if (a.isImportant && !b.isImportant) return 1;
 
   if (!a.isImportant && b.isImportant) return -1;

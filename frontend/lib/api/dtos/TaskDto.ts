@@ -7,6 +7,9 @@ type TaskDto = {
   isImportant: boolean;
   description?: string | null | undefined;
   dueDate?: string | null | undefined;
+  priority: TaskPriorityEnum;
 };
 
-export type { TaskDto };
+type TaskPriorityEnum = 0 | 1 | 2 | 3;
+
+export type { TaskDto, TaskPriorityEnum };

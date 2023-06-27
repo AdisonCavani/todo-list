@@ -1,8 +1,10 @@
 "use client";
 
-import { useCreateTaskMutation } from "@hooks/query";
-import { useToast } from "@hooks/use-toast";
+import { TaskPriorityEnum } from "@api/dtos/TaskDto";
 import { addDays, getShortDayName } from "@lib/date";
+import { getPriorityColor, getPriorityText } from "@lib/helpers";
+import { useCreateTaskMutation } from "@lib/hooks/query";
+import { useToast } from "@lib/hooks/use-toast";
 import {
   IconBell,
   IconCalendar,
@@ -10,6 +12,8 @@ import {
   IconCalendarEvent,
   IconCalendarPlus,
   IconCalendarStats,
+  IconFlag2,
+  IconFlag2Filled,
   IconLoader2,
   IconRepeat,
   IconTrash,
@@ -35,6 +39,7 @@ import DateComponent from "./date";
 function Form() {
   const [title, setTitle] = useState<string>("");
   const [date, setDate] = useState<Date | null>(null);
+  const [priority, setPriority] = useState<TaskPriorityEnum>();
 
   const { mutate, isLoading } = useCreateTaskMutation();
   const submitDisabled = title.trim().length === 0 || isLoading;
@@ -45,10 +50,12 @@ function Form() {
     mutate({
       title: title,
       dueDate: date?.toISOString().split("T")[0],
+      priority: priority,
     });
 
     setTitle("");
     setDate(null);
+    setPriority(undefined);
   }
 
   function handleNotSupportedFeature() {
@@ -106,7 +113,7 @@ function Form() {
                 </TooltipTrigger>
 
                 <TooltipContent side="bottom" sideOffset={10}>
-                  <p>Add due date</p>
+                  <p>Due date</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -218,7 +225,75 @@ function Form() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
+
+          <DropdownMenu>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      aria-label="Priority"
+                      variant={priority ? "outline" : "ghost"}
+                      size="xxs"
+                      className="h-7"
+                    >
+                      {priority ? (
+                        <>
+                          <IconFlag2Filled
+                            size={20}
+                            className={getPriorityColor(priority)}
+                          />
+                          <span>{getPriorityText(priority)}</span>
+                        </>
+                      ) : (
+                        <IconFlag2 size={20} />
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+                </TooltipTrigger>
+
+                <TooltipContent side="bottom" sideOffset={10}>
+                  <p>Priority</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <DropdownMenuContent>
+              <DropdownMenuLabel>Priority</DropdownMenuLabel>
+
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem onClick={() => setPriority(3)}>
+                <IconFlag2Filled className="h-5 w-5 text-red-500" />
+                <div className="flex w-full justify-between">
+                  <span>Priority 1</span>
+                </div>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem onClick={() => setPriority(2)}>
+                <IconFlag2Filled className="h-5 w-5 text-orange-400" />
+                <div className="flex w-full justify-between">
+                  <span>Priority 2</span>
+                </div>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem onClick={() => setPriority(1)}>
+                <IconFlag2Filled className="h-5 w-5 text-blue-500" />
+                <div className="flex w-full justify-between">
+                  <span>Priority 3</span>
+                </div>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem onClick={() => setPriority(undefined)}>
+                <IconFlag2 className="h-5 w-5" />
+                <div className="flex w-full justify-between">
+                  <span>Priority 4</span>
+                </div>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
+
         <Button
           disabled={submitDisabled}
           onClick={handleOnSubmit}

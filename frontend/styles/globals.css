@@ -19,13 +19,13 @@
     --border: 220 13% 91%;
     --input: 214.3 31.8% 91.4%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 0 0% 9%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 0 0% 100%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --accent: 210 40% 96.1%;
+    --accent: 0 0% 92%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 96% 89%;
@@ -64,10 +64,7 @@
     --destructive: 0 96% 89%;
     --destructive-foreground: 0 74% 42%;
 
-    /* TODO: change this color */
     --ring: 217 90% 80%;
-
-    --radius: 0.5rem;
   }
 }
 

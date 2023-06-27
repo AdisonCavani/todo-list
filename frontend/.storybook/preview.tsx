@@ -1,5 +1,5 @@
 import type { Preview } from "@storybook/react";
-import "../app/globals.css";
+import "@styles/globals.css";
 import { ThemeProvider } from "next-themes";
 import React from "react";
 import { fontInter } from "../lib/font";
