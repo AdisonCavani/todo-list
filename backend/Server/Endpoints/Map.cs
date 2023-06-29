@@ -6,6 +6,34 @@ namespace Server.Endpoints;
 
 public static class Map
 {
+    private static void MapLabelsApi(this RouteGroupBuilder group)
+    {
+        group.MapPost("/", Labels.Create.HandleAsync)
+            .RequireAuthorization()
+            .AddEndpointFilter<ValidationFilter<CreateLabelReq>>()
+            .WithOpenApi(Labels.Create.OpenApi);
+
+        group.MapGet("/{id}", Labels.Get.HandleAsync)
+            .RequireAuthorization()
+            .WithOpenApi(Labels.Get.OpenApi);
+
+        group.MapDelete("/{id}", Labels.Delete.HandleAsync)
+            .RequireAuthorization()
+            .WithOpenApi(Labels.Delete.OpenApi);
+
+        group.MapGet("/", Labels.List.HandleAsync)
+            .RequireAuthorization()
+            .AddEndpointFilter<ValidationFilter<PaginatedReq>>()
+            .WithOpenApi(Labels.List.OpenApi);
+
+        group.MapPatch("/", Labels.Update.HandleAsync)
+            .RequireAuthorization()
+            .AddEndpointFilter<ValidationFilter<UpdateLabelReq>>()
+            .WithOpenApi(Labels.Update.OpenApi);
+
+        group.WithTags("Label Endpoint");
+    }
+    
     private static void MapTasksApi(this RouteGroupBuilder group)
     {
         group.MapPost("/", Tasks.Create.HandleAsync)
@@ -40,6 +68,7 @@ public static class Map
             .WithTags("Health Endpoint")
             .WithOpenApi(Health.OpenApi);
         
+        app.MapGroup(ApiRoutes.Labels).MapLabelsApi();
         app.MapGroup(ApiRoutes.Tasks).MapTasksApi();
     }
 }

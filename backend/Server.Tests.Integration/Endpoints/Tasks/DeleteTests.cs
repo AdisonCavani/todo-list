@@ -15,7 +15,7 @@ public class DeleteTests : IAsyncLifetime
     private readonly TasksApiFactory _factory;
     private readonly HttpClient _httpClient;
 
-    private static readonly string TasksTableName =
+    private static readonly string TableName =
         Environment.GetEnvironmentVariable(EnvVariables.TableName) ??
         throw new Exception(
             $"{nameof(EnvVariables.TableName)} env variable cannot be null");
@@ -48,7 +48,7 @@ public class DeleteTests : IAsyncLifetime
 
         var createItemReq = new PutItemRequest
         {
-            TableName = TasksTableName,
+            TableName = TableName,
             Item = DynamoDbMapper.ToDict(entity)
         };
 
@@ -63,5 +63,5 @@ public class DeleteTests : IAsyncLifetime
     
     public Task InitializeAsync() => Task.CompletedTask;
 
-    public async Task DisposeAsync() => await Database.ResetAsync(_factory, TasksTableName);
+    public async Task DisposeAsync() => await Database.ResetAsync(_factory, TableName);
 }

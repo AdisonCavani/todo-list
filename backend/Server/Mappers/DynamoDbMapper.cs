@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
-using Server.Contracts.Entities;
 
 namespace Server.Mappers;
 
@@ -16,11 +16,11 @@ public static class DynamoDbMapper
         return itemAsAttrib;
     }
 
-    public static TaskEntity? FromDict(Dictionary<string, AttributeValue> item)
+    public static TItem? FromDict<TItem>(Dictionary<string, AttributeValue> item, JsonTypeInfo<TItem> jsonTypeInfo)
     {
         var itemAsDoc = Document.FromAttributeMap(item);
-        var taskEntity = JsonSerializer.Deserialize(itemAsDoc.ToJson(), SerializationContext.Default.TaskEntity);
+        var value = JsonSerializer.Deserialize(itemAsDoc.ToJson(), jsonTypeInfo);
 
-        return taskEntity;
+        return value;
     }
 }

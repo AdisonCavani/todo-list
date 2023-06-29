@@ -7,6 +7,7 @@ public static class Services
 {
     public static void AddServices(this IServiceCollection services, IWebHostEnvironment environment)
     {
+        services.AddSingleton<ILabelRepository, LabelRepository>();
         services.AddSingleton<ITaskRepository, TaskRepository>();
         
         var config = environment.IsProduction()

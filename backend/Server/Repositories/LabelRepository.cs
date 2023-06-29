@@ -11,7 +11,7 @@ using Server.Startup;
 
 namespace Server.Repositories;
 
-public class TaskRepository : ITaskRepository
+public class LabelRepository : ILabelRepository
 {
     private readonly IAmazonDynamoDB _client;
 
@@ -20,14 +20,14 @@ public class TaskRepository : ITaskRepository
         throw new Exception(
             $"{nameof(EnvVariables.TableName)} env variable cannot be null");
 
-    public TaskRepository(IAmazonDynamoDB client)
+    public LabelRepository(IAmazonDynamoDB client)
     {
         _client = client;
     }
-
-    public async Task<TaskDto?> CreateAsync(CreateTaskReq req, string userId, CancellationToken ct = default)
+    
+    public async Task<LabelDto?> CreateAsync(CreateLabelReq req, string userId, CancellationToken ct = default)
     {
-        var entity = req.ToTaskEntity(userId);
+        var entity = req.ToLabelEntity(userId);
 
         var createItemReq = new PutItemRequest
         {
@@ -40,18 +40,18 @@ public class TaskRepository : ITaskRepository
         if (response.HttpStatusCode != HttpStatusCode.OK)
             return null;
 
-        return entity.ToTaskDto();
+        return entity.ToLabelDto();
     }
 
-    public async Task<TaskDto?> GetAsync(Guid id, string userId, CancellationToken ct = default)
+    public async Task<LabelDto?> GetAsync(Guid id, string userId, CancellationToken ct = default)
     {
         var request = new GetItemRequest
         {
             TableName = TableName,
             Key = new()
             {
-                {TaskMapper.Pk, TaskMapper.GetPk(userId)},
-                {TaskMapper.Sk, TaskMapper.GetSk(id)}
+                {LabelMapper.Pk, LabelMapper.GetPk(userId)},
+                {LabelMapper.Sk, LabelMapper.GetSk(id)}
             }
         };
 
@@ -60,22 +60,22 @@ public class TaskRepository : ITaskRepository
         if (!response.IsItemSet)
             return null;
 
-        return DynamoDbMapper.FromDict(response.Item, SerializationContext.Default.TaskEntity)?.ToTaskDto();
+        return DynamoDbMapper.FromDict(response.Item, SerializationContext.Default.LabelEntity)?.ToLabelDto();
     }
 
-    public async Task<TaskDto?> UpdateAsync(UpdateTaskReq req, string userId, CancellationToken ct = default)
+    public async Task<LabelDto?> UpdateAsync(UpdateLabelReq req, string userId, CancellationToken ct = default)
     {
-        var entity = req.ToTaskEntity(userId);
+        var entity = req.ToLabelEntity(userId);
 
         var updateItemReq = new PutItemRequest
         {
             TableName = TableName,
             Item = DynamoDbMapper.ToDict(entity),
-            ConditionExpression = $"{TaskMapper.Pk} = :v_pk AND {TaskMapper.Sk} = :v_sk",
+            ConditionExpression = $"{LabelMapper.Pk} = :v_pk AND {LabelMapper.Sk} = :v_sk",
             ExpressionAttributeValues = new()
             {
-                {":v_pk", TaskMapper.GetPk(userId)},
-                {":v_sk", TaskMapper.GetSk(req.Id)}
+                {":v_pk", LabelMapper.GetPk(userId)},
+                {":v_sk", LabelMapper.GetSk(req.Id)}
             }
         };
 
@@ -86,7 +86,7 @@ public class TaskRepository : ITaskRepository
             if (response.HttpStatusCode != HttpStatusCode.OK)
                 return null;
 
-            return entity.ToTaskDto();
+            return entity.ToLabelDto();
         }
         catch (ConditionalCheckFailedException)
         {
@@ -101,8 +101,8 @@ public class TaskRepository : ITaskRepository
             TableName = TableName,
             Key = new()
             {
-                {TaskMapper.Pk, TaskMapper.GetPk(userId)},
-                {TaskMapper.Sk, TaskMapper.GetSk(id)}
+                {LabelMapper.Pk, LabelMapper.GetPk(userId)},
+                {LabelMapper.Sk, LabelMapper.GetSk(id)}
             },
             ReturnValues = ReturnValue.ALL_OLD
         };
@@ -111,7 +111,7 @@ public class TaskRepository : ITaskRepository
         return response.HttpStatusCode == HttpStatusCode.OK && response.Attributes.Count > 0;
     }
 
-    public async Task<PaginatedRes<TaskDto>> ListAsync(PaginatedReq req, string userId, CancellationToken ct = default)
+    public async Task<PaginatedRes<LabelDto>> ListAsync(PaginatedReq req, string userId, CancellationToken ct = default)
     {
         var exclusiveStartKey = string.IsNullOrWhiteSpace(req.PageKey)
             ? null
@@ -122,23 +122,23 @@ public class TaskRepository : ITaskRepository
             TableName = TableName,
             Limit = req.PageSize,
             ExclusiveStartKey = exclusiveStartKey,
-            KeyConditionExpression = $"{TaskMapper.Pk} = :v_pk",
+            KeyConditionExpression = $"{LabelMapper.Pk} = :v_pk",
             ExpressionAttributeValues = new()
             {
-                {":v_pk", TaskMapper.GetPk(userId)}
+                {":v_pk", LabelMapper.GetPk(userId)}
             }
         };
 
         var response = await _client.QueryAsync(queryRequest, ct);
 
-        var data = new List<TaskDto>();
+        var data = new List<LabelDto>();
 
         foreach (var item in response.Items)
         {
-            var entity = DynamoDbMapper.FromDict(item, SerializationContext.Default.TaskEntity);
+            var entity = DynamoDbMapper.FromDict(item, SerializationContext.Default.LabelEntity);
 
             if (entity is not null)
-                data.Add(entity.ToTaskDto());
+                data.Add(entity.ToLabelDto());
         }
 
         var nextPageKey = response.LastEvaluatedKey.Count == 0

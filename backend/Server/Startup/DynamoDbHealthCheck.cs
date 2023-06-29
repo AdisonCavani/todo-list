@@ -9,7 +9,7 @@ public class DynamoDbHealthCheck : IHealthCheck
 {
     private readonly IAmazonDynamoDB _client;
     
-    private static readonly string TasksTableName =
+    private static readonly string TableName =
         Environment.GetEnvironmentVariable(EnvVariables.TableName) ??
         throw new Exception(
             $"{nameof(EnvVariables.TableName)} env variable cannot be null");
@@ -23,7 +23,7 @@ public class DynamoDbHealthCheck : IHealthCheck
     {
         var request = new DescribeTableRequest
         {
-            TableName = TasksTableName
+            TableName = TableName
         };
         
         var response = await _client.DescribeTableAsync(request, ct);
