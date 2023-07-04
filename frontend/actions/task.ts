@@ -25,8 +25,6 @@ async function createTaskAction(
 
   const endTime = performance.now();
   console.warn(`Query took ${endTime - startTime} milliseconds`);
-
-  revalidatePath("/app");
 }
 
 async function toggleTaskCompletionAction({ id, isCompleted }: TaskType) {
