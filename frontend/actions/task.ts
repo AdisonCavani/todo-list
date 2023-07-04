@@ -11,6 +11,8 @@ async function createTaskAction(
   dueDate: Date | null,
   priority: "P1" | "P2" | "P3" | "P4"
 ) {
+  const startTime = performance.now();
+
   await db.insert(tasks).values({
     id: v4(),
     title: title,
@@ -20,6 +22,9 @@ async function createTaskAction(
     priority: priority,
     userId: "76855180",
   });
+
+  const endTime = performance.now();
+  console.warn(`Query took ${endTime - startTime} milliseconds`);
 
   revalidatePath("/app");
 }
