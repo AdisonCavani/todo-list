@@ -8,6 +8,20 @@
       "when": 1688412254971,
       "tag": "0000_medical_blackheart",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1688462014914,
+      "tag": "0001_friendly_justice",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1688468581441,
+      "tag": "0002_fast_shinobi_shaw",
+      "breakpoints": true
     }
   ]
 }

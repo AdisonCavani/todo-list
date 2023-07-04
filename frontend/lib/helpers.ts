@@ -3,28 +3,13 @@ import { cn } from "./utils";
 export const isUrlInternal = (href: string) =>
   href && (href.startsWith("/") || href.startsWith("#"));
 
-export function getPriorityText(priority: any, long?: boolean) {
-  const prefix = long ? "Priority " : "P";
-
+export function getPriorityColor(priority: "P4" | "P3" | "P2" | "P1") {
   switch (priority) {
-    case 1:
-      return prefix + 3;
-    case 2:
-      return prefix + 2;
-    case 3:
-      return prefix + 1;
-    default:
-      return "Set priority";
-  }
-}
-
-export function getPriorityColor(priority: any) {
-  switch (priority) {
-    case 1:
-      return cn("text-blue-500");
-    case 2:
+    case "P1":
+      return cn("text-red-500");
+    case "P2":
       return cn("text-orange-400");
     default:
-      return cn("text-red-500");
+      return cn("text-blue-500");
   }
 }

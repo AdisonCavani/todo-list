@@ -1,13 +1,12 @@
-type TaskDto = any;
+import type { TaskType } from "@db/schema";
 
-function sortTasksByTitle(a: TaskDto, b: TaskDto): number {
+function sortTasksByTitle(a: TaskType, b: TaskType): number {
   return a.title.localeCompare(b.title);
 }
 
-function sortTasksByDueDate(a: TaskDto, b: TaskDto): number {
-  // No due date - sort by updatedAt
-  if (!a.dueDate && !b.dueDate)
-    return Date.parse(a.updatedAt) - Date.parse(b.updatedAt);
+function sortTasksByDueDate(a: TaskType, b: TaskType): number {
+  // No due date - sort by createdAt
+  if (!a.dueDate && !b.dueDate) return sortTasksByCreationDate(a, b);
 
   // A has dueDate, but B does not
   if (a.dueDate && !b.dueDate) return -1;
@@ -16,13 +15,11 @@ function sortTasksByDueDate(a: TaskDto, b: TaskDto): number {
   if (!a.dueDate && b.dueDate) return 1;
 
   // Both have due date
-  const aDate = Date.parse(a.dueDate!);
-  const bDate = Date.parse(b.dueDate!);
 
-  return aDate - bDate;
+  return a.dueDate!.getTime() - b.dueDate!.getTime();
 }
 
-function sortTasksByImportance(a: TaskDto, b: TaskDto): number {
+function sortTasksByImportance(a: TaskType, b: TaskType): number {
   // Priority
   if (a.priority > b.priority) return 1;
 
@@ -36,8 +33,8 @@ function sortTasksByImportance(a: TaskDto, b: TaskDto): number {
   return sortTasksByDueDate(b, a);
 }
 
-function sortTasksByCreationDate(a: TaskDto, b: TaskDto): number {
-  return Date.parse(a.updatedAt) - Date.parse(b.updatedAt);
+function sortTasksByCreationDate(a: TaskType, b: TaskType): number {
+  return a.createdAt.getTime() - b.createdAt.getTime();
 }
 
 export const sortMethods = {

@@ -1,13 +1,32 @@
+import type { InferModel } from "drizzle-orm";
 import {
+  boolean,
+  date,
   datetime,
   index,
   int,
+  mysqlEnum,
   mysqlTable,
   text,
   timestamp,
   uniqueIndex,
   varchar,
 } from "drizzle-orm/mysql-core";
+
+export const tasks = mysqlTable("tasks", {
+  id: varchar("id", { length: 255 }).primaryKey().notNull(),
+  userId: varchar("userId", { length: 255 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
+  dueDate: date("due_date"),
+  isCompleted: boolean("is_completed").notNull(),
+  isImportant: boolean("is_important").notNull(),
+  priority: mysqlEnum("priority", ["P1", "P2", "P3", "P4"]).notNull(),
+});
+
+export type TaskType = InferModel<typeof tasks>;
 
 export const accounts = mysqlTable(
   "accounts",

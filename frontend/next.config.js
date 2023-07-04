@@ -22,6 +22,7 @@ let nextConfig = {
 
   experimental: {
     mdxRs: true,
+    serverActions: true,
   },
 
   headers() {
@@ -48,7 +49,7 @@ const ContentSecurityPolicy = `
   script-src 'self' 'unsafe-eval' 'unsafe-inline' https://insights.k1ng.dev;
   style-src 'self' 'unsafe-inline';
   font-src 'self';
-  img-src 'self' data: https://*.googleusercontent.com https://www.gravatar.com;
+  img-src 'self' data: https://avatars.githubusercontent.com https://*.googleusercontent.com;
   connect-src 'self' https://insights.k1ng.dev ${process.env.NEXT_PUBLIC_API_URL};
 `;
 
