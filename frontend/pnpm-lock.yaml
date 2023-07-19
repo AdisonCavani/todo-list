@@ -48,8 +48,8 @@ dependencies:
     specifier: ^2.26.0
     version: 2.26.0(react@18.2.0)
   '@tanstack/react-query':
-    specifier: 5.0.0-alpha.71
-    version: 5.0.0-alpha.71(react-dom@18.2.0)(react@18.2.0)
+    specifier: 5.0.0-alpha.86
+    version: 5.0.0-alpha.86(react-dom@18.2.0)(react@18.2.0)
   drizzle-orm:
     specifier: ^0.27.2
     version: 0.27.2(@planetscale/database@1.8.0)
@@ -4463,12 +4463,12 @@ packages:
       tailwindcss: 3.3.3
     dev: true
 
-  /@tanstack/query-core@5.0.0-alpha.70:
-    resolution: {integrity: sha512-JOq9ciu8647Au8rX0O9737kJ1IBAupLcI77eFc9RaubiZPr6DIurOtI2Lc4hoaJNHIofNBQUnEyifzDIHORsdA==}
+  /@tanstack/query-core@5.0.0-alpha.86:
+    resolution: {integrity: sha512-Z/ZFeZW7XvoR6AZYZOM/1Y6D/O4+9I0FAfBG7jQwtyhyOAppw6ib6BgQaOS8Vfqau7MLIIGhYuJQ7JgsLbHzMg==}
     dev: false
 
-  /@tanstack/react-query@5.0.0-alpha.71(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-QwP90/rqxYucCIJ/QAfBpg4ODF4ozKZIp145CElZCBkvvONGxY2Y6Z1mBPQXrync9Nb1fB4DEEVfpxEDcktogg==}
+  /@tanstack/react-query@5.0.0-alpha.86(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-WMVKYekBaNH2yGTCabthyI0h1RKWxHsAOLZ8rBF8BBB+t6OxB3p7Xt8UkRTnr6bspFrS2RReyIIduYtnrbEU3Q==}
     peerDependencies:
       react: ^18.0.0
       react-dom: ^18.0.0
@@ -4479,7 +4479,7 @@ packages:
       react-native:
         optional: true
     dependencies:
-      '@tanstack/query-core': 5.0.0-alpha.70
+      '@tanstack/query-core': 5.0.0-alpha.86
       client-only: 0.0.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
