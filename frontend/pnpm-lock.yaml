@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@ducanh2912/next-pwa':
-    specifier: ^9.2.1
-    version: 9.2.1(esbuild@0.18.11)(next@13.4.10)
+    specifier: ^9.3.0
+    version: 9.3.0(esbuild@0.18.11)(next@13.4.10)(webpack@5.88.1)
   '@mdx-js/loader':
     specifier: ^2.3.0
     version: 2.3.0(webpack@5.88.1)
@@ -1671,10 +1671,11 @@ packages:
     resolution: {integrity: sha512-cHgGezy2ojBFMaU6PZyBkksgFsg2CQ8IRN4mS7WdbA/Zv6xUK6fCNmpEWS/FftbxoA4B8Z0XGnuKsaTJEZsGgA==}
     dev: true
 
-  /@ducanh2912/next-pwa@9.2.1(esbuild@0.18.11)(next@13.4.10):
-    resolution: {integrity: sha512-oucSNTBMIWorSgDPyffsckBxDCvn23buLFfwdSwtQlKQXjg+L3fNXhj6vNKDzDXHvEimoQNP3Pn8xrl1s+5cdw==}
+  /@ducanh2912/next-pwa@9.3.0(esbuild@0.18.11)(next@13.4.10)(webpack@5.88.1):
+    resolution: {integrity: sha512-/Jle/1ekuDhzMiU+C6dgjjAdiW5c4RpHEciyIO4ZaUFzAbRmWR+Wz6lrJjJKHQTWq25tj8HOIrlMYELt22RU6Q==}
     peerDependencies:
       next: '>=11.0.0'
+      webpack: '>=5.9.0'
     dependencies:
       clean-webpack-plugin: 4.0.0(webpack@5.88.1)
       fast-glob: 3.3.0
@@ -1692,7 +1693,6 @@ packages:
       - esbuild
       - supports-color
       - uglify-js
-      - webpack-cli
     dev: false
 
   /@emotion/use-insertion-effect-with-fallbacks@1.0.1(react@18.2.0):
