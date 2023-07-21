@@ -95,8 +95,8 @@ devDependencies:
     specifier: ^4.1.0
     version: 4.1.0(prettier@3.0.0)
   '@next/bundle-analyzer':
-    specifier: ^13.4.10
-    version: 13.4.10
+    specifier: ^13.4.11
+    version: 13.4.11
   '@storybook/addon-a11y':
     specifier: ^7.1.0
     version: 7.1.0(react-dom@18.2.0)(react@18.2.0)
@@ -2346,8 +2346,8 @@ packages:
       tar-fs: 2.1.1
     dev: true
 
-  /@next/bundle-analyzer@13.4.10:
-    resolution: {integrity: sha512-QwjRH/x1coj8+2Q2suXKez01Irc/rZQXiZ7qE96jj/xR1C+zze6cEdlhWzMlsBFlLmazBhFeOb0PeK6r4dVImA==}
+  /@next/bundle-analyzer@13.4.11:
+    resolution: {integrity: sha512-RdwU8fF0gfxKOmJMw65Ol8t0YGJt7agnHC9caSJK4uYRkzmsZQ3ZYGxf67eMBTJSUzDrVb98qn3etNpNv3oa7Q==}
     dependencies:
       webpack-bundle-analyzer: 4.7.0
     transitivePeerDependencies:
