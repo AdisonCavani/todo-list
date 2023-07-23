@@ -15,8 +15,7 @@ function Footer({ locale }: Props) {
   ];
 
   const entries: MenuEntry[] = [
-    { name: locale.home.footer.analytics, href: "https://analytics.k1ng.dev" },
-    { name: locale.home.footer.health, href: "/health" },
+    { name: locale.home.footer.analytics, href: "https://insights.k1ng.dev" },
     ...menuEntries,
   ];
 
