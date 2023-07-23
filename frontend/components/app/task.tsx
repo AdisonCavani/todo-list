@@ -1,6 +1,7 @@
 "use client";
 
 import type { TaskType } from "@db/schema";
+import { addDays, getShortDayName } from "@lib/date";
 import { getPriorityColor, getPriorityText } from "@lib/helpers";
 import { useDeleteTaskMutation, useUpdateTaskMutation } from "@lib/hooks/query";
 import type { TaskPriorityEnum } from "@lib/types";
@@ -274,7 +275,9 @@ const Task = forwardRef<HTMLLIElement, Props>(({ locale, task }, ref) => {
                   <IconCalendar className="h-5 w-5" />
                   <div className="flex w-full justify-between">
                     <span>{locale.app.shared.today}</span>
-                    <span className="pl-8 text-neutral-500">Wed</span>
+                    <span className="pl-8 text-neutral-500">
+                      {getShortDayName(new Date())}
+                    </span>
                   </div>
                 </DropdownMenuItem>
 
@@ -288,7 +291,9 @@ const Task = forwardRef<HTMLLIElement, Props>(({ locale, task }, ref) => {
                   <IconCalendarDue className="h-5 w-5" />
                   <div className="flex w-full justify-between">
                     <span>{locale.app.shared.tomorrow}</span>
-                    <span className="pl-8 text-neutral-500">Thu</span>
+                    <span className="pl-8 text-neutral-500">
+                      {getShortDayName(addDays(new Date(), 1))}
+                    </span>
                   </div>
                 </DropdownMenuItem>
 
@@ -302,7 +307,9 @@ const Task = forwardRef<HTMLLIElement, Props>(({ locale, task }, ref) => {
                   <IconCalendarPlus className="h-5 w-5" />
                   <div className="flex w-full justify-between">
                     <span>{locale.app.shared.nextWeek}</span>
-                    <span className="pl-8 text-neutral-500">Mon</span>
+                    <span className="pl-8 text-neutral-500">
+                      {getShortDayName(addDays(new Date(), 7))}
+                    </span>
                   </div>
                 </DropdownMenuItem>
 
