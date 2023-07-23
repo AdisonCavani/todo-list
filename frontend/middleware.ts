@@ -1,4 +1,3 @@
-// TODO: add auth middleware
 import { match } from "@formatjs/intl-localematcher";
 import { auth } from "@lib/auth";
 import { i18n } from "i18n-config";
