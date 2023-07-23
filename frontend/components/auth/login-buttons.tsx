@@ -7,7 +7,11 @@ import { signIn } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
 
-function LoginButtons() {
+type Props = {
+  text: string;
+};
+
+function LoginButtons({ text }: Props) {
   const [loadingGithub, setLoadingGithub] = useState<boolean>(false);
   const [loadingGoogle, setLoadingGoogle] = useState<boolean>(false);
 
@@ -24,7 +28,7 @@ function LoginButtons() {
         loading={loadingGithub}
         icon={<IconBrandGithub size={20} />}
       >
-        Continue with Github
+        {text} Github
       </Button>
 
       {/* Google */}
@@ -47,7 +51,7 @@ function LoginButtons() {
           />
         }
       >
-        Continue with Google
+        {text} Google
       </Button>
     </>
   );

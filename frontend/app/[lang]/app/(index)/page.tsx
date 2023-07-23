@@ -5,7 +5,9 @@ import { tasks } from "@db/schema";
 import { db } from "@db/sql";
 import { auth } from "@lib/auth";
 import { twindConfig, type ColorRecordType } from "@lib/twind";
+import { getDictionary } from "dictionaries";
 import { eq } from "drizzle-orm";
+import type { LocaleParams } from "i18n-config";
 
 export const metadata = {
   title: "App",
@@ -21,17 +23,19 @@ export const metadata = {
   ],
 };
 
-async function Page() {
+async function Page({ params: { lang } }: LocaleParams) {
   const session = await auth();
   const response = await db
     .select()
     .from(tasks)
     .where(eq(tasks.userId, session!.user.id));
 
+  const locale = await getDictionary(lang);
+
   return (
     <AuthWrapper>
       <ReactQueryWrapper>
-        <App initialTasks={response} />
+        <App initialTasks={response} locale={locale} />
       </ReactQueryWrapper>
     </AuthWrapper>
   );

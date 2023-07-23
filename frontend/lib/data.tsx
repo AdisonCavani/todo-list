@@ -20,16 +20,6 @@ import {
   IconUrgent,
 } from "@tabler/icons-react";
 
-export type MenuEntry = {
-  name: string;
-  href: string;
-};
-
-export const MenuEntries: MenuEntry[] = [
-  { name: "Privacy", href: "/privacy" },
-  { name: "Terms of Service", href: "/terms-of-service" },
-];
-
 type Data = {
   id: string;
   title: string;

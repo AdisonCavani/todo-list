@@ -1,4 +1,4 @@
-import { sortMethodsNames, type SortingOptions } from "@lib/sort";
+import type { SortingOptions } from "@lib/sort";
 import { cn } from "@lib/utils";
 import {
   IconArrowsSort,
@@ -17,30 +17,33 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@ui/dropdown-menu";
+import type { LangDictionary } from "dictionaries";
 import type { Dispatch, SetStateAction } from "react";
 
 type Props = {
+  locale: LangDictionary;
+
   sorting: SortingOptions;
   defaultSorting: SortingOptions;
   setSorting: Dispatch<SetStateAction<SortingOptions>>;
 };
 
-function Sort({ sorting, defaultSorting, setSorting }: Props) {
+function Sort({ locale, sorting, defaultSorting, setSorting }: Props) {
   return (
     <>
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-xl font-bold">Tasks</h2>
+        <h2 className="text-xl font-bold">{locale.app.tasks}</h2>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="sm">
               <IconArrowsSort className="h-4 w-4" />
-              <span>Sort</span>
+              <span>{locale.app.sort.title}</span>
             </Button>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Sort by</DropdownMenuLabel>
+            <DropdownMenuLabel>{locale.app.sort.sortBy}</DropdownMenuLabel>
 
             <DropdownMenuSeparator />
 
@@ -53,7 +56,7 @@ function Sort({ sorting, defaultSorting, setSorting }: Props) {
               }
             >
               <IconStar className="h-4 w-4" />
-              <span>Importance</span>
+              <span>{locale.app.sort.importance}</span>
             </DropdownMenuItem>
 
             <DropdownMenuItem
@@ -65,7 +68,7 @@ function Sort({ sorting, defaultSorting, setSorting }: Props) {
               }
             >
               <IconCalendarTime className="h-4 w-4" />
-              <span>Due date</span>
+              <span>{locale.app.shared.dueDate}</span>
             </DropdownMenuItem>
 
             <DropdownMenuItem
@@ -77,7 +80,7 @@ function Sort({ sorting, defaultSorting, setSorting }: Props) {
               }
             >
               <IconArrowsSort className="h-4 w-4" />
-              <span>Alphabetically</span>
+              <span>{locale.app.sort.alphabetically}</span>
             </DropdownMenuItem>
 
             <DropdownMenuItem
@@ -89,7 +92,7 @@ function Sort({ sorting, defaultSorting, setSorting }: Props) {
               }
             >
               <IconCalendarPlus className="h-4 w-4" />
-              <span>Creation date</span>
+              <span>{locale.app.sort.creationDate}</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -116,7 +119,7 @@ function Sort({ sorting, defaultSorting, setSorting }: Props) {
           />
         </Button>
         <p className="text-xs font-semibold">
-          Sorted {sortMethodsNames[sorting.fn]}
+          {locale.app.sort.sorting[sorting.fn]}
         </p>
         <Button
           size="xxs"

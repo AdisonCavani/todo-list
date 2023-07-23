@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "@components/router/link";
-import type { MenuEntry } from "@lib/data";
+import type { MenuEntry } from "@lib/types";
 import { cn } from "@lib/utils";
 import { usePathname } from "next/navigation";
 

@@ -21,11 +21,20 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from "@ui/dropdown-menu";
+import type { LangDictionary } from "dictionaries";
 import type { User } from "next-auth";
 import { signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
 
-function ProfileMenu({ firstName, lastName, email, image }: User) {
+type Props = {
+  locale: LangDictionary;
+  user: User;
+};
+
+function ProfileMenu({
+  locale,
+  user: { firstName, lastName, email, image },
+}: Props) {
   const { setTheme } = useTheme();
   const initials = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
 
@@ -37,7 +46,10 @@ function ProfileMenu({ firstName, lastName, email, image }: User) {
           className="relative h-8 w-8 rounded-full hover:bg-transparent"
         >
           <Avatar>
-            <AvatarImage src={image ?? undefined} alt="User avatar" />
+            <AvatarImage
+              src={image ?? undefined}
+              alt={locale.app.profileMenu.avatar}
+            />
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
         </Button>
@@ -58,22 +70,22 @@ function ProfileMenu({ firstName, lastName, email, image }: User) {
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <IconSun size={16} />
-            Theme
+            {locale.app.profileMenu.theme.title}
           </DropdownMenuSubTrigger>
 
           <DropdownMenuPortal>
             <DropdownMenuSubContent>
               <DropdownMenuItem onClick={() => setTheme("light")}>
                 <IconSun size={16} />
-                Light
+                {locale.app.profileMenu.theme.light}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme("dark")}>
                 <IconMoon size={16} />
-                Dark
+                {locale.app.profileMenu.theme.dark}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme("system")}>
                 <IconDeviceLaptop size={16} />
-                System
+                {locale.app.profileMenu.theme.system}
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuPortal>
@@ -82,7 +94,7 @@ function ProfileMenu({ firstName, lastName, email, image }: User) {
         <DropdownMenuItem asChild>
           <Link href="/app/settings">
             <IconSettings size={16} />
-            Settings
+            {locale.app.profileMenu.settings}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -93,7 +105,7 @@ function ProfileMenu({ firstName, lastName, email, image }: User) {
           }
         >
           <IconLogout size={16} />
-          Logout
+          {locale.app.profileMenu.logout}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

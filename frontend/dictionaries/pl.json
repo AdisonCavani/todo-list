@@ -1,0 +1,88 @@
+{
+  "home": {
+    "header": {
+      "privacy": "Prywatność",
+      "tos": "Warunki",
+      "openApp": "Otwórz aplikację",
+      "login": "Zaloguj się"
+    },
+    "footer": {
+      "analytics": "Analityka",
+      "health": "Status",
+      "copyright": "Wszelkie prawa zastrzeżone"
+    }
+  },
+  "auth": {
+    "back": "Powrót",
+    "title": "Witaj spowrotem",
+    "summary": "Zaloguj się na swoje konto przy użyciu wybranego dostawcy protokołu OAuth2",
+    "continueWith": "Logowanie przez"
+  },
+  "app": {
+    "tasks": "Zadania",
+    "completed": "Zakończone",
+
+    "notSupportedToast": {
+      "title": "Ta funkcja nie jest jeszcze dostępna",
+      "description": "Praca w toku. Przepraszamy za niedogodności"
+    },
+
+    "sort": {
+      "title": "Sortuj",
+      "sortBy": "Sortuj według",
+      "importance": "Znaczenie",
+      "alphabetically": "Alfabetycznie",
+      "creationDate": "Data utworzenia",
+      "sorting": {
+        "sortTasksByCreationDate": "Posortowanu wg daty utworzenia",
+        "sortTasksByDueDate": "Posortowano wg terminu",
+        "sortTasksByImportance": "Posortowano wg znaczenia",
+        "sortTasksByTitle": "Posortowano alfabetycznie"
+      }
+    },
+
+    "shared": {
+      "dueDate": "Termin",
+
+      "today": "Dzisiaj",
+      "tomorrow": "Jutro",
+      "nextWeek": "Next week",
+      "pickDate": "Wybierz datę",
+      "removeDueDate": "Usuń datę",
+      "priority": "Priorytet",
+      "remindMe": "Przypomnij mi",
+      "repeat": "Powtarzanie"
+    },
+
+    "form": {
+      "add": "Dodaj",
+      "addTask": "Dodaj zadanie"
+    },
+
+    "profileMenu": {
+      "avatar": "Avatar użytkownika",
+      "theme": {
+        "title": "Motyw",
+        "light": "Jasny",
+        "dark": "Ciemny",
+        "system": "System"
+      },
+      "settings": "Ustawienia",
+      "logout": "Wyloguj się"
+    },
+
+    "task": {
+      "title": "Zaktualizuj zadanie",
+      "description": "Tutaj wprowadzisz zmiany w swoim zadaniu. Kliknij zapisz, kiedy skończysz",
+      "toggleImportance": "Zmień ważność zadania",
+      "toggleCompletion": "Zmień status zadania",
+      "addDueDate": "Dodaj termin",
+      "save": "Zapisz",
+      "cancel": "Anuluj",
+      "labelTitle": "Tytuł",
+      "placeholderTitle": "Odrobić zadanie domowe",
+      "labelDescription": "Opis",
+      "placeholderDescription": "Ćwiczenia, str.84, zad.1-3"
+    }
+  }
+}

@@ -28,10 +28,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@ui/dropdown-menu";
+import type { LangDictionary } from "dictionaries";
 import { createRef, useState, type FormEventHandler } from "react";
 import DateComponent from "./date";
 
-function MobileForm() {
+type Props = {
+  locale: LangDictionary;
+};
+
+function MobileForm({ locale }: Props) {
   const [title, setTitle] = useState<string>("");
   const [date, setDate] = useState<Date | null>(null);
   const [priority, setPriority] = useState<TaskPriorityEnum>("P4");
@@ -44,8 +49,8 @@ function MobileForm() {
 
   function handleNotSupportedFeature() {
     toast({
-      title: "This feature is not available yet.",
-      description: "Work in progress. Sorry for the inconvenience.",
+      title: `${locale.app.notSupportedToast.title}.`,
+      description: `${locale.app.notSupportedToast.description}.`,
     });
   }
 
@@ -88,7 +93,7 @@ function MobileForm() {
             <div className="flex h-full items-center justify-between gap-x-4">
               <Input
                 type="text"
-                placeholder="Add a task"
+                placeholder={locale.app.form.addTask}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
@@ -117,7 +122,7 @@ function MobileForm() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
-                    aria-label="Due Date"
+                    aria-label={locale.app.shared.dueDate}
                     variant={date ? "outline" : "ghost"}
                     size="xxs"
                     className="h-7 font-normal"
@@ -126,20 +131,22 @@ function MobileForm() {
                     {date ? (
                       <DateComponent date={date} textCss="font-normal" />
                     ) : (
-                      "Due date"
+                      locale.app.shared.dueDate
                     )}
                   </Button>
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent align="start" alignOffset={-30}>
-                  <DropdownMenuLabel>Due Date</DropdownMenuLabel>
+                  <DropdownMenuLabel>
+                    {locale.app.shared.dueDate}
+                  </DropdownMenuLabel>
 
                   <DropdownMenuSeparator />
 
                   <DropdownMenuItem onClick={() => setDate(new Date())}>
                     <IconCalendar className="h-5 w-5" />
                     <div className="flex w-full justify-between">
-                      <span>Today</span>
+                      <span>{locale.app.shared.today}</span>
                       <span className="pl-8 text-neutral-500">
                         {getShortDayName(new Date())}
                       </span>
@@ -155,7 +162,7 @@ function MobileForm() {
                   >
                     <IconCalendarDue className="h-5 w-5" />
                     <div className="flex w-full justify-between">
-                      <span>Tomorrow</span>
+                      <span>{locale.app.shared.tomorrow}</span>
                       <span className="pl-8 text-neutral-500">
                         {getShortDayName(addDays(new Date(), 1))}
                       </span>
@@ -171,7 +178,7 @@ function MobileForm() {
                   >
                     <IconCalendarPlus className="h-5 w-5" />
                     <div className="flex w-full justify-between">
-                      <span>Next week</span>
+                      <span>{locale.app.shared.nextWeek}</span>
                       <span className="pl-8 text-neutral-500">
                         {getShortDayName(addDays(new Date(), 7))}
                       </span>
@@ -184,7 +191,7 @@ function MobileForm() {
                     onClick={() => dateRef.current?.showPicker()}
                   >
                     <IconCalendarStats className="h-4 w-4" />
-                    <span>Pick a date</span>
+                    <span>{locale.app.shared.pickDate}</span>
                   </DropdownMenuItem>
 
                   {date && (
@@ -196,7 +203,7 @@ function MobileForm() {
                         className="text-red-600 dark:text-red-400"
                       >
                         <IconTrash size={24} className="h-4 w-4" />
-                        <span>Remove due date</span>
+                        <span>{locale.app.shared.removeDueDate}</span>
                       </DropdownMenuItem>
                     </>
                   )}
@@ -225,40 +232,42 @@ function MobileForm() {
                   >
                     {priority !== "P4"
                       ? getPriorityText(priority, true)
-                      : "Priority"}
+                      : locale.app.shared.priority}
                   </Button>
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent>
-                  <DropdownMenuLabel>Priority</DropdownMenuLabel>
+                  <DropdownMenuLabel>
+                    {locale.app.shared.priority}
+                  </DropdownMenuLabel>
 
                   <DropdownMenuSeparator />
 
                   <DropdownMenuItem onClick={() => setPriority("P1")}>
                     <IconFlag2Filled className="h-5 w-5 text-red-500" />
                     <div className="flex w-full justify-between">
-                      <span>Priority 1</span>
+                      <span>{locale.app.shared.priority} 1</span>
                     </div>
                   </DropdownMenuItem>
 
                   <DropdownMenuItem onClick={() => setPriority("P2")}>
                     <IconFlag2Filled className="h-5 w-5 text-orange-400" />
                     <div className="flex w-full justify-between">
-                      <span>Priority 2</span>
+                      <span>{locale.app.shared.priority} 2</span>
                     </div>
                   </DropdownMenuItem>
 
                   <DropdownMenuItem onClick={() => setPriority("P3")}>
                     <IconFlag2Filled className="h-5 w-5 text-blue-500" />
                     <div className="flex w-full justify-between">
-                      <span>Priority 3</span>
+                      <span>{locale.app.shared.priority} 3</span>
                     </div>
                   </DropdownMenuItem>
 
                   <DropdownMenuItem onClick={() => setPriority("P4")}>
                     <IconFlag2 className="h-5 w-5" />
                     <div className="flex w-full justify-between">
-                      <span>Priority 4</span>
+                      <span>{locale.app.shared.priority} 4</span>
                     </div>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -272,7 +281,7 @@ function MobileForm() {
                 onClick={handleNotSupportedFeature}
                 icon={<IconBell size={18} />}
               >
-                Remind me
+                {locale.app.shared.remindMe}
               </Button>
               <Button
                 type="button"
@@ -282,7 +291,7 @@ function MobileForm() {
                 onClick={handleNotSupportedFeature}
                 icon={<IconRepeat size={18} />}
               >
-                Repeat
+                {locale.app.shared.repeat}
               </Button>
             </div>
           </form>

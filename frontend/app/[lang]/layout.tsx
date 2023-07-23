@@ -4,11 +4,12 @@ import NextThemeProvider from "@components/theme-provider";
 import { fontInter } from "@lib/font";
 import { twindConfig, type ColorRecordType } from "@lib/twind";
 import { cn } from "@lib/utils";
+import type { LocaleParams } from "i18n-config";
 import Script from "next/script";
 import type { PropsWithChildren } from "react";
 
 export const dynamic = "force-dynamic";
-// export const runtime = "edge";
+export const runtime = "edge";
 
 export const metadata = {
   title: {
@@ -49,10 +50,13 @@ export const metadata = {
   },
 };
 
-function RootLayout({ children }: PropsWithChildren) {
+function RootLayout({
+  children,
+  params: { lang },
+}: PropsWithChildren<LocaleParams>) {
   return (
     <html
-      lang="en"
+      lang={lang}
       className={cn("font-sans antialiased", fontInter.variable)}
       suppressHydrationWarning
     >

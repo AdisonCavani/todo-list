@@ -1,6 +1,11 @@
 import type { TaskType } from "@db/schema";
 import { z } from "zod";
 
+export type MenuEntry = {
+  name: string;
+  href: string;
+};
+
 export type TaskPriorityEnum = "P1" | "P2" | "P3" | "P4";
 
 export interface TaskRenderType extends TaskType {

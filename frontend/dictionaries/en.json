@@ -1,0 +1,88 @@
+{
+  "home": {
+    "header": {
+      "privacy": "Privacy",
+      "tos": "Terms of Service",
+      "openApp": "Open app",
+      "login": "Sign in"
+    },
+    "footer": {
+      "analytics": "Analytics",
+      "health": "Health",
+      "copyright": "All rights reserved"
+    }
+  },
+  "auth": {
+    "back": "Back",
+    "title": "Welcome back",
+    "summary": "Sign in to your account using OAuth2 providers",
+    "continueWith": "Continue with"
+  },
+  "app": {
+    "tasks": "Tasks",
+    "completed": "Completed",
+
+    "notSupportedToast": {
+      "title": "This feature is not available yet",
+      "description": "Work in progress. Sorry for the inconvenience"
+    },
+
+    "sort": {
+      "title": "Sort",
+      "sortBy": "Sort by",
+      "importance": "Importance",
+      "alphabetically": "Alphabetically",
+      "creationDate": "Creation date",
+      "sorting": {
+        "sortTasksByCreationDate": "Sorted by creation date",
+        "sortTasksByDueDate": "Sorted by due date",
+        "sortTasksByImportance": "Sorted by importance",
+        "sortTasksByTitle": "Sorted alphabetically"
+      }
+    },
+
+    "shared": {
+      "dueDate": "Due date",
+
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "nextWeek": "Next week",
+      "pickDate": "Pick a date",
+      "removeDueDate": "Remove due date",
+      "priority": "Priority",
+      "remindMe": "Remind me",
+      "repeat": "Repeat"
+    },
+
+    "form": {
+      "add": "Add",
+      "addTask": "Add a task"
+    },
+
+    "profileMenu": {
+      "avatar": "User avatar",
+      "theme": {
+        "title": "Theme",
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+      },
+      "settings": "Settings",
+      "logout": "Logout"
+    },
+
+    "task": {
+      "title": "Update task",
+      "description": "Make changes to your task here. Click save when you're done",
+      "toggleImportance": "Toggle task importance",
+      "toggleCompletion": "Toggle task completion",
+      "addDueDate": "Add due date",
+      "save": "Save",
+      "cancel": "Cancel",
+      "labelTitle": "Title",
+      "placeholderTitle": "Do a homework",
+      "labelDescription": "Description",
+      "placeholderDescription": "Student's book, p.84, ex.1-3"
+    }
+  }
+}

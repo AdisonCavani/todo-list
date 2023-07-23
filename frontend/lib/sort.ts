@@ -43,13 +43,6 @@ export const sortMethods = {
   sortTasksByCreationDate,
 };
 
-export const sortMethodsNames = {
-  sortTasksByTitle: "alphabetically",
-  sortTasksByDueDate: "by due date",
-  sortTasksByImportance: "by importance",
-  sortTasksByCreationDate: "by creation date",
-};
-
 type SortMethodsTypes = keyof typeof sortMethods;
 export type SortingOptions = {
   fn: SortMethodsTypes;

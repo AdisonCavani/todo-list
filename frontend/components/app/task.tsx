@@ -40,10 +40,16 @@ import {
 } from "@ui/dropdown-menu";
 import { Input } from "@ui/input";
 import { Textarea } from "@ui/textarea";
+import type { LangDictionary } from "dictionaries";
 import { createRef, forwardRef, useState, type MouseEventHandler } from "react";
 import DateComponent from "./date";
 
-const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
+type Props = {
+  locale: LangDictionary;
+  task: TaskType;
+};
+
+const Task = forwardRef<HTMLLIElement, Props>(({ locale, task }, ref) => {
   const { title, description, dueDate, priority, isCompleted, isImportant } =
     task;
 
@@ -116,7 +122,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
           className="flex cursor-pointer flex-row items-center gap-x-2 rounded-md bg-white px-4 shadow-ms hover:bg-neutral-100 dark:bg-neutral-800"
         >
           <button
-            aria-label="Toggle task completion"
+            aria-label={locale.app.task.toggleCompletion}
             onClick={handleOnClick}
             className={cn(
               "group ml-[6px] min-h-[18px] min-w-[18px] cursor-pointer appearance-none items-center justify-center rounded-full border-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
@@ -167,7 +173,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
           </div>
 
           <button
-            aria-label="Toggle task importance"
+            aria-label={locale.app.task.toggleImportance}
             onClick={onImportantChange}
             className="group rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
@@ -186,7 +192,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
       <DialogContent className="dark:bg-neutral-800">
         <DialogHeader>
           <div className="flex justify-between">
-            <DialogTitle>Update task</DialogTitle>
+            <DialogTitle>{locale.app.task.title}</DialogTitle>
 
             <DialogClose asChild>
               <Button
@@ -198,20 +204,18 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
               />
             </DialogClose>
           </div>
-          <DialogDescription>
-            Make changes to your task here. Click save when you&apos;re done.
-          </DialogDescription>
+          <DialogDescription>{locale.app.task.description}.</DialogDescription>
         </DialogHeader>
 
         <div className="mt-2 flex flex-col gap-y-3">
           <div>
             <label htmlFor="title" className="mb-2 block text-sm font-medium">
-              Title
+              {locale.app.task.labelTitle}
             </label>
             <Input
               id="title"
               type="text"
-              placeholder="Do a homework"
+              placeholder={locale.app.task.placeholderTitle}
               value={dialogTitle}
               onChange={(event) => setDialogTitle(event.target.value)}
             />
@@ -222,11 +226,11 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
               htmlFor="description"
               className="mb-2 block text-sm font-medium"
             >
-              Description
+              {locale.app.task.labelDescription}
             </label>
             <Textarea
               id="description"
-              placeholder="Student's book, p.84, ex.1-3"
+              placeholder={locale.app.task.placeholderDescription}
               value={dialogDescription}
               onChange={(event) => setDialogDescription(event.target.value)}
             />
@@ -245,7 +249,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
-                  aria-label="Due Date"
+                  aria-label={locale.app.shared.dueDate}
                   variant="outline"
                   className="w-full"
                   onClick={(event) => event.stopPropagation()}
@@ -254,20 +258,22 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
                   {dialogDate ? (
                     <DateComponent date={dialogDate} textCss="font-semibold" />
                   ) : (
-                    "Add due date"
+                    locale.app.task.addDueDate
                   )}
                 </Button>
               </DropdownMenuTrigger>
 
               <DropdownMenuContent>
-                <DropdownMenuLabel>Due Date</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                  {locale.app.shared.dueDate}
+                </DropdownMenuLabel>
 
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem onClick={() => setDialogDate(new Date())}>
                   <IconCalendar className="h-5 w-5" />
                   <div className="flex w-full justify-between">
-                    <span>Today</span>
+                    <span>{locale.app.shared.today}</span>
                     <span className="pl-8 text-neutral-500">Wed</span>
                   </div>
                 </DropdownMenuItem>
@@ -281,7 +287,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
                 >
                   <IconCalendarDue className="h-5 w-5" />
                   <div className="flex w-full justify-between">
-                    <span>Tomorrow</span>
+                    <span>{locale.app.shared.tomorrow}</span>
                     <span className="pl-8 text-neutral-500">Thu</span>
                   </div>
                 </DropdownMenuItem>
@@ -295,7 +301,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
                 >
                   <IconCalendarPlus className="h-5 w-5" />
                   <div className="flex w-full justify-between">
-                    <span>Next week</span>
+                    <span>{locale.app.shared.nextWeek}</span>
                     <span className="pl-8 text-neutral-500">Mon</span>
                   </div>
                 </DropdownMenuItem>
@@ -306,7 +312,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
                   onClick={() => dialogDateRef.current?.showPicker()}
                 >
                   <IconCalendarStats className="h-4 w-4" />
-                  <span>Pick a date</span>
+                  <span>{locale.app.shared.pickDate}</span>
                 </DropdownMenuItem>
 
                 {dialogDate && (
@@ -318,7 +324,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
                       className="text-red-600 dark:text-red-400"
                     >
                       <IconTrash size={24} className="h-4 w-4" />
-                      <span>Remove due date</span>
+                      <span>{locale.app.shared.removeDueDate}</span>
                     </DropdownMenuItem>
                   </>
                 )}
@@ -330,7 +336,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
-                  aria-label="Priority"
+                  aria-label={locale.app.shared.priority}
                   variant="outline"
                   className="w-full"
                   onClick={(event) => event.stopPropagation()}
@@ -347,35 +353,37 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuLabel>Priority</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                  {locale.app.shared.priority}
+                </DropdownMenuLabel>
 
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem onClick={() => setDialogPriority("P1")}>
                   <IconFlag2Filled className="h-5 w-5 text-red-500" />
                   <div className="flex w-full justify-between">
-                    <span>Priority 1</span>
+                    <span>{locale.app.shared.priority} 1</span>
                   </div>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem onClick={() => setDialogPriority("P2")}>
                   <IconFlag2Filled className="h-5 w-5 text-orange-400" />
                   <div className="flex w-full justify-between">
-                    <span>Priority 2</span>
+                    <span>{locale.app.shared.priority} 2</span>
                   </div>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem onClick={() => setDialogPriority("P3")}>
                   <IconFlag2Filled className="h-5 w-5 text-blue-500" />
                   <div className="flex w-full justify-between">
-                    <span>Priority 3</span>
+                    <span>{locale.app.shared.priority} 3</span>
                   </div>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem onClick={() => setDialogPriority("P4")}>
                   <IconFlag2 className="h-5 w-5" />
                   <div className="flex w-full justify-between">
-                    <span>Priority 4</span>
+                    <span>{locale.app.shared.priority} 4</span>
                   </div>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -392,12 +400,12 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
               onClick={handleOnSubmit}
               className="w-full"
             >
-              <p>Save</p>
+              {locale.app.task.save}
             </Button>
           </DialogClose>
           <DialogClose asChild>
             <Button variant="subtle" className="w-full">
-              Cancel
+              {locale.app.task.cancel}
             </Button>
           </DialogClose>
         </DialogFooter>

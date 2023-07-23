@@ -11,6 +11,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@ui/accordion";
+import type { LangDictionary } from "dictionaries";
 import { useState } from "react";
 import FlipMove from "react-flip-move";
 import Form from "./form";
@@ -20,9 +21,10 @@ import Task from "./task";
 
 type Props = {
   initialTasks: TaskType[];
+  locale: LangDictionary;
 };
 
-function App({ initialTasks }: Props) {
+function App({ initialTasks, locale }: Props) {
   const { data: tasks } = useQuery({
     queryKey: [queryKeys.tasks],
     initialData: initialTasks,
@@ -51,19 +53,23 @@ function App({ initialTasks }: Props) {
   return (
     <>
       <Sort
+        locale={locale}
         sorting={sorting}
         defaultSorting={defaultSorting}
         setSorting={setSorting}
       />
 
-      <Form />
-      <MobileForm />
+      <Form locale={locale} />
+      <MobileForm locale={locale} />
 
       {notFinishedTasks.length > 0 && (
         <ul className="relative flex flex-col gap-y-2">
           <FlipMove typeName={null}>
             {notFinishedTasks.map((task: TaskRenderType) => (
-              <Task key={task.renderId ?? task.id} {...task} />
+              <Task
+                key={task.renderId ?? task.id}
+                {...{ locale: locale, task: task }}
+              />
             ))}
           </FlipMove>
         </ul>
@@ -74,7 +80,7 @@ function App({ initialTasks }: Props) {
           <AccordionItem value="finished-tasks">
             <AccordionTrigger className="hover:no-underline">
               <div className="flex items-center gap-x-4 text-sm">
-                <p>Completed</p>
+                <p>{locale.app.completed}</p>
                 <span className="font-normal text-neutral-600 dark:text-neutral-400">
                   {finishedTasks.length}
                 </span>
@@ -84,7 +90,10 @@ function App({ initialTasks }: Props) {
               <ul className="relative flex flex-col gap-y-2">
                 <FlipMove typeName={null}>
                   {finishedTasks.map((task: TaskRenderType) => (
-                    <Task key={task.renderId ?? task.id} {...task} />
+                    <Task
+                      key={task.renderId ?? task.id}
+                      {...{ locale: locale, task: task }}
+                    />
                   ))}
                 </FlipMove>
               </ul>

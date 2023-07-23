@@ -4,16 +4,20 @@ import { auth } from "@lib/auth";
 import { cn } from "@lib/utils";
 import { IconChecklist, IconChevronLeft } from "@tabler/icons-react";
 import { buttonVariants } from "@ui/button";
+import { getDictionary } from "dictionaries";
+import type { LocaleParams } from "i18n-config";
 import { redirect } from "next/navigation";
 
 export const metadata = {
   title: "Sign in",
 };
 
-async function Page() {
+async function Page({ params: { lang } }: LocaleParams) {
   const session = await auth();
 
   if (session) redirect("/app");
+
+  const locale = await getDictionary(lang);
 
   return (
     <main className="mx-auto flex h-screen w-screen flex-col items-center justify-center px-6">
@@ -25,23 +29,23 @@ async function Page() {
         )}
       >
         <IconChevronLeft size={18} />
-        Back
+        {locale.auth.back}
       </Link>
 
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 xs:w-80">
         <div className="flex flex-col space-y-2 text-center">
           <IconChecklist className="mx-auto h-6 w-6" />
           <h1 className="text-2xl font-semibold tracking-tight">
-            Welcome back
+            {locale.auth.title}
           </h1>
           <p className="text-sm text-neutral-500 dark:text-neutral-300">
-            Sign in to your account using OAuth2 providers
+            {locale.auth.summary}
           </p>
         </div>
 
         <hr className="w-full border-neutral-300 dark:border-neutral-500" />
 
-        <LoginButtons />
+        <LoginButtons text={locale.auth.continueWith} />
       </div>
     </main>
   );

@@ -1,21 +1,28 @@
 "use client";
 
 import Link from "@components/router/link";
-import { MenuEntries } from "@lib/data";
+import type { MenuEntry } from "@lib/types";
 import { cn } from "@lib/utils";
 import styles from "@styles/header.module.css";
 import { IconChecklist, IconMenu } from "@tabler/icons-react";
+import type { LangDictionary } from "dictionaries";
 import type { Session } from "next-auth";
 import { useState } from "react";
 import HeaderLink from "./header-link";
 import MobileMenu from "./mobile-menu";
 
 type Props = {
+  locale: LangDictionary;
   session: Session | null;
 };
 
-function Header({ session }: Props) {
+function Header({ locale, session }: Props) {
   const [open, setOpen] = useState<boolean>(false);
+
+  const entries: MenuEntry[] = [
+    { name: locale.home.header.privacy, href: "/privacy" },
+    { name: locale.home.header.tos, href: "/terms-of-service" },
+  ];
 
   return (
     <header className="sticky inset-0 z-10 flex h-12">
@@ -37,7 +44,7 @@ function Header({ session }: Props) {
               <span className="select-none">To Do</span>
             </Link>
           </li>
-          {MenuEntries.map((entry, index) => (
+          {entries.map((entry, index) => (
             <HeaderLink key={index} {...entry} className="hidden sm:block" />
           ))}
 
@@ -46,7 +53,7 @@ function Header({ session }: Props) {
               href={session ? "/app" : "/auth"}
               className="flex h-8 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-violet-600 px-4 text-sm font-medium"
             >
-              {session ? "Open app" : "Sign in"}
+              {session ? locale.home.header.openApp : locale.home.header.login}
             </Link>
           </li>
           <li className="flex sm:hidden">
@@ -61,7 +68,9 @@ function Header({ session }: Props) {
           </li>
         </ul>
 
-        {open && <MobileMenu onClick={() => setOpen(false)} />}
+        {open && (
+          <MobileMenu entries={entries} onClick={() => setOpen(false)} />
+        )}
       </nav>
     </header>
   );

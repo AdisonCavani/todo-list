@@ -2,9 +2,14 @@ import Link from "@components/router/link";
 import { auth } from "@lib/auth";
 import { IconChecklist } from "@tabler/icons-react";
 import { buttonVariants } from "@ui/button";
+import type { LangDictionary } from "dictionaries";
 import ProfileMenu from "./profile-menu";
 
-async function Header() {
+type Props = {
+  locale: LangDictionary;
+};
+
+async function Header({ locale }: Props) {
   const session = await auth();
 
   return (
@@ -17,7 +22,7 @@ async function Header() {
         <IconChecklist className="h-6 w-6" />
         <h1 className="select-none font-semibold">To Do</h1>
       </Link>
-      <ProfileMenu {...session!.user} />
+      <ProfileMenu locale={locale} user={session.user} />
     </header>
   );
 }
