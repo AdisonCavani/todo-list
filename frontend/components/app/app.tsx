@@ -62,8 +62,8 @@ function App({ initialTasks }: Props) {
       {notFinishedTasks.length > 0 && (
         <ul className="relative flex flex-col gap-y-2">
           <FlipMove typeName={null}>
-            {notFinishedTasks.map(({ renderId, ...task }: TaskRenderType) => (
-              <Task key={renderId ?? task.id} {...task} />
+            {notFinishedTasks.map((task: TaskRenderType) => (
+              <Task key={task.renderId ?? task.id} {...task} />
             ))}
           </FlipMove>
         </ul>
@@ -83,11 +83,9 @@ function App({ initialTasks }: Props) {
             <AccordionContent>
               <ul className="relative flex flex-col gap-y-2">
                 <FlipMove typeName={null}>
-                  {finishedTasks.map(
-                    ({ renderId, ...task }: TaskRenderType) => (
-                      <Task key={renderId ?? task.id} {...task} />
-                    ),
-                  )}
+                  {finishedTasks.map((task: TaskRenderType) => (
+                    <Task key={task.renderId ?? task.id} {...task} />
+                  ))}
                 </FlipMove>
               </ul>
             </AccordionContent>
