@@ -1,4 +1,5 @@
-// TODO: localize date
+"use client";
+
 import { cn } from "@lib/utils";
 import type { ReactNode } from "react";
 
@@ -69,7 +70,7 @@ function getDateString(date: Date, withTime?: boolean) {
 
   // Today and tomorrow
   if (diff >= -1 && diff <= 1) {
-    const relative = new Intl.RelativeTimeFormat("en-US", {
+    const relative = new Intl.RelativeTimeFormat(navigator.language, {
       localeMatcher: "best fit",
       numeric: "auto",
     }).format(diff, "day");
@@ -77,7 +78,7 @@ function getDateString(date: Date, withTime?: boolean) {
 
     if (!withTime) return dateString;
 
-    const timeString = date.toLocaleTimeString("en-US", timeOptions);
+    const timeString = date.toLocaleTimeString(navigator.language, timeOptions);
     return `${dateString} ${timeString}`;
   } else {
     let options = weekendOpt;
@@ -87,11 +88,13 @@ function getDateString(date: Date, withTime?: boolean) {
       options = currYearOpt;
     else options = otherOpt;
 
-    const dateString = Intl.DateTimeFormat("en-US", options).format(date);
+    const dateString = Intl.DateTimeFormat(navigator.language, options).format(
+      date,
+    );
 
     if (!withTime) return dateString;
 
-    const timeString = date.toLocaleTimeString("en-US", timeOptions);
+    const timeString = date.toLocaleTimeString(navigator.language, timeOptions);
     return `${dateString} ${timeString}`;
   }
 }

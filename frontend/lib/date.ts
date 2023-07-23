@@ -1,3 +1,5 @@
+"use client";
+
 function addDays(date: Date, days: number): Date {
   if (!days) return date;
 
@@ -7,7 +9,7 @@ function addDays(date: Date, days: number): Date {
 }
 
 function getShortDayName(date: Date): string {
-  return Intl.DateTimeFormat("en-US", {
+  return Intl.DateTimeFormat(navigator.language, {
     weekday: "short",
   }).format(date);
 }
