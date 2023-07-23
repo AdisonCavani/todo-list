@@ -28,15 +28,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@ui/dropdown-menu";
-import type { LangDictionary } from "dictionaries";
+import type { LangDictionary, Languages } from "dictionaries";
 import { createRef, useState, type FormEventHandler } from "react";
 import DateComponent from "./date";
 
 type Props = {
+  lang: Languages;
   locale: LangDictionary;
 };
 
-function MobileForm({ locale }: Props) {
+function MobileForm({ lang, locale }: Props) {
   const [title, setTitle] = useState<string>("");
   const [date, setDate] = useState<Date | null>(null);
   const [priority, setPriority] = useState<TaskPriorityEnum>("P4");
@@ -129,7 +130,11 @@ function MobileForm({ locale }: Props) {
                     icon={<IconCalendarEvent size={18} />}
                   >
                     {date ? (
-                      <DateComponent date={date} textCss="font-normal" />
+                      <DateComponent
+                        date={date}
+                        lang={lang}
+                        textCss="font-normal"
+                      />
                     ) : (
                       locale.app.shared.dueDate
                     )}
@@ -148,7 +153,7 @@ function MobileForm({ locale }: Props) {
                     <div className="flex w-full justify-between">
                       <span>{locale.app.shared.today}</span>
                       <span className="pl-8 text-neutral-500">
-                        {getShortDayName(new Date())}
+                        {getShortDayName(new Date(), lang)}
                       </span>
                     </div>
                   </DropdownMenuItem>
@@ -164,7 +169,7 @@ function MobileForm({ locale }: Props) {
                     <div className="flex w-full justify-between">
                       <span>{locale.app.shared.tomorrow}</span>
                       <span className="pl-8 text-neutral-500">
-                        {getShortDayName(addDays(new Date(), 1))}
+                        {getShortDayName(addDays(new Date(), 1), lang)}
                       </span>
                     </div>
                   </DropdownMenuItem>
@@ -180,7 +185,7 @@ function MobileForm({ locale }: Props) {
                     <div className="flex w-full justify-between">
                       <span>{locale.app.shared.nextWeek}</span>
                       <span className="pl-8 text-neutral-500">
-                        {getShortDayName(addDays(new Date(), 7))}
+                        {getShortDayName(addDays(new Date(), 7), lang)}
                       </span>
                     </div>
                   </DropdownMenuItem>

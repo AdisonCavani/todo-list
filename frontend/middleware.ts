@@ -24,7 +24,11 @@ export async function middleware(request: NextRequest, response: NextResponse) {
   const pathname = request.nextUrl.pathname;
 
   // Ignore public folder
-  if (pathname.startsWith("/static") || ["/sw.js"].includes(pathname)) return;
+  if (
+    pathname.startsWith("/static") ||
+    ["/sw.js", "/workbox-8637ed29.js"].includes(pathname)
+  )
+    return;
 
   // Check if there is any supported locale in the pathname
   const pathnameIsMissingLocale = i18n.locales.every(

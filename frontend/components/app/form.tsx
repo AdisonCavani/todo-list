@@ -32,15 +32,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@ui/tooltip";
-import type { LangDictionary } from "dictionaries";
+import type { LangDictionary, Languages } from "dictionaries";
 import { createRef, useState, type FormEventHandler } from "react";
 import DateComponent from "./date";
 
 type Props = {
   locale: LangDictionary;
+  lang: Languages;
 };
 
-function Form({ locale }: Props) {
+function Form({ lang, locale }: Props) {
   const [title, setTitle] = useState<string>("");
   const [date, setDate] = useState<Date | null>(null);
   const [priority, setPriority] = useState<TaskPriorityEnum>("P4");
@@ -116,6 +117,7 @@ function Form({ locale }: Props) {
                       <IconCalendarEvent size={20} />
                       {date && (
                         <DateComponent
+                          lang={lang}
                           date={date}
                           textCss="text-xs font-semibold"
                         />
@@ -140,7 +142,7 @@ function Form({ locale }: Props) {
                 <div className="flex w-full justify-between">
                   <span>{locale.app.shared.today}</span>
                   <span className="pl-8 text-neutral-500">
-                    {getShortDayName(new Date())}
+                    {getShortDayName(new Date(), lang)}
                   </span>
                 </div>
               </DropdownMenuItem>
@@ -156,7 +158,7 @@ function Form({ locale }: Props) {
                 <div className="flex w-full justify-between">
                   <span>{locale.app.shared.tomorrow}</span>
                   <span className="pl-8 text-neutral-500">
-                    {getShortDayName(addDays(new Date(), 1))}
+                    {getShortDayName(addDays(new Date(), 1), lang)}
                   </span>
                 </div>
               </DropdownMenuItem>
@@ -172,7 +174,7 @@ function Form({ locale }: Props) {
                 <div className="flex w-full justify-between">
                   <span>{locale.app.shared.nextWeek}</span>
                   <span className="pl-8 text-neutral-500">
-                    {getShortDayName(addDays(new Date(), 7))}
+                    {getShortDayName(addDays(new Date(), 7), lang)}
                   </span>
                 </div>
               </DropdownMenuItem>

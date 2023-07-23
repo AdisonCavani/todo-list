@@ -41,16 +41,17 @@ import {
 } from "@ui/dropdown-menu";
 import { Input } from "@ui/input";
 import { Textarea } from "@ui/textarea";
-import type { LangDictionary } from "dictionaries";
+import type { LangDictionary, Languages } from "dictionaries";
 import { createRef, forwardRef, useState, type MouseEventHandler } from "react";
 import DateComponent from "./date";
 
 type Props = {
+  lang: Languages;
   locale: LangDictionary;
   task: TaskType;
 };
 
-const Task = forwardRef<HTMLLIElement, Props>(({ locale, task }, ref) => {
+const Task = forwardRef<HTMLLIElement, Props>(({ lang, locale, task }, ref) => {
   const { title, description, dueDate, priority, isCompleted, isImportant } =
     task;
 
@@ -154,6 +155,7 @@ const Task = forwardRef<HTMLLIElement, Props>(({ locale, task }, ref) => {
             <div className="flex items-center">
               {dueDate && (
                 <DateComponent
+                  lang={lang}
                   className={cn(
                     description &&
                       "after:mx-1 after:text-xs after:leading-none after:text-neutral-500 after:content-['•'] after:dark:text-neutral-400",
@@ -257,7 +259,11 @@ const Task = forwardRef<HTMLLIElement, Props>(({ locale, task }, ref) => {
                 >
                   <IconCalendarEvent className="h-4 w-4" />
                   {dialogDate ? (
-                    <DateComponent date={dialogDate} textCss="font-semibold" />
+                    <DateComponent
+                      lang={lang}
+                      date={dialogDate}
+                      textCss="font-semibold"
+                    />
                   ) : (
                     locale.app.task.addDueDate
                   )}
@@ -276,7 +282,7 @@ const Task = forwardRef<HTMLLIElement, Props>(({ locale, task }, ref) => {
                   <div className="flex w-full justify-between">
                     <span>{locale.app.shared.today}</span>
                     <span className="pl-8 text-neutral-500">
-                      {getShortDayName(new Date())}
+                      {getShortDayName(new Date(), lang)}
                     </span>
                   </div>
                 </DropdownMenuItem>
@@ -292,7 +298,7 @@ const Task = forwardRef<HTMLLIElement, Props>(({ locale, task }, ref) => {
                   <div className="flex w-full justify-between">
                     <span>{locale.app.shared.tomorrow}</span>
                     <span className="pl-8 text-neutral-500">
-                      {getShortDayName(addDays(new Date(), 1))}
+                      {getShortDayName(addDays(new Date(), 1), lang)}
                     </span>
                   </div>
                 </DropdownMenuItem>
@@ -308,7 +314,7 @@ const Task = forwardRef<HTMLLIElement, Props>(({ locale, task }, ref) => {
                   <div className="flex w-full justify-between">
                     <span>{locale.app.shared.nextWeek}</span>
                     <span className="pl-8 text-neutral-500">
-                      {getShortDayName(addDays(new Date(), 7))}
+                      {getShortDayName(addDays(new Date(), 7), lang)}
                     </span>
                   </div>
                 </DropdownMenuItem>

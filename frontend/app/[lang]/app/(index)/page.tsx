@@ -35,7 +35,7 @@ async function Page({ params: { lang } }: LocaleParams) {
   return (
     <AuthWrapper>
       <ReactQueryWrapper>
-        <App initialTasks={response} locale={locale} />
+        <App initialTasks={response} lang={lang} locale={locale} />
       </ReactQueryWrapper>
     </AuthWrapper>
   );

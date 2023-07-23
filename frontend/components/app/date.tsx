@@ -1,9 +1,8 @@
-"use client";
-
 import { cn } from "@lib/utils";
 import type { ReactNode } from "react";
 
 interface Props {
+  lang: string;
   date: Date;
   withTime?: boolean;
   icon?: ReactNode;
@@ -11,9 +10,16 @@ interface Props {
   className?: string;
 }
 
-function DateComponent({ date, withTime, icon, textCss, className }: Props) {
+function DateComponent({
+  lang,
+  date,
+  withTime,
+  icon,
+  textCss,
+  className,
+}: Props) {
   const textColor = getColor(date);
-  const dateString = getDateString(date, withTime);
+  const dateString = getDateString(lang, date, withTime);
 
   return (
     <div className={cn("flex items-center", textColor, className)}>
@@ -43,7 +49,7 @@ function getColor(date: Date) {
   return "text-neutral-500 dark:text-neutral-400";
 }
 
-function getDateString(date: Date, withTime?: boolean) {
+function getDateString(lang: string, date: Date, withTime?: boolean) {
   const timeOptions: Intl.DateTimeFormatOptions = {
     hour12: false,
     hour: "2-digit",
@@ -70,7 +76,7 @@ function getDateString(date: Date, withTime?: boolean) {
 
   // Today and tomorrow
   if (diff >= -1 && diff <= 1) {
-    const relative = new Intl.RelativeTimeFormat(navigator.language, {
+    const relative = new Intl.RelativeTimeFormat(lang, {
       localeMatcher: "best fit",
       numeric: "auto",
     }).format(diff, "day");
@@ -78,7 +84,7 @@ function getDateString(date: Date, withTime?: boolean) {
 
     if (!withTime) return dateString;
 
-    const timeString = date.toLocaleTimeString(navigator.language, timeOptions);
+    const timeString = date.toLocaleTimeString(lang, timeOptions);
     return `${dateString} ${timeString}`;
   } else {
     let options = weekendOpt;
@@ -88,13 +94,11 @@ function getDateString(date: Date, withTime?: boolean) {
       options = currYearOpt;
     else options = otherOpt;
 
-    const dateString = Intl.DateTimeFormat(navigator.language, options).format(
-      date,
-    );
+    const dateString = Intl.DateTimeFormat(lang, options).format(date);
 
     if (!withTime) return dateString;
 
-    const timeString = date.toLocaleTimeString(navigator.language, timeOptions);
+    const timeString = date.toLocaleTimeString(lang, timeOptions);
     return `${dateString} ${timeString}`;
   }
 }

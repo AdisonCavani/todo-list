@@ -11,7 +11,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@ui/accordion";
-import type { LangDictionary } from "dictionaries";
+import type { LangDictionary, Languages } from "dictionaries";
 import { useState } from "react";
 import FlipMove from "react-flip-move";
 import Form from "./form";
@@ -21,10 +21,11 @@ import Task from "./task";
 
 type Props = {
   initialTasks: TaskType[];
+  lang: Languages;
   locale: LangDictionary;
 };
 
-function App({ initialTasks, locale }: Props) {
+function App({ initialTasks, lang, locale }: Props) {
   const { data: tasks } = useQuery({
     queryKey: [queryKeys.tasks],
     initialData: initialTasks,
@@ -59,8 +60,8 @@ function App({ initialTasks, locale }: Props) {
         setSorting={setSorting}
       />
 
-      <Form locale={locale} />
-      <MobileForm locale={locale} />
+      <Form lang={lang} locale={locale} />
+      <MobileForm lang={lang} locale={locale} />
 
       {notFinishedTasks.length > 0 && (
         <ul className="relative flex flex-col gap-y-2">
@@ -68,7 +69,7 @@ function App({ initialTasks, locale }: Props) {
             {notFinishedTasks.map((task: TaskRenderType) => (
               <Task
                 key={task.renderId ?? task.id}
-                {...{ locale: locale, task: task }}
+                {...{ lang: lang, locale: locale, task: task }}
               />
             ))}
           </FlipMove>
@@ -92,7 +93,7 @@ function App({ initialTasks, locale }: Props) {
                   {finishedTasks.map((task: TaskRenderType) => (
                     <Task
                       key={task.renderId ?? task.id}
-                      {...{ locale: locale, task: task }}
+                      {...{ lang: lang, locale: locale, task: task }}
                     />
                   ))}
                 </FlipMove>
