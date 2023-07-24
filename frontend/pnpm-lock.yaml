@@ -51,8 +51,8 @@ dependencies:
     specifier: ^2.28.0
     version: 2.28.0(react@18.2.0)
   '@tanstack/query-sync-storage-persister':
-    specifier: 5.0.0-alpha.88
-    version: 5.0.0-alpha.88
+    specifier: 5.0.0-alpha.90
+    version: 5.0.0-alpha.90
   '@tanstack/react-query':
     specifier: 5.0.0-alpha.88
     version: 5.0.0-alpha.88(react-dom@18.2.0)(react@18.2.0)
@@ -4644,6 +4644,10 @@ packages:
   /@tanstack/query-core@5.0.0-alpha.88:
     resolution: {integrity: sha512-B7BFXo1LdlLB0U04ALS1Pl3ayEQNYWO9LsNRFV4o2RgR3GFcfG+Z1qalVQ65Ibo4VSoIWChAQ665yNenb2ZPag==}
 
+  /@tanstack/query-core@5.0.0-alpha.90:
+    resolution: {integrity: sha512-g98HIobKf0K02zEu5UdmflfzK5EQwSh9lOW/fWJiQIJC218rMqt9TFJr5zKcnhd1S9GAb7bJnMKTB724GpCW2g==}
+    dev: false
+
   /@tanstack/query-devtools@5.0.0-alpha.86:
     resolution: {integrity: sha512-UWyG3WE7YKI6Fm0ddIX1CPZvE/uipc67nySlWUs2knejIVC6wdLjFJQkQ3OK8S3JUjn2WKs9fF/FwE38XASwcA==}
     dependencies:
@@ -4663,11 +4667,17 @@ packages:
       '@tanstack/query-core': 5.0.0-alpha.88
     dev: false
 
-  /@tanstack/query-sync-storage-persister@5.0.0-alpha.88:
-    resolution: {integrity: sha512-eZbZkRFZgLeQZbsJ7e3HfiCaT5vqCo60OLLTO9YAcl0mTWncHjMJ8SkFU6N4IN1aiRfMP3qGv5i7EYysNiTYnA==}
+  /@tanstack/query-persist-client-core@5.0.0-alpha.90:
+    resolution: {integrity: sha512-jphTBspQ0GSUokl+1zk4zFweOpLy/FCp/tTNblGyo8TsailZLL8/9zV5H6k5cgzP7t3QpexbDjlMwFugVIC0gA==}
     dependencies:
-      '@tanstack/query-core': 5.0.0-alpha.88
-      '@tanstack/query-persist-client-core': 5.0.0-alpha.88
+      '@tanstack/query-core': 5.0.0-alpha.90
+    dev: false
+
+  /@tanstack/query-sync-storage-persister@5.0.0-alpha.90:
+    resolution: {integrity: sha512-VeHMK1ohDmLbvNsDIgaCwBM3PiIIwwwf2YCqPHxt78zVM8XhhRRDs4oHO1HZO37loPBkWWzhjq9nd0xlHP6sRQ==}
+    dependencies:
+      '@tanstack/query-core': 5.0.0-alpha.90
+      '@tanstack/query-persist-client-core': 5.0.0-alpha.90
     dev: false
 
   /@tanstack/react-query-devtools@5.0.0-alpha.86(@tanstack/react-query@5.0.0-alpha.88)(react-dom@18.2.0)(react@18.2.0):
