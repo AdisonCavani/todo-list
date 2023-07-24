@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest, response: NextResponse) {
     pathname.startsWith("/static") ||
     ["/sw.js", "/workbox-8637ed29.js"].includes(pathname)
   )
-    return;
+    return NextResponse.next();
 
   // Check if there is any supported locale in the pathname
   const pathnameIsMissingLocale = i18n.locales.every(
@@ -54,7 +54,7 @@ export async function middleware(request: NextRequest, response: NextResponse) {
     // @ts-expect-error
     return await auth(request, response);
 
-  return;
+  return NextResponse.next();
 }
 
 export const config = {
