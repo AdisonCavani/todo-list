@@ -34,7 +34,7 @@
     "@tanstack/react-query-persist-client": "5.0.0-beta.5",
     "drizzle-orm": "^0.27.2",
     "next": "^13.4.12",
-    "next-auth": "0.0.0-manual.83c4ebd1",
+    "next-auth": "4.20.1",
     "next-themes": "^0.2.1",
     "nprogress": "^0.2.0",
     "react": "^18.2.0",
