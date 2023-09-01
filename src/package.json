@@ -58,7 +58,7 @@
     "@tailwindcss/typography": "^0.5.9",
     "@tanstack/react-query-devtools": "5.0.0-beta.5",
     "@types/mdx": "^2.0.7",
-    "@types/node": "^20.5.3",
+    "@types/node": "^20.5.7",
     "@types/nprogress": "^0.2.0",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
