@@ -58,7 +58,7 @@
     "@storybook/react": "^7.4.1",
     "@storybook/testing-library": "^0.2.0",
     "@tailwindcss/typography": "^0.5.10",
-    "@tanstack/react-query-devtools": "5.0.0-beta.5",
+    "@tanstack/react-query-devtools": "5.0.0-beta.27",
     "@types/mdx": "^2.0.7",
     "@types/node": "^20.6.0",
     "@types/nprogress": "^0.2.0",
