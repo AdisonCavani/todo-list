@@ -48,8 +48,8 @@ dependencies:
     specifier: ^2.34.0
     version: 2.34.0(react@18.2.0)
   '@tanstack/query-sync-storage-persister':
-    specifier: 5.0.0-beta.5
-    version: 5.0.0-beta.5
+    specifier: 5.0.0-beta.27
+    version: 5.0.0-beta.27
   '@tanstack/react-query':
     specifier: 5.0.0-beta.5
     version: 5.0.0-beta.5(react-dom@18.2.0)(react@18.2.0)
@@ -4421,6 +4421,10 @@ packages:
       tailwindcss: 3.3.3
     dev: true
 
+  /@tanstack/query-core@5.0.0-beta.27:
+    resolution: {integrity: sha512-Dri9GPSeGmD1t4CNh1QYz47CxQvYJfUwaZ37PVsmV6nvHsYQdXzVW8wv31ivBKQajy3sOqC/O0NHDswFnq566g==}
+    dev: false
+
   /@tanstack/query-core@5.0.0-beta.5:
     resolution: {integrity: sha512-j7NZgvpNjG12GLkdTSjvhaeOw87F5sdeJ5iILT8S5XA00jZns2b8+tKlwKWS4V3DjwkupMHm9RZ9NQVsyllDMA==}
 
@@ -4428,17 +4432,23 @@ packages:
     resolution: {integrity: sha512-n+UFgL4C/OWNpmVR8v/cj4WIMw5xapGLsZS0qHXgGrpXqNTp2IPWzeU848KHpL7BqBQZeuKDj20BuID+1FsmgA==}
     dev: true
 
+  /@tanstack/query-persist-client-core@5.0.0-beta.27:
+    resolution: {integrity: sha512-quOkwg24WAmsOR2k6kX8hV8BTVwfveXDExhiN7ahURMEsuIwJP3LBf1sTK+tz30fVsmiemoSyB/uqgs7PhV1dA==}
+    dependencies:
+      '@tanstack/query-core': 5.0.0-beta.27
+    dev: false
+
   /@tanstack/query-persist-client-core@5.0.0-beta.5:
     resolution: {integrity: sha512-lEPiFb/KxY3fFnktyfgmIjb3BTmIc3jf01jbC1E0CrCkGCwk7/0FqLjjOm8j1smKsRDzBNJJVWqXUTNwPhXAsA==}
     dependencies:
       '@tanstack/query-core': 5.0.0-beta.5
     dev: false
 
-  /@tanstack/query-sync-storage-persister@5.0.0-beta.5:
-    resolution: {integrity: sha512-AJjYLqUxX2dxV59Idl9LaRdvtn1UDEk0sVzJJ8ZilnWz+QOYMNEnUhrJobL7X592euaU2DcOMjzr2qhfjRj8wQ==}
+  /@tanstack/query-sync-storage-persister@5.0.0-beta.27:
+    resolution: {integrity: sha512-rlN52t0nu9+NvWSARbhxLgboQiw0w4Jh5Gky1DVeezSDYMYQibK4bByq09Qg0z01lShnKM/oxuvGmzZYVcgsvw==}
     dependencies:
-      '@tanstack/query-core': 5.0.0-beta.5
-      '@tanstack/query-persist-client-core': 5.0.0-beta.5
+      '@tanstack/query-core': 5.0.0-beta.27
+      '@tanstack/query-persist-client-core': 5.0.0-beta.27
     dev: false
 
   /@tanstack/react-query-devtools@5.0.0-beta.5(@tanstack/react-query@5.0.0-beta.5)(react-dom@18.2.0)(react@18.2.0):
