@@ -134,8 +134,8 @@ devDependencies:
     specifier: ^0.5.10
     version: 0.5.10(tailwindcss@3.3.3)
   '@tanstack/react-query-devtools':
-    specifier: 5.0.0-beta.33
-    version: 5.0.0-beta.33(@tanstack/react-query@5.0.0-beta.31)(react-dom@18.2.0)(react@18.2.0)
+    specifier: 5.0.0-rc.13
+    version: 5.0.0-rc.13(@tanstack/react-query@5.0.0-beta.31)(react-dom@18.2.0)(react@18.2.0)
   '@types/mdx':
     specifier: ^2.0.8
     version: 2.0.8
@@ -4600,8 +4600,8 @@ packages:
   /@tanstack/query-core@5.0.0-beta.31:
     resolution: {integrity: sha512-XOpDJqRLIcbrC9AFb2/JzgvshS4Gwl7v9M2t4qXHFYRCwaLD+cL18QzMntqz0VeLMHzBShUFPeJUFzuUwTm/Gg==}
 
-  /@tanstack/query-devtools@5.0.0-beta.33:
-    resolution: {integrity: sha512-khg+nUIWLeCqMzbjWuJ0mmuheRWUkItRpn+ZOWsq4/v2/OrgHwSRPUjbIhfLc73rDxSu/XvIMkij8aY9A705qg==}
+  /@tanstack/query-devtools@5.0.0-rc.13:
+    resolution: {integrity: sha512-O88UIStZ98xoFPhgl3C71l7ycM4s/n5lKjlwFcYb8bdqbZyymw4cnNJO3l/YZrT+9Qa6JcLBm1gMXB3s51OUvQ==}
     dev: true
 
   /@tanstack/query-persist-client-core@5.0.0-beta.31:
@@ -4617,14 +4617,14 @@ packages:
       '@tanstack/query-persist-client-core': 5.0.0-beta.31
     dev: false
 
-  /@tanstack/react-query-devtools@5.0.0-beta.33(@tanstack/react-query@5.0.0-beta.31)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-9xmO3GjFlafwvFN1xsyTFDGIlJT4CJqDYWkSyS2TVI6x8t6jNVi4LzyXhCYEXKrP/eqw6pBHDy4fspNRqDDxiQ==}
+  /@tanstack/react-query-devtools@5.0.0-rc.13(@tanstack/react-query@5.0.0-beta.31)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-5LMAkDf+98t78o0bEXsORv0fO3LLYm9IpuOKynlcdPhNu07uT72iu5v/1Q6qSNCsbF1J0QsKxAK9bt0gvZtHTw==}
     peerDependencies:
-      '@tanstack/react-query': ^5.0.0-beta.31
+      '@tanstack/react-query': ^5.0.0-rc.12
       react: ^18.0.0
       react-dom: ^18.0.0
     dependencies:
-      '@tanstack/query-devtools': 5.0.0-beta.33
+      '@tanstack/query-devtools': 5.0.0-rc.13
       '@tanstack/react-query': 5.0.0-beta.31(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
