@@ -4,22 +4,15 @@ import NextThemeProvider from "@components/theme-provider";
 import { fontInter } from "@lib/font";
 import { twindConfig, type ColorRecordType } from "@lib/twind";
 import { cn } from "@lib/utils";
+import type { Viewport } from "next";
 import { AxiomWebVitals } from "next-axiom";
 import Script from "next/script";
 import type { PropsWithChildren } from "react";
 
 export const dynamic = "force-dynamic";
-// export const runtime = "edge";
+export const runtime = "edge";
 
-export const metadata = {
-  title: {
-    default: "To-do list",
-    template: "%s | To-do list",
-  },
-  description: "Managing your tasks has never been simpler before.",
-
-  metadataBase: new URL("https://todo.k1ng.dev"),
-  manifest: "/static/manifest.json",
+export const viewport: Viewport = {
   themeColor: [
     {
       color: (twindConfig.colors.neutral as ColorRecordType)[50],
@@ -30,6 +23,17 @@ export const metadata = {
       media: "(prefers-color-scheme: dark)",
     },
   ],
+};
+
+export const metadata = {
+  title: {
+    default: "To-do list",
+    template: "%s | To-do list",
+  },
+  description: "Managing your tasks has never been simpler before.",
+
+  metadataBase: new URL("https://todo.k1ng.dev"),
+  manifest: "/static/manifest.json",
   openGraph: {
     images: ["/static/images/og.webp"],
   },

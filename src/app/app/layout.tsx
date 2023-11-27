@@ -5,10 +5,14 @@ import { auth } from "@lib/auth";
 import { twindConfig, type ColorRecordType } from "@lib/twind";
 import { IconChecklist } from "@tabler/icons-react";
 import { Toaster } from "@ui/toaster";
+import type { Viewport } from "next";
 import type { PropsWithChildren } from "react";
 
 export const metadata = {
   title: "App",
+};
+
+export const viewport: Viewport = {
   themeColor: [
     {
       color: (twindConfig.colors.blue as ColorRecordType)[600],
