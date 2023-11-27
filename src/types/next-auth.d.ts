@@ -1,17 +1,12 @@
+import { users } from "@/server/db/schema";
+import { type InferSelectModel } from "drizzle-orm";
 import { User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 
-declare module "next-auth/jwt" {
-  interface JWT {
-    id: string;
+declare module "@auth/core/adapters" {
+  interface AdapterUser extends InferSelectModel<typeof users> {
     firstName: string;
     lastName: string;
-    email: string;
-
-    access_token: string;
-    expires_at: number;
-    refresh_token: string;
-    error?: "RefreshAccessTokenError";
   }
 }
 

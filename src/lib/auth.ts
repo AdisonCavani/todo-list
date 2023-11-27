@@ -52,7 +52,7 @@ export const {
 
   callbacks: {
     authorized({ auth }) {
-      return !!auth.user;
+      return !!auth?.user;
     },
     jwt({ token, user, account }) {
       if (user) {

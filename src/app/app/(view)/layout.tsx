@@ -13,7 +13,7 @@ async function Layout({ children }: PropsWithChildren) {
   const response = await db
     .select()
     .from(lists)
-    .where(eq(lists.userId, session.user.id));
+    .where(eq(lists.userId, session!.user.id));
 
   return (
     <main className="flex grow flex-row">

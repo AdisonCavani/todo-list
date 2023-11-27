@@ -41,7 +41,7 @@ async function Layout({ children }: PropsWithChildren) {
           </Link>
         </div>
 
-        <ProfileMenu {...session.user} />
+        <ProfileMenu {...session!.user} />
       </header>
 
       {children}
