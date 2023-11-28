@@ -72,13 +72,14 @@ function MobileNav({ initialLists }: Props) {
 
                 <ContextMenuContent>
                   <ContextMenuItem
-                    onClick={() =>
+                    onClick={(event) => {
+                      event.stopPropagation();
                       toast({
                         title: "This feature is not available yet.",
                         description:
                           "Work in progress. Sorry for the inconvenience.",
-                      })
-                    }
+                      });
+                    }}
                   >
                     <IconEdit size={16} />
                     Edit
