@@ -1,5 +1,5 @@
 import { db } from "@db/sql";
-import NextAuth from "next-auth";
+import NextAuth, { type User } from "next-auth";
 import Github, { type GitHubProfile } from "next-auth/providers/github";
 import Google, { type GoogleProfile } from "next-auth/providers/google";
 import { DrizzleAdapter } from "./drizzle-adapter";
@@ -38,11 +38,11 @@ export const {
       clientId: process.env.AUTH_GOOGLE_ID,
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
 
-      profile(profile: GoogleProfile) {
+      profile(profile: GoogleProfile): User {
         return {
           id: profile.sub,
           firstName: profile.given_name,
-          lastName: profile.family_name,
+          lastName: profile.family_name!,
           email: profile.email,
           image: profile.picture,
         };

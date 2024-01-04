@@ -78,7 +78,7 @@ function Form({ listId }: Props) {
   return (
     <form
       onSubmit={handleOnSubmit}
-      className="mb-3 hidden rounded-md bg-white shadow-ms dark:bg-neutral-800 lg:block"
+      className="mb-3 hidden rounded-md bg-white shadow-ms lg:block dark:bg-neutral-800"
     >
       <div className="flex flex-row items-center gap-x-2 px-4">
         <div className="ml-[6px] min-h-[18px] min-w-[18px] cursor-pointer rounded-full border border-neutral-400" />
