@@ -4,6 +4,7 @@ import NextThemeProvider from "@components/theme-provider";
 import { fontInter } from "@lib/font";
 import { twindConfig, type ColorRecordType } from "@lib/twind";
 import { cn } from "@lib/utils";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Viewport } from "next";
 import { AxiomWebVitals } from "next-axiom";
 import Script from "next/script";
@@ -73,6 +74,7 @@ function RootLayout({ children }: PropsWithChildren) {
               {`window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }`}
             </Script>
             <AxiomWebVitals />
+            <SpeedInsights />
           </>
         )}
       </head>
