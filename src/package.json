@@ -37,7 +37,6 @@
     "@tanstack/query-sync-storage-persister": "^5.17.1",
     "@tanstack/react-query": "^5.17.1",
     "@tanstack/react-query-persist-client": "^5.17.1",
-    "@vercel/speed-insights": "^1.0.3",
     "drizzle-orm": "^0.29.3",
     "next": "^14.0.4",
     "next-auth": "5.0.0-beta.4",
