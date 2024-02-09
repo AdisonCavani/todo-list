@@ -76,7 +76,7 @@ function RootLayout({ children }: PropsWithChildren) {
           </>
         )}
       </head>
-      <body className="flex min-h-screen flex-col">
+      <body className="flex min-h-svh flex-col">
         <NextThemeProvider>
           <NProgressWrapper>{children}</NProgressWrapper>
         </NextThemeProvider>
