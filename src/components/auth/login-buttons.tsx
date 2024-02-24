@@ -8,6 +8,8 @@ import Image from "next/image";
 import { useState } from "react";
 
 function LoginButtons() {
+  const [disabled, setDisabled] = useState<boolean>(false);
+
   const [loadingGithub, setLoadingGithub] = useState<boolean>(false);
   const [loadingGoogle, setLoadingGoogle] = useState<boolean>(false);
 
@@ -16,11 +18,13 @@ function LoginButtons() {
       {/* Github */}
       <Button
         onClick={() => {
+          setDisabled(true);
           setLoadingGithub(true);
           signIn("github", {
             callbackUrl: "/app",
           });
         }}
+        disabled={disabled}
         loading={loadingGithub}
         icon={<IconBrandGithub size={20} />}
       >
@@ -31,11 +35,13 @@ function LoginButtons() {
       <Button
         variant="outline"
         onClick={() => {
+          setDisabled(true);
           setLoadingGoogle(true);
           signIn("google", {
             callbackUrl: "/app",
           });
         }}
+        disabled={disabled}
         loading={loadingGoogle}
         icon={
           <Image
