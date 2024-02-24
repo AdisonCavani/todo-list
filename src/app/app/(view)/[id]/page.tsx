@@ -15,7 +15,7 @@ async function Page({ params: { id } }: Props) {
   const [listExists, tasksResponse] = await Promise.all([
     db.query.lists.findFirst({
       where: (list, { and, eq }) =>
-        and(eq(list.id, id), eq(list.userId, session!.user.id)),
+        and(eq(list.id, id), eq(list.userId, session!.user.id!)),
     }),
     db.select().from(tasks).where(eq(tasks.listId, id)),
   ]);

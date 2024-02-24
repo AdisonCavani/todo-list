@@ -20,7 +20,7 @@ async function POST(request: Request) {
     const entity = {
       ...list,
       id: v4(),
-      userId: session.user.id,
+      userId: session.user.id!,
     };
 
     await db.insert(lists).values(entity);
@@ -53,11 +53,11 @@ async function PATCH(request: Request) {
     await db
       .update(lists)
       .set(list)
-      .where(and(eq(lists.id, list.id), eq(lists.userId, session.user.id)));
+      .where(and(eq(lists.id, list.id), eq(lists.userId, session.user.id!)));
 
     const response: ListType = {
       ...list,
-      userId: session.user.id,
+      userId: session.user.id!,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

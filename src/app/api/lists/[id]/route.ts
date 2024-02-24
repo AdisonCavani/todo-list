@@ -14,7 +14,7 @@ async function DELETE(
   const [listsResponse, __] = await Promise.all([
     db
       .delete(lists)
-      .where(and(eq(lists.id, id), eq(lists.userId, session.user.id))),
+      .where(and(eq(lists.id, id), eq(lists.userId, session.user.id!))),
 
     db.delete(tasks).where(eq(tasks.listId, id)),
   ]);

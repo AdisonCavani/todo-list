@@ -114,7 +114,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
       <DialogTrigger asChild>
         <li
           ref={ref}
-          className="flex cursor-pointer flex-row items-center gap-x-2 rounded-md bg-white px-4 shadow-ms hover:bg-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 transition-colors"
+          className="flex cursor-pointer flex-row items-center gap-x-2 rounded-md bg-white px-4 shadow-ms transition-colors hover:bg-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-700"
         >
           <button
             aria-label="Toggle task completion"

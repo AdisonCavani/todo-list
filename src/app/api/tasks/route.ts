@@ -19,7 +19,7 @@ async function POST(request: Request) {
 
     const listExists = await db.query.lists.findFirst({
       where: (list, { and, eq }) =>
-        and(eq(list.id, task.listId), eq(list.userId, session.user.id)),
+        and(eq(list.id, task.listId), eq(list.userId, session.user.id!)),
     });
 
     if (!listExists)
