@@ -30,7 +30,7 @@ async function Layout({ children }: PropsWithChildren) {
 
   return (
     <>
-      <header className="sticky top-0 z-10 flex w-full items-center justify-between border-b bg-blue-600 px-4 py-2 dark:bg-neutral-800">
+      <header className="sticky top-0 z-10 flex w-screen items-center justify-between border-b bg-blue-600 py-2 pl-4 pr-9 dark:bg-neutral-800">
         <div className="flex items-center gap-x-2">
           <Link
             href="/app"
@@ -40,7 +40,7 @@ async function Layout({ children }: PropsWithChildren) {
               className: "text-white",
             })}
           >
-            <IconChecklist className="h-6 w-6" />
+            <IconChecklist className="size-6" />
             <h1 className="select-none font-semibold">To Do</h1>
           </Link>
         </div>
