@@ -60,15 +60,13 @@ function App({ initialTasks, listId }: Props) {
       <Form listId={listId} />
       <MobileForm listId={listId} />
 
-      {notFinishedTasks.length > 0 && (
-        <ul className="relative flex flex-col gap-y-2">
-          <FlipMove typeName={null}>
-            {notFinishedTasks.map((task: TaskRenderType) => (
-              <Task key={task.renderId ?? task.id} {...task} />
-            ))}
-          </FlipMove>
-        </ul>
-      )}
+      <ul className="relative flex flex-col gap-y-2">
+        <FlipMove typeName={null}>
+          {notFinishedTasks.map((task: TaskRenderType) => (
+            <Task key={task.renderId ?? task.id} {...task} />
+          ))}
+        </FlipMove>
+      </ul>
 
       {finishedTasks.length > 0 && (
         <Accordion type="single" collapsible className="mt-4">
