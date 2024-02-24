@@ -30,7 +30,7 @@ async function Layout({ children }: PropsWithChildren) {
 
   return (
     <>
-      <header className="sticky top-0 z-10 flex w-screen items-center justify-between border-b bg-blue-600 py-2 pl-4 pr-9 dark:bg-neutral-800">
+      <header className="sticky top-0 z-10 flex w-screen items-center justify-between border-b bg-blue-600 py-2 pl-4 pr-[calc(100vw-100%+24px)] dark:bg-neutral-800">
         <div className="flex items-center gap-x-2">
           <Link
             href="/app"
