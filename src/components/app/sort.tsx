@@ -34,7 +34,7 @@ function Sort({ sorting, defaultSorting, setSorting }: Props) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="sm">
-              <IconArrowsSort className="h-4 w-4" />
+              <IconArrowsSort className="size-4" />
               <span>Sort</span>
             </Button>
           </DropdownMenuTrigger>
@@ -52,7 +52,7 @@ function Sort({ sorting, defaultSorting, setSorting }: Props) {
                 })
               }
             >
-              <IconStar className="h-4 w-4" />
+              <IconStar className="size-4" />
               <span>Importance</span>
             </DropdownMenuItem>
 
@@ -64,7 +64,7 @@ function Sort({ sorting, defaultSorting, setSorting }: Props) {
                 })
               }
             >
-              <IconCalendarTime className="h-4 w-4" />
+              <IconCalendarTime className="size-4" />
               <span>Due date</span>
             </DropdownMenuItem>
 
@@ -76,7 +76,7 @@ function Sort({ sorting, defaultSorting, setSorting }: Props) {
                 })
               }
             >
-              <IconArrowsSort className="h-4 w-4" />
+              <IconArrowsSort className="size-4" />
               <span>Alphabetically</span>
             </DropdownMenuItem>
 
@@ -88,7 +88,7 @@ function Sort({ sorting, defaultSorting, setSorting }: Props) {
                 })
               }
             >
-              <IconCalendarPlus className="h-4 w-4" />
+              <IconCalendarPlus className="size-4" />
               <span>Creation date</span>
             </DropdownMenuItem>
           </DropdownMenuContent>

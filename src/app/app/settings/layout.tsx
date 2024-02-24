@@ -6,7 +6,7 @@ function Layout({ children }: PropsWithChildren) {
   const css = cn("mx-auto w-full max-w-7xl px-3 sm:px-6");
 
   return (
-    <main className="flex h-full w-full grow flex-col py-8">
+    <main className="flex size-full grow flex-col py-8">
       <h2 className={cn("mb-12 mt-4 text-3xl font-medium", css)}>
         Personal Account Settings
       </h2>

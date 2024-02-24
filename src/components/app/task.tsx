@@ -126,7 +126,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
           >
             <IconCheck
               className={cn(
-                "ml-px h-3 w-3",
+                "ml-px size-3",
                 isCompleted
                   ? "text-white"
                   : "text-inherit opacity-0 transition-opacity duration-200 group-hover:opacity-100",
@@ -240,7 +240,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
               ref={dialogDateRef}
               value={dialogDate?.toISOString().split("T")[0] ?? ""}
               onChange={(event) => setDialogDate(event.target.valueAsDate)}
-              className="invisible absolute left-0 top-0 -ml-1 mt-9 h-0 w-0"
+              className="invisible absolute left-0 top-0 -ml-1 mt-9 size-0"
             />
 
             <DropdownMenu>
@@ -251,7 +251,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
                   className="w-full"
                   onClick={(event) => event.stopPropagation()}
                 >
-                  <IconCalendarEvent className="h-4 w-4" />
+                  <IconCalendarEvent className="size-4" />
                   {dialogDate ? (
                     <DateComponent date={dialogDate} textCss="font-semibold" />
                   ) : (
@@ -266,7 +266,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem onClick={() => setDialogDate(new Date())}>
-                  <IconCalendar className="h-5 w-5" />
+                  <IconCalendar className="size-5" />
                   <div className="flex w-full justify-between">
                     <span>Today</span>
                     <span className="pl-8 text-neutral-500">Wed</span>
@@ -280,7 +280,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
                     setDialogDate(date);
                   }}
                 >
-                  <IconCalendarDue className="h-5 w-5" />
+                  <IconCalendarDue className="size-5" />
                   <div className="flex w-full justify-between">
                     <span>Tomorrow</span>
                     <span className="pl-8 text-neutral-500">
@@ -296,7 +296,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
                     setDialogDate(date);
                   }}
                 >
-                  <IconCalendarPlus className="h-5 w-5" />
+                  <IconCalendarPlus className="size-5" />
                   <div className="flex w-full justify-between">
                     <span>Next week</span>
                     <span className="pl-8 text-neutral-500">
@@ -310,7 +310,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
                 <DropdownMenuItem
                   onClick={() => dialogDateRef.current?.showPicker()}
                 >
-                  <IconCalendarStats className="h-4 w-4" />
+                  <IconCalendarStats className="size-4" />
                   <span>Pick a date</span>
                 </DropdownMenuItem>
 
@@ -322,7 +322,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
                       onClick={() => setDialogDate(null)}
                       className="text-red-600 dark:text-red-400"
                     >
-                      <IconTrash size={24} className="h-4 w-4" />
+                      <IconTrash size={24} className="size-4" />
                       <span>Remove due date</span>
                     </DropdownMenuItem>
                   </>
@@ -357,28 +357,28 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem onClick={() => setDialogPriority("P1")}>
-                  <IconFlag2Filled className="h-5 w-5 text-red-500" />
+                  <IconFlag2Filled className="size-5 text-red-500" />
                   <div className="flex w-full justify-between">
                     <span>Priority 1</span>
                   </div>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem onClick={() => setDialogPriority("P2")}>
-                  <IconFlag2Filled className="h-5 w-5 text-orange-400" />
+                  <IconFlag2Filled className="size-5 text-orange-400" />
                   <div className="flex w-full justify-between">
                     <span>Priority 2</span>
                   </div>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem onClick={() => setDialogPriority("P3")}>
-                  <IconFlag2Filled className="h-5 w-5 text-blue-500" />
+                  <IconFlag2Filled className="size-5 text-blue-500" />
                   <div className="flex w-full justify-between">
                     <span>Priority 3</span>
                   </div>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem onClick={() => setDialogPriority("P4")}>
-                  <IconFlag2 className="h-5 w-5" />
+                  <IconFlag2 className="size-5" />
                   <div className="flex w-full justify-between">
                     <span>Priority 4</span>
                   </div>

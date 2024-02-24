@@ -45,7 +45,7 @@ function SettingsCard({
         </div>
 
         {type == "avatar" && (
-          <Avatar className="h-20 w-20">
+          <Avatar className="size-20">
             <AvatarImage src={avatarSrc} alt="User avatar" />
             <AvatarFallback>{avatarFallback}</AvatarFallback>
           </Avatar>

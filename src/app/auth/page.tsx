@@ -30,7 +30,7 @@ async function Page() {
 
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 xs:w-80">
         <div className="flex flex-col space-y-2 text-center">
-          <IconChecklist className="mx-auto h-6 w-6" />
+          <IconChecklist className="mx-auto size-6" />
           <h1 className="text-2xl font-semibold tracking-tight">
             Welcome back
           </h1>

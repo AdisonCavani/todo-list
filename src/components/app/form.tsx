@@ -99,7 +99,7 @@ function Form({ listId }: Props) {
             ref={dateRef}
             value={date?.toISOString().split("T")[0] ?? ""}
             onChange={(event) => setDate(event.target.valueAsDate)}
-            className="invisible absolute left-0 top-0 -ml-1 mt-9 h-0 w-0"
+            className="invisible absolute left-0 top-0 -ml-1 mt-9 size-0"
           />
 
           <DropdownMenu>
@@ -136,7 +136,7 @@ function Form({ listId }: Props) {
               <DropdownMenuSeparator />
 
               <DropdownMenuItem onClick={() => setDate(new Date())}>
-                <IconCalendar className="h-5 w-5" />
+                <IconCalendar className="size-5" />
                 <div className="flex w-full justify-between">
                   <span>Today</span>
                   <span className="pl-8 text-neutral-500">
@@ -152,7 +152,7 @@ function Form({ listId }: Props) {
                   setDate(date);
                 }}
               >
-                <IconCalendarDue className="h-5 w-5" />
+                <IconCalendarDue className="size-5" />
                 <div className="flex w-full justify-between">
                   <span>Tomorrow</span>
                   <span className="pl-8 text-neutral-500">
@@ -168,7 +168,7 @@ function Form({ listId }: Props) {
                   setDate(date);
                 }}
               >
-                <IconCalendarPlus className="h-5 w-5" />
+                <IconCalendarPlus className="size-5" />
                 <div className="flex w-full justify-between">
                   <span>Next week</span>
                   <span className="pl-8 text-neutral-500">
@@ -180,7 +180,7 @@ function Form({ listId }: Props) {
               <DropdownMenuSeparator />
 
               <DropdownMenuItem onClick={() => dateRef.current?.showPicker()}>
-                <IconCalendarStats className="h-4 w-4" />
+                <IconCalendarStats className="size-4" />
                 <span>Pick a date</span>
               </DropdownMenuItem>
 
@@ -192,7 +192,7 @@ function Form({ listId }: Props) {
                     onClick={() => setDate(null)}
                     className="text-red-600 dark:text-red-400"
                   >
-                    <IconTrash size={24} className="h-4 w-4" />
+                    <IconTrash size={24} className="size-4" />
                     <span>Remove due date</span>
                   </DropdownMenuItem>
                 </>
@@ -239,28 +239,28 @@ function Form({ listId }: Props) {
               <DropdownMenuSeparator />
 
               <DropdownMenuItem onClick={() => setPriority("P1")}>
-                <IconFlag2Filled className="h-5 w-5 text-red-500" />
+                <IconFlag2Filled className="size-5 text-red-500" />
                 <div className="flex w-full justify-between">
                   <span>Priority 1</span>
                 </div>
               </DropdownMenuItem>
 
               <DropdownMenuItem onClick={() => setPriority("P2")}>
-                <IconFlag2Filled className="h-5 w-5 text-orange-400" />
+                <IconFlag2Filled className="size-5 text-orange-400" />
                 <div className="flex w-full justify-between">
                   <span>Priority 2</span>
                 </div>
               </DropdownMenuItem>
 
               <DropdownMenuItem onClick={() => setPriority("P3")}>
-                <IconFlag2Filled className="h-5 w-5 text-blue-500" />
+                <IconFlag2Filled className="size-5 text-blue-500" />
                 <div className="flex w-full justify-between">
                   <span>Priority 3</span>
                 </div>
               </DropdownMenuItem>
 
               <DropdownMenuItem onClick={() => setPriority("P4")}>
-                <IconFlag2 className="h-5 w-5" />
+                <IconFlag2 className="size-5" />
                 <div className="flex w-full justify-between">
                   <span>Priority 4</span>
                 </div>

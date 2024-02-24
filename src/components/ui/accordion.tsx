@@ -37,7 +37,7 @@ const AccordionTrigger = forwardRef<
       {...props}
     >
       {children}
-      <IconChevronDown className="h-4 w-4 transition-transform duration-200" />
+      <IconChevronDown className="size-4 transition-transform duration-200" />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ));
