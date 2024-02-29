@@ -51,7 +51,7 @@ function MobileNav({ initialLists }: Props) {
 
   return (
     <nav className="flex w-full grow flex-col py-8 lg:hidden">
-      <h2 className="mb-8 ml-5 text-xl font-bold">Lists</h2>
+      <h2 className="mb-8 ml-3 text-xl font-bold">Lists</h2>
       <hr className="w-full" />
 
       {lists
