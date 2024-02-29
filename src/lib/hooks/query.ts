@@ -120,36 +120,6 @@ function useUpdateTaskMutation() {
   });
 }
 
-function useDeleteTaskMutation(listId: string) {
-  const queryClient = useQueryClient();
-  const { toast } = useToast();
-
-  const queryKey = `${queryKeys.tasks}-${listId}`;
-
-  return useMutation({
-    mutationFn: (req: string) => client("/tasks/{id}", req).delete(),
-    async onMutate(taskId) {
-      await queryClient.cancelQueries({ queryKey: [queryKey] });
-
-      const previousTasks = queryClient.getQueryData<TaskType[]>([queryKey]);
-
-      queryClient.setQueryData<TaskType[]>([queryKey], (tasks) =>
-        tasks!.filter((task) => task.id !== taskId),
-      );
-
-      return { previousTasks };
-    },
-    onError(_, __, context) {
-      queryClient.setQueryData<TaskType[]>([queryKey], context?.previousTasks);
-
-      toast({
-        variant: "destructive",
-        title: "Failed to delete task.",
-      });
-    },
-  });
-}
-
 function useCreateListMutation() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -212,7 +182,6 @@ function useDeleteListMutation() {
 export {
   useCreateTaskMutation,
   useUpdateTaskMutation,
-  useDeleteTaskMutation,
   useCreateListMutation,
   useDeleteListMutation,
 };

@@ -2,7 +2,9 @@
 
 import { addDays, getShortDayName } from "@lib/date";
 import { getPriorityColor, getPriorityText } from "@lib/helpers";
-import { useDeleteTaskMutation, useUpdateTaskMutation } from "@lib/hooks/query";
+import { useUpdateTaskMutation } from "@lib/hooks/query";
+import { toast } from "@lib/hooks/use-toast";
+import { api } from "@lib/trpc/react";
 import type { TaskPriorityEnum } from "@lib/types";
 import { cn } from "@lib/utils";
 import { DialogClose } from "@radix-ui/react-dialog";
@@ -48,8 +50,29 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
   const { title, description, dueDate, priority, isCompleted, isImportant } =
     task;
 
-  const { mutate: deleteTask, isPending: deleteTaskLoading } =
-    useDeleteTaskMutation(task.listId);
+  const utils = api.useUtils();
+  const deleteTask = api.task.delete.useMutation({
+    async onMutate(input) {
+      await utils.task.invalidate();
+
+      const prevData = utils.task.get.getData({ listId: input.id });
+
+      utils.task.get.setData({ listId: input.id }, (old) =>
+        old?.filter((task) => task.id !== input.id),
+      );
+
+      return { prevData };
+    },
+    onError(_, input, ctx) {
+      utils.task.get.setData({ listId: input.id }, ctx?.prevData);
+
+      toast({
+        variant: "destructive",
+        title: "Failed to delete task.",
+      });
+    },
+  });
+
   const { mutate: updateTask, isPending: updateTaskLoading } =
     useUpdateTaskMutation();
 
@@ -79,7 +102,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
   }
 
   function handleOnDelete() {
-    deleteTask(task.id);
+    deleteTask.mutate({ id: task.id });
   }
 
   const handleOnClick: MouseEventHandler<HTMLButtonElement> = async (event) => {
@@ -192,7 +215,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
             <DialogClose asChild>
               <Button
                 size="xs"
-                loading={deleteTaskLoading}
+                loading={deleteTask.isPending}
                 icon={<IconTrash size={18} />}
                 variant="destructive"
                 onClick={handleOnDelete}
