@@ -1,87 +1,8 @@
 import { client } from "@api/client";
 import { useToast } from "@lib/hooks/use-toast";
-import type {
-  CreateListRequest,
-  CreateTaskRequest,
-  TaskRenderType,
-  UpdateTaskRequest,
-} from "@lib/types";
+import type { CreateListRequest, UpdateTaskRequest } from "@lib/types";
 import type { ListType, TaskType } from "@server/db/schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { v4 } from "uuid";
-
-function useCreateTaskMutation() {
-  const queryClient = useQueryClient();
-  const { toast } = useToast();
-
-  return useMutation({
-    mutationFn: (req: CreateTaskRequest) =>
-      client("/tasks").post({
-        body: req,
-      }),
-    async onMutate(data) {
-      const queryKey = `${queryKeys.tasks}-${data.listId}`;
-
-      await queryClient.cancelQueries({
-        queryKey: [queryKey],
-      });
-
-      const taskId = v4();
-
-      const newTask: TaskRenderType = {
-        renderId: taskId,
-        id: "",
-        description: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        isCompleted: false,
-        isImportant: false,
-        dueDate: data.dueDate ?? null,
-        ...data,
-      };
-
-      const previousTasks =
-        queryClient.getQueryData<TaskType[]>([queryKey]) ?? [];
-
-      queryClient.setQueryData<TaskType[]>([queryKey], (old) => [
-        ...(old ?? []),
-        newTask,
-      ]);
-
-      return { previousTasks, taskId };
-    },
-    onError(_, data, context) {
-      queryClient.setQueryData(
-        [`${queryKeys.tasks}-${data.listId}`],
-        context?.previousTasks,
-      );
-      toast({
-        variant: "destructive",
-        title: "Failed to create task.",
-      });
-    },
-    onSuccess(data, _, context) {
-      queryClient.setQueryData<TaskType[]>(
-        [`${queryKeys.tasks}-${data.listId}`],
-        (old) => {
-          if (!old) return [];
-
-          const updatedTasks = old.map((task: TaskRenderType) => {
-            if (task.renderId === context?.taskId)
-              return {
-                renderId: task.renderId,
-                ...data,
-              };
-
-            return task;
-          });
-
-          return updatedTasks;
-        },
-      );
-    },
-  });
-}
 
 function useUpdateTaskMutation() {
   const queryClient = useQueryClient();
@@ -145,7 +66,7 @@ function useCreateListMutation() {
     },
   });
 }
-export { useCreateTaskMutation, useUpdateTaskMutation, useCreateListMutation };
+export { useUpdateTaskMutation, useCreateListMutation };
 
 const queryKeys = {
   lists: "lists" as const,
