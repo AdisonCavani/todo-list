@@ -1,4 +1,4 @@
-import { db } from "@db/sql";
+import { db } from "@server/db/sql";
 import NextAuth, { type User } from "next-auth";
 import Github, { type GitHubProfile } from "next-auth/providers/github";
 import Google, { type GoogleProfile } from "next-auth/providers/google";

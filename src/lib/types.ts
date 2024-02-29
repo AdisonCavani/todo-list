@@ -1,4 +1,4 @@
-import type { TaskType } from "@db/schema";
+import type { TaskType } from "@server/db/schema";
 import { z } from "zod";
 
 export type TaskPriorityEnum = "P1" | "P2" | "P3" | "P4";

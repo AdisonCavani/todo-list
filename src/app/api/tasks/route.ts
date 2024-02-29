@@ -1,10 +1,10 @@
-import { tasks, type TaskType } from "@db/schema";
-import { db } from "@db/sql";
 import { auth } from "@lib/auth";
 import {
   createTaskRequestValidator,
   updateTaskRequestValidator,
 } from "@lib/types";
+import { tasks, type TaskType } from "@server/db/schema";
+import { db } from "@server/db/sql";
 import { and, eq } from "drizzle-orm";
 import { v4 } from "uuid";
 import { ZodError } from "zod";

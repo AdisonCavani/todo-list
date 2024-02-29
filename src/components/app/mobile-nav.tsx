@@ -11,9 +11,9 @@ import {
 } from "@components/ui/context-menu";
 import { DialogTrigger } from "@components/ui/dialog";
 import { Input } from "@components/ui/input";
-import type { ListType } from "@db/schema";
 import { queryKeys, useCreateListMutation } from "@lib/hooks/query";
 import { useToast } from "@lib/hooks/use-toast";
+import type { ListType } from "@server/db/schema";
 import { IconEdit, IconList, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";

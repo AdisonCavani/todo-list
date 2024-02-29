@@ -1,4 +1,4 @@
-import type { TaskType } from "@db/schema";
+import type { TaskType } from "@server/db/schema";
 
 function sortTasksByTitle(a: TaskType, b: TaskType): number {
   return a.title.localeCompare(b.title);

@@ -23,9 +23,9 @@
     "paths": {
       "@api/*": ["lib/api/*"],
       "@components/*": ["components/*"],
-      "@db/*": ["db/*"],
       "@lib/*": ["lib/*"],
       "@images/*": ["public/static/images/*"],
+      "@server/*": ["server/*"],
       "@styles/*": ["styles/*"],
       "@ui/*": ["components/ui/*"]
     },

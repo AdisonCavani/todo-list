@@ -1,5 +1,4 @@
 import { client } from "@api/client";
-import type { ListType, TaskType } from "@db/schema";
 import { useToast } from "@lib/hooks/use-toast";
 import type {
   CreateListRequest,
@@ -7,6 +6,7 @@ import type {
   TaskRenderType,
   UpdateTaskRequest,
 } from "@lib/types";
+import type { ListType, TaskType } from "@server/db/schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { v4 } from "uuid";
 

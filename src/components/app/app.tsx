@@ -1,9 +1,9 @@
 "use client";
 
-import type { TaskType } from "@db/schema";
 import { queryKeys } from "@lib/hooks/query";
 import { sortMethods, type SortingOptions } from "@lib/sort";
 import type { TaskRenderType } from "@lib/types";
+import type { TaskType } from "@server/db/schema";
 import { useQuery } from "@tanstack/react-query";
 import {
   Accordion,

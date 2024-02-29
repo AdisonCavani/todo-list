@@ -1,10 +1,10 @@
-import { lists, type ListType } from "@db/schema";
-import { db } from "@db/sql";
 import { auth } from "@lib/auth";
 import {
   createListRequestValidator,
   updateListRequestValidator,
 } from "@lib/types";
+import { lists, type ListType } from "@server/db/schema";
+import { db } from "@server/db/sql";
 import { and, eq } from "drizzle-orm";
 import { v4 } from "uuid";
 import { ZodError } from "zod";

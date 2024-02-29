@@ -1,4 +1,4 @@
-import type { ListType, TaskType } from "@db/schema";
+import type { ListType, TaskType } from "@server/db/schema";
 import type {
   CreateListOptions,
   CreateTaskOptions,

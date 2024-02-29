@@ -1,8 +1,5 @@
 import App from "@components/app/app";
-import { tasks } from "@db/schema";
-import { db } from "@db/sql";
-import { auth } from "@lib/auth";
-import { eq } from "drizzle-orm";
+import { api } from "@lib/trpc/server";
 import { notFound } from "next/navigation";
 
 type Props = {
@@ -10,14 +7,9 @@ type Props = {
 };
 
 async function Page({ params: { id } }: Props) {
-  const session = await auth();
-
   const [listExists, tasksResponse] = await Promise.all([
-    db.query.lists.findFirst({
-      where: (list, { and, eq }) =>
-        and(eq(list.id, id), eq(list.userId, session!.user.id!)),
-    }),
-    db.select().from(tasks).where(eq(tasks.listId, id)),
+    api.list.getById({ id: id }),
+    api.task.get({ listId: id }),
   ]);
 
   if (!listExists) notFound();

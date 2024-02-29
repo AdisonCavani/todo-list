@@ -1,12 +1,12 @@
 "use client";
 
-import type { TaskType } from "@db/schema";
 import { addDays, getShortDayName } from "@lib/date";
 import { getPriorityColor, getPriorityText } from "@lib/helpers";
 import { useDeleteTaskMutation, useUpdateTaskMutation } from "@lib/hooks/query";
 import type { TaskPriorityEnum } from "@lib/types";
 import { cn } from "@lib/utils";
 import { DialogClose } from "@radix-ui/react-dialog";
+import type { TaskType } from "@server/db/schema";
 import {
   IconCalendar,
   IconCalendarDue,

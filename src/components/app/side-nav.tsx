@@ -7,9 +7,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@components/ui/popover";
-import type { ListType } from "@db/schema";
 import { queryKeys, useCreateListMutation } from "@lib/hooks/query";
 import { PopoverClose } from "@radix-ui/react-popover";
+import type { ListType } from "@server/db/schema";
 import { IconPlus } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState, type FormEventHandler } from "react";

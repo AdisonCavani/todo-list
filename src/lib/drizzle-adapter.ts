@@ -1,7 +1,12 @@
 import type { Adapter } from "@auth/core/adapters";
-import { accounts, sessions, users, verificationTokens } from "@db/schema";
-import * as schema from "@db/schema";
 import { createId } from "@paralleldrive/cuid2";
+import {
+  accounts,
+  sessions,
+  users,
+  verificationTokens,
+} from "@server/db/schema";
+import * as schema from "@server/db/schema";
 import { and, eq } from "drizzle-orm";
 import type { PlanetScaleDatabase } from "drizzle-orm/planetscale-serverless";
 

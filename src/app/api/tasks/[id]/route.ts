@@ -1,6 +1,6 @@
-import { tasks } from "@db/schema";
-import { db } from "@db/sql";
 import { auth } from "@lib/auth";
+import { tasks } from "@server/db/schema";
+import { db } from "@server/db/sql";
 import { and, eq } from "drizzle-orm";
 
 async function DELETE(

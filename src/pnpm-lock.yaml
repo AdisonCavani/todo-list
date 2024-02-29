@@ -65,6 +65,18 @@ dependencies:
   '@tanstack/react-query-persist-client':
     specifier: ^5.24.1
     version: 5.24.1(@tanstack/react-query@5.24.1)(react@18.2.0)
+  '@trpc/client':
+    specifier: 11.0.0-next-beta.300
+    version: 11.0.0-next-beta.300(@trpc/server@11.0.0-next-beta.300)
+  '@trpc/next':
+    specifier: 11.0.0-next-beta.300
+    version: 11.0.0-next-beta.300(@tanstack/react-query@5.24.1)(@trpc/client@11.0.0-next-beta.300)(@trpc/react-query@11.0.0-next-beta.300)(@trpc/server@11.0.0-next-beta.300)(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)
+  '@trpc/react-query':
+    specifier: 11.0.0-next-beta.300
+    version: 11.0.0-next-beta.300(@tanstack/react-query@5.24.1)(@trpc/client@11.0.0-next-beta.300)(@trpc/server@11.0.0-next-beta.300)(react-dom@18.2.0)(react@18.2.0)
+  '@trpc/server':
+    specifier: 11.0.0-next-beta.300
+    version: 11.0.0-next-beta.300
   drizzle-orm:
     specifier: ^0.29.4
     version: 0.29.4(@planetscale/database@1.16.0)(@types/react@18.2.61)(mysql2@3.9.2)(react@18.2.0)
@@ -92,9 +104,15 @@ dependencies:
   react-flip-move:
     specifier: ^3.0.5
     version: 3.0.5(react-dom@18.2.0)(react@18.2.0)
+  server-only:
+    specifier: ^0.0.1
+    version: 0.0.1
   sharp:
     specifier: ^0.33.2
     version: 0.33.2
+  superjson:
+    specifier: ^2.2.1
+    version: 2.2.1
   uuid:
     specifier: ^9.0.1
     version: 9.0.1
@@ -4783,6 +4801,59 @@ packages:
       '@testing-library/dom': 9.3.4
     dev: true
 
+  /@trpc/client@11.0.0-next-beta.300(@trpc/server@11.0.0-next-beta.300):
+    resolution: {integrity: sha512-a4XWsGs44keGj/vlUCRcFiQFCvxzhUVJs5wtAWWFaU1wrPvTEvc9+cIAUAdQtuNIVFGaLxMZ3dQALvqW75KMSg==}
+    peerDependencies:
+      '@trpc/server': 11.0.0-next-beta.300+2486831f7
+    dependencies:
+      '@trpc/server': 11.0.0-next-beta.300
+    dev: false
+
+  /@trpc/next@11.0.0-next-beta.300(@tanstack/react-query@5.24.1)(@trpc/client@11.0.0-next-beta.300)(@trpc/react-query@11.0.0-next-beta.300)(@trpc/server@11.0.0-next-beta.300)(next@14.1.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-AAAosWO9Nl1dL6/CHjYIVtPaGlo8Jiq4ju6RIJRmjfRB8qNcWzapgMGW6yWI1YTY/79wc7bZSJSMkA2C/vqN3Q==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.0.0
+      '@trpc/client': 11.0.0-next-beta.300+2486831f7
+      '@trpc/react-query': 11.0.0-next-beta.300+2486831f7
+      '@trpc/server': 11.0.0-next-beta.300+2486831f7
+      next: '*'
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+    peerDependenciesMeta:
+      '@tanstack/react-query':
+        optional: true
+      '@trpc/react-query':
+        optional: true
+    dependencies:
+      '@tanstack/react-query': 5.24.1(react@18.2.0)
+      '@trpc/client': 11.0.0-next-beta.300(@trpc/server@11.0.0-next-beta.300)
+      '@trpc/react-query': 11.0.0-next-beta.300(@tanstack/react-query@5.24.1)(@trpc/client@11.0.0-next-beta.300)(@trpc/server@11.0.0-next-beta.300)(react-dom@18.2.0)(react@18.2.0)
+      '@trpc/server': 11.0.0-next-beta.300
+      next: 14.1.0(@babel/core@7.24.0)(react-dom@18.2.0)(react@18.2.0)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@trpc/react-query@11.0.0-next-beta.300(@tanstack/react-query@5.24.1)(@trpc/client@11.0.0-next-beta.300)(@trpc/server@11.0.0-next-beta.300)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-ZEsQyhm1WosvYi94q6ilMSswGdGFQzMeZu4NUJPBMtKt8/LBsG6HK7n7zwnY9XZb1THyujebeOxwJYbmCOWabw==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.0.0
+      '@trpc/client': 11.0.0-next-beta.300+2486831f7
+      '@trpc/server': 11.0.0-next-beta.300+2486831f7
+      react: '>=18.2.0'
+      react-dom: '>=18.2.0'
+    dependencies:
+      '@tanstack/react-query': 5.24.1(react@18.2.0)
+      '@trpc/client': 11.0.0-next-beta.300(@trpc/server@11.0.0-next-beta.300)
+      '@trpc/server': 11.0.0-next-beta.300
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@trpc/server@11.0.0-next-beta.300:
+    resolution: {integrity: sha512-iJ/eSJn3CHEk68Eu7IeYNr7BmMsKvGN9biXcXpGhiXw4JDv8l8SWvOKrvoWqPvDUr74VUL5jkD1WmhLfxOk6Bg==}
+    dev: false
+
   /@types/acorn@4.0.6:
     resolution: {integrity: sha512-veQTnWP+1D/xbxVrPC3zHnCZRjSrKfhbMUlEA43iMZLu7EsnTtkJklIuwrCPbOi8YkvDQAiW05VQQFvvz9oieQ==}
     dependencies:
@@ -6529,7 +6600,6 @@ packages:
     engines: {node: '>=12.13'}
     dependencies:
       is-what: 4.1.16
-    dev: true
 
   /core-js-compat@3.36.0:
     resolution: {integrity: sha512-iV9Pd/PsgjNWBXeq8XRtWVSgz2tKAfhfvBs7qxYty+RlRd+OCksaWmOnc4JKrTc1cToXL1N0s3l/vwlxPtdElw==}
@@ -9163,7 +9233,6 @@ packages:
   /is-what@4.1.16:
     resolution: {integrity: sha512-ZhMwEosbFJkA0YhFnNDgTM4ZxDRsS6HqTo7qsZM08fehyRYIYa0yHu5R6mgo1n/8MgaPBXiPimPD77baVFYg+A==}
     engines: {node: '>=12.13'}
-    dev: true
 
   /is-wsl@2.2.0:
     resolution: {integrity: sha512-fKzAra0rGJUUBwGBgNkHZuToZcn+TtXHpeCgmkMJMMYx1sQDYaCSyjJBSCa2nH1DGm7s3n1oBnohoVTBaN7Lww==}
@@ -12172,6 +12241,10 @@ packages:
       - supports-color
     dev: true
 
+  /server-only@0.0.1:
+    resolution: {integrity: sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==}
+    dev: false
+
   /set-function-length@1.2.1:
     resolution: {integrity: sha512-j4t6ccc+VsKwYHso+kElc5neZpjtq9EnRICFZtWyBsLojhmeF/ZBd/elqm22WJh/BziDe/SBiOeAt0m2mfLD0g==}
     engines: {node: '>= 0.4'}
@@ -12676,7 +12749,6 @@ packages:
     engines: {node: '>=16'}
     dependencies:
       copy-anything: 3.0.5
-    dev: true
 
   /supports-color@5.5.0:
     resolution: {integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==}
