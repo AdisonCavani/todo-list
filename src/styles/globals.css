@@ -128,7 +128,7 @@
 }
 
 #nprogress .bar {
-  background: #0076ff;
+  @apply bg-blue-600 dark:bg-zinc-100;
 
   position: fixed;
   z-index: 1031;
