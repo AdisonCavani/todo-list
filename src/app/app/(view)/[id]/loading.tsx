@@ -4,7 +4,7 @@ function Loading() {
   return (
     <>
       {/* Tasks & sort button */}
-      <div className="mb-3 flex items-center justify-between">
+      <div className="mb-3 flex justify-between">
         <div className="h-7 w-14 animate-pulse rounded-md bg-muted" />
 
         <div className="h-9 w-20 animate-pulse rounded-md bg-muted" />
