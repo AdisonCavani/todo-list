@@ -28,7 +28,7 @@ type Props = {
 function Sort({ sorting, defaultSorting, setSorting }: Props) {
   return (
     <>
-      <div className="mb-3 flex items-center justify-between">
+      <div className="mb-3 flex justify-between">
         <h2 className="text-xl font-bold">Tasks</h2>
 
         <DropdownMenu>
