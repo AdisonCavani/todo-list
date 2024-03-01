@@ -1,10 +1,9 @@
 "use client";
 
-import { queryKeys } from "@lib/hooks/query";
 import { sortMethods, type SortingOptions } from "@lib/sort";
+import { api } from "@lib/trpc/react";
 import type { TaskRenderType } from "@lib/types";
 import type { TaskType } from "@server/db/schema";
-import { useQuery } from "@tanstack/react-query";
 import {
   Accordion,
   AccordionContent,
@@ -24,10 +23,14 @@ type Props = {
 };
 
 function App({ initialTasks, listId }: Props) {
-  const { data: tasks } = useQuery({
-    queryKey: [`${queryKeys.tasks}-${listId}`],
-    initialData: initialTasks,
-  });
+  const { data: tasks } = api.task.get.useQuery(
+    {
+      listId: listId,
+    },
+    {
+      initialData: initialTasks,
+    },
+  );
 
   const defaultSorting: SortingOptions = {
     fn: "sortTasksByImportance",

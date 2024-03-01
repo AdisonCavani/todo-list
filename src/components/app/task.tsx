@@ -2,7 +2,6 @@
 
 import { addDays, getShortDayName } from "@lib/date";
 import { getPriorityColor, getPriorityText } from "@lib/helpers";
-import { useUpdateTaskMutation } from "@lib/hooks/query";
 import { toast } from "@lib/hooks/use-toast";
 import { api } from "@lib/trpc/react";
 import type { TaskPriorityEnum } from "@lib/types";
@@ -53,18 +52,20 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
   const utils = api.useUtils();
   const deleteTask = api.task.delete.useMutation({
     async onMutate(input) {
-      await utils.task.invalidate();
+      await utils.task.get.invalidate({
+        listId: task.listId,
+      });
 
-      const prevData = utils.task.get.getData({ listId: input.id });
+      const prevData = utils.task.get.getData({ listId: task.listId });
 
-      utils.task.get.setData({ listId: input.id }, (old) =>
+      utils.task.get.setData({ listId: task.listId }, (old) =>
         old?.filter((task) => task.id !== input.id),
       );
 
       return { prevData };
     },
-    onError(_, input, ctx) {
-      utils.task.get.setData({ listId: input.id }, ctx?.prevData);
+    onError(_, __, ctx) {
+      utils.task.get.setData({ listId: task.listId }, ctx?.prevData);
 
       toast({
         variant: "destructive",
@@ -73,8 +74,30 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
     },
   });
 
-  const { mutate: updateTask, isPending: updateTaskLoading } =
-    useUpdateTaskMutation();
+  const updateTask = api.task.update.useMutation({
+    async onMutate(input) {
+      await utils.task.get.invalidate({
+        listId: task.listId,
+      });
+
+      const prevData = utils.task.get.getData({ listId: task.listId });
+
+      utils.task.get.setData({ listId: task.listId }, (old) => [
+        ...old!.filter((task) => task.id !== input.id),
+        input as TaskType,
+      ]);
+
+      return { prevData };
+    },
+    onError(_, __, ctx) {
+      utils.task.get.setData({ listId: task.listId }, ctx?.prevData);
+
+      toast({
+        variant: "destructive",
+        title: "Failed to update task.",
+      });
+    },
+  });
 
   const [dialogTitle, setDialogTitle] = useState<string>(title);
   const [dialogDescription, setDialogDescription] = useState<string>(
@@ -91,7 +114,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
   const isSubmitDisabled = dialogTitle.trim().length <= 0;
 
   function handleOnSubmit() {
-    updateTask({
+    updateTask.mutate({
       ...task,
       title: dialogTitle,
       description:
@@ -107,7 +130,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
 
   const handleOnClick: MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.stopPropagation();
-    updateTask({
+    updateTask.mutate({
       ...task,
       isCompleted: !isCompleted,
     });
@@ -117,7 +140,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
     event,
   ) => {
     event.stopPropagation();
-    updateTask({
+    updateTask.mutate({
       ...task,
       isImportant: !isImportant,
     });
@@ -415,7 +438,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
           <DialogClose asChild>
             <Button
               variant="blue"
-              loading={updateTaskLoading}
+              loading={updateTask.isPending}
               disabled={isSubmitDisabled}
               onClick={handleOnSubmit}
               className="w-full"

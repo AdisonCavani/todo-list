@@ -9,7 +9,8 @@ import {
   DialogTitle,
 } from "@components/ui/dialog";
 import { Input } from "@components/ui/input";
-import { useDeleteListMutation } from "@lib/hooks/query";
+import { toast } from "@lib/hooks/use-toast";
+import { api } from "@lib/trpc/react";
 import { usePathname, useRouter } from "next/navigation";
 import {
   useState,
@@ -25,8 +26,29 @@ type Props = {
 function RemoveList({ children, listId, listName }: PropsWithChildren<Props>) {
   const { push } = useRouter();
   const pathname = usePathname();
-  const { mutate: deleteList, isPending: deleteListLoading } =
-    useDeleteListMutation();
+
+  const utils = api.useUtils();
+  const deleteList = api.list.delete.useMutation({
+    async onMutate(input) {
+      await utils.list.get.invalidate();
+
+      const prevData = utils.list.get.getData();
+
+      utils.list.get.setData(undefined, (old) =>
+        old?.filter((list) => list.id !== input.id),
+      );
+
+      return { prevData };
+    },
+    onError(_, __, ctx) {
+      utils.list.get.setData(undefined, ctx?.prevData);
+
+      toast({
+        variant: "destructive",
+        title: "Failed to delete list.",
+      });
+    },
+  });
 
   const [input, setInput] = useState<string>("");
 
@@ -36,7 +58,7 @@ function RemoveList({ children, listId, listName }: PropsWithChildren<Props>) {
   const handleOnRemove: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
 
-    deleteList(listId);
+    deleteList.mutate({ id: listId });
 
     if (pathname === `/app/${listId}`) push("/app");
   };
@@ -65,7 +87,7 @@ function RemoveList({ children, listId, listName }: PropsWithChildren<Props>) {
           variant="destructive"
           className="w-full"
           disabled={removeDisabled}
-          loading={deleteListLoading}
+          loading={deleteList.isPending}
           onClick={handleOnRemove}
         >
           Delete this list

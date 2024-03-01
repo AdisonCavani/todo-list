@@ -2,9 +2,9 @@
 
 import { addDays, getShortDayName } from "@lib/date";
 import { getPriorityColor, getPriorityText } from "@lib/helpers";
-import { useCreateTaskMutation } from "@lib/hooks/query";
-import { useToast } from "@lib/hooks/use-toast";
-import type { TaskPriorityEnum } from "@lib/types";
+import { toast } from "@lib/hooks/use-toast";
+import { api } from "@lib/trpc/react";
+import type { TaskPriorityEnum, TaskRenderType } from "@lib/types";
 import {
   IconBell,
   IconCalendar,
@@ -33,6 +33,7 @@ import {
   TooltipTrigger,
 } from "@ui/tooltip";
 import { createRef, useState, type FormEventHandler } from "react";
+import { v4 } from "uuid";
 import DateComponent from "./date";
 
 type Props = {
@@ -44,10 +45,63 @@ function Form({ listId }: Props) {
   const [date, setDate] = useState<Date | null>(null);
   const [priority, setPriority] = useState<TaskPriorityEnum>("P4");
 
-  const { mutate } = useCreateTaskMutation();
-  const submitDisabled = title.trim().length === 0;
+  const utils = api.useUtils();
+  const { mutate } = api.task.create.useMutation({
+    async onMutate(input) {
+      await utils.task.get.cancel();
 
-  const { toast } = useToast();
+      const taskId = v4();
+
+      const newTask: TaskRenderType = {
+        renderId: taskId,
+        id: "",
+        description: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isCompleted: false,
+        isImportant: false,
+        dueDate: input.dueDate ?? null,
+        ...input,
+      };
+
+      const previousTasks = utils.task.get.getData();
+
+      utils.task.get.setData({ listId: listId }, (old) => {
+        const arr = old ?? [];
+        arr.push(newTask);
+        return arr;
+      });
+
+      return { previousTasks, taskId };
+    },
+    onError(_, __, context) {
+      utils.task.get.setData({ listId: listId }, context?.previousTasks);
+
+      toast({
+        variant: "destructive",
+        title: "Failed to create task.",
+      });
+    },
+    onSuccess(data, _, context) {
+      utils.task.get.setData({ listId: listId }, (old) => {
+        if (!old) return [];
+
+        const updatedTasks = old.map((task: TaskRenderType) => {
+          if (task.renderId === context?.taskId)
+            return {
+              renderId: task.renderId,
+              ...data,
+            };
+
+          return task;
+        });
+
+        return updatedTasks;
+      });
+    },
+  });
+
+  const submitDisabled = title.trim().length === 0;
 
   const handleOnSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
