@@ -56,15 +56,9 @@ dependencies:
   '@tabler/icons-react':
     specifier: ^2.47.0
     version: 2.47.0(react@18.2.0)
-  '@tanstack/query-sync-storage-persister':
-    specifier: ^5.24.1
-    version: 5.24.1
   '@tanstack/react-query':
     specifier: ^5.24.1
     version: 5.24.1(react@18.2.0)
-  '@tanstack/react-query-persist-client':
-    specifier: ^5.24.1
-    version: 5.24.1(@tanstack/react-query@5.24.1)(react@18.2.0)
   '@trpc/client':
     specifier: 11.0.0-next-beta.300
     version: 11.0.0-next-beta.300(@trpc/server@11.0.0-next-beta.300)
@@ -2147,6 +2141,7 @@ packages:
     engines: {glibc: '>=2.26', npm: '>=9.6.5', pnpm: '>=7.1.0', yarn: '>=3.2.0'}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     dev: false
     optional: true
@@ -2156,6 +2151,7 @@ packages:
     engines: {glibc: '>=2.28', npm: '>=9.6.5', pnpm: '>=7.1.0', yarn: '>=3.2.0'}
     cpu: [arm]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     dev: false
     optional: true
@@ -2165,6 +2161,7 @@ packages:
     engines: {glibc: '>=2.28', npm: '>=9.6.5', pnpm: '>=7.1.0', yarn: '>=3.2.0'}
     cpu: [s390x]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     dev: false
     optional: true
@@ -2174,6 +2171,7 @@ packages:
     engines: {glibc: '>=2.26', npm: '>=9.6.5', pnpm: '>=7.1.0', yarn: '>=3.2.0'}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     dev: false
     optional: true
@@ -2183,6 +2181,7 @@ packages:
     engines: {musl: '>=1.2.2', npm: '>=9.6.5', pnpm: '>=7.1.0', yarn: '>=3.2.0'}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
     requiresBuild: true
     dev: false
     optional: true
@@ -2192,6 +2191,7 @@ packages:
     engines: {musl: '>=1.2.2', npm: '>=9.6.5', pnpm: '>=7.1.0', yarn: '>=3.2.0'}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
     requiresBuild: true
     dev: false
     optional: true
@@ -2201,6 +2201,7 @@ packages:
     engines: {glibc: '>=2.26', node: ^18.17.0 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0', yarn: '>=3.2.0'}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     optionalDependencies:
       '@img/sharp-libvips-linux-arm64': 1.0.1
@@ -2212,6 +2213,7 @@ packages:
     engines: {glibc: '>=2.28', node: ^18.17.0 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0', yarn: '>=3.2.0'}
     cpu: [arm]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     optionalDependencies:
       '@img/sharp-libvips-linux-arm': 1.0.1
@@ -2223,6 +2225,7 @@ packages:
     engines: {glibc: '>=2.28', node: ^18.17.0 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0', yarn: '>=3.2.0'}
     cpu: [s390x]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     optionalDependencies:
       '@img/sharp-libvips-linux-s390x': 1.0.1
@@ -2234,6 +2237,7 @@ packages:
     engines: {glibc: '>=2.26', node: ^18.17.0 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0', yarn: '>=3.2.0'}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     optionalDependencies:
       '@img/sharp-libvips-linux-x64': 1.0.1
@@ -2245,6 +2249,7 @@ packages:
     engines: {musl: '>=1.2.2', node: ^18.17.0 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0', yarn: '>=3.2.0'}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
     requiresBuild: true
     optionalDependencies:
       '@img/sharp-libvips-linuxmusl-arm64': 1.0.1
@@ -2256,6 +2261,7 @@ packages:
     engines: {musl: '>=1.2.2', node: ^18.17.0 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0', yarn: '>=3.2.0'}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
     requiresBuild: true
     optionalDependencies:
       '@img/sharp-libvips-linuxmusl-x64': 1.0.1
@@ -2532,6 +2538,7 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     optional: true
 
@@ -2540,6 +2547,7 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
     requiresBuild: true
     optional: true
 
@@ -2548,6 +2556,7 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     optional: true
 
@@ -2556,6 +2565,7 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
     requiresBuild: true
     optional: true
 
@@ -4616,6 +4626,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     optional: true
 
@@ -4624,6 +4635,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
     requiresBuild: true
     optional: true
 
@@ -4632,6 +4644,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     optional: true
 
@@ -4640,6 +4653,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
     requiresBuild: true
     optional: true
 
@@ -4735,19 +4749,6 @@ packages:
     resolution: {integrity: sha512-pThim455t69zrZaQKa7IRkEIK8UBTS+gHVAdNfhO72Xh4rWpMc63ovRje5/n6iw63+d6QiJzVadsJVdPoodSeQ==}
     dev: true
 
-  /@tanstack/query-persist-client-core@5.24.1:
-    resolution: {integrity: sha512-ayUDCSCXAq3ZYXMrVQ3c4g2Mvj+d/Q7rGkNJTvdw09DZQUUMTfZsvSayitJjOxqJl1Pex4HmZNk8PiDvrqvlRQ==}
-    dependencies:
-      '@tanstack/query-core': 5.24.1
-    dev: false
-
-  /@tanstack/query-sync-storage-persister@5.24.1:
-    resolution: {integrity: sha512-dfqgFgb+6tmdvnE1vMQbBuZOBUi7zFeQB/gQJgiADJ2IO0OXp/Ucj06sVOLm9fAPGiUBDqF+UW/xB9ipBH2+Hw==}
-    dependencies:
-      '@tanstack/query-core': 5.24.1
-      '@tanstack/query-persist-client-core': 5.24.1
-    dev: false
-
   /@tanstack/react-query-devtools@5.24.1(@tanstack/react-query@5.24.1)(react@18.2.0):
     resolution: {integrity: sha512-qa4SEugN+EF8JJXcpsM9Lu05HfUv5cvHvLuB0uw/81eJZyNHFdtHFBi5RLCgpBrOyVMDfH8UQ3VBMqXzFKV68A==}
     peerDependencies:
@@ -4758,17 +4759,6 @@ packages:
       '@tanstack/react-query': 5.24.1(react@18.2.0)
       react: 18.2.0
     dev: true
-
-  /@tanstack/react-query-persist-client@5.24.1(@tanstack/react-query@5.24.1)(react@18.2.0):
-    resolution: {integrity: sha512-USD4afkZbSsAWwor5xbXTkzca0ud4SLd2Q++he8Y1iEyOCh7QJhn+zwsKOaqH2X3ecQMvH/jIzO2r+fieKyMvg==}
-    peerDependencies:
-      '@tanstack/react-query': ^5.24.1
-      react: ^18.0.0
-    dependencies:
-      '@tanstack/query-persist-client-core': 5.24.1
-      '@tanstack/react-query': 5.24.1(react@18.2.0)
-      react: 18.2.0
-    dev: false
 
   /@tanstack/react-query@5.24.1(react@18.2.0):
     resolution: {integrity: sha512-4+09JEdO4d6+Gc8Y/g2M/MuxDK5IY0QV8+2wL2304wPKJgJ54cBbULd3nciJ5uvh/as8rrxx6s0mtIwpRuGd1g==}

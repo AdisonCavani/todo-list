@@ -19,7 +19,11 @@ type Props = {
   initialLists: ListType[];
 };
 
-function SideNav({ initialLists: lists }: Props) {
+function SideNav({ initialLists }: Props) {
+  const { data: lists } = api.list.get.useQuery(undefined, {
+    initialData: initialLists,
+  });
+
   const [name, setName] = useState<string>("");
 
   const utils = api.useUtils();

@@ -1,4 +1,3 @@
-import { createListRequestValidator } from "@lib/types";
 import { createTRPCRouter, protectedProcedure } from "@server/api/trpc";
 import { lists, tasks, type ListType } from "@server/db/schema";
 import { and, eq } from "drizzle-orm";
@@ -7,7 +6,11 @@ import { z } from "zod";
 
 export const listRouter = createTRPCRouter({
   create: protectedProcedure
-    .input(createListRequestValidator)
+    .input(
+      z.object({
+        name: z.string(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const entity = {
         ...input,

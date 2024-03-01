@@ -1,6 +1,7 @@
 "use client";
 
 import { sortMethods, type SortingOptions } from "@lib/sort";
+import { api } from "@lib/trpc/react";
 import type { TaskRenderType } from "@lib/types";
 import type { TaskType } from "@server/db/schema";
 import {
@@ -21,7 +22,16 @@ type Props = {
   listId: string;
 };
 
-function App({ initialTasks: tasks, listId }: Props) {
+function App({ initialTasks, listId }: Props) {
+  const { data: tasks } = api.task.get.useQuery(
+    {
+      listId: listId,
+    },
+    {
+      initialData: initialTasks,
+    },
+  );
+
   const defaultSorting: SortingOptions = {
     fn: "sortTasksByImportance",
     order: "desc",

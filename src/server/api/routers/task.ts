@@ -1,7 +1,3 @@
-import {
-  createTaskRequestValidator,
-  updateTaskRequestValidator,
-} from "@lib/types";
 import { createTRPCRouter, protectedProcedure } from "@server/api/trpc";
 import { tasks, type TaskType } from "@server/db/schema";
 import { TRPCError } from "@trpc/server";
@@ -9,9 +5,16 @@ import { and, eq } from "drizzle-orm";
 import { v4 } from "uuid";
 import { z } from "zod";
 
+const createRequestSchema = z.object({
+  listId: z.string().uuid(),
+  title: z.string(),
+  dueDate: z.date().optional().nullable(),
+  priority: z.enum(["P1", "P2", "P3", "P4"]),
+});
+
 export const taskRouter = createTRPCRouter({
   create: protectedProcedure
-    .input(createTaskRequestValidator)
+    .input(createRequestSchema)
     .mutation(async ({ ctx, input }) => {
       const listExists = await ctx.db.query.lists.findFirst({
         where: (list, { and, eq }) =>
@@ -50,7 +53,15 @@ export const taskRouter = createTRPCRouter({
     }),
 
   update: protectedProcedure
-    .input(updateTaskRequestValidator)
+    .input(
+      createRequestSchema.extend({
+        id: z.string().uuid(),
+        listId: z.string().uuid(),
+        description: z.string().nullish(),
+        isCompleted: z.boolean().optional(),
+        isImportant: z.boolean().optional(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       await ctx.db
         .update(tasks)

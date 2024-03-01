@@ -52,18 +52,20 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
   const utils = api.useUtils();
   const deleteTask = api.task.delete.useMutation({
     async onMutate(input) {
-      await utils.task.invalidate();
+      await utils.task.get.invalidate({
+        listId: task.listId,
+      });
 
-      const prevData = utils.task.get.getData({ listId: input.id });
+      const prevData = utils.task.get.getData({ listId: task.listId });
 
-      utils.task.get.setData({ listId: input.id }, (old) =>
+      utils.task.get.setData({ listId: task.listId }, (old) =>
         old?.filter((task) => task.id !== input.id),
       );
 
       return { prevData };
     },
-    onError(_, input, ctx) {
-      utils.task.get.setData({ listId: input.id }, ctx?.prevData);
+    onError(_, __, ctx) {
+      utils.task.get.setData({ listId: task.listId }, ctx?.prevData);
 
       toast({
         variant: "destructive",
@@ -74,18 +76,21 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
 
   const updateTask = api.task.update.useMutation({
     async onMutate(input) {
-      await utils.task.invalidate();
+      await utils.task.get.invalidate({
+        listId: task.listId,
+      });
 
-      const prevData = utils.task.get.getData({ listId: input.id });
+      const prevData = utils.task.get.getData({ listId: task.listId });
 
-      utils.task.get.setData({ listId: input.id }, (old) =>
-        old?.filter((task) => task.id !== input.id),
-      );
+      utils.task.get.setData({ listId: task.listId }, (old) => [
+        ...old!.filter((task) => task.id !== input.id),
+        input as TaskType,
+      ]);
 
       return { prevData };
     },
-    onError(_, input, ctx) {
-      utils.task.get.setData({ listId: input.id }, ctx?.prevData);
+    onError(_, __, ctx) {
+      utils.task.get.setData({ listId: task.listId }, ctx?.prevData);
 
       toast({
         variant: "destructive",

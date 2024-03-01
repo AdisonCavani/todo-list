@@ -23,7 +23,11 @@ type Props = {
   initialLists: ListType[];
 };
 
-function MobileNav({ initialLists: lists }: Props) {
+function MobileNav({ initialLists }: Props) {
+  const { data: lists } = api.list.get.useQuery(undefined, {
+    initialData: initialLists,
+  });
+
   const { toast } = useToast();
   const pathname = usePathname();
 

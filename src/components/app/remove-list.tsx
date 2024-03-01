@@ -30,7 +30,7 @@ function RemoveList({ children, listId, listName }: PropsWithChildren<Props>) {
   const utils = api.useUtils();
   const deleteList = api.list.delete.useMutation({
     async onMutate(input) {
-      await utils.list.invalidate();
+      await utils.list.get.invalidate();
 
       const prevData = utils.list.get.getData();
 
