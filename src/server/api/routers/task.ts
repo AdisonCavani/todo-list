@@ -1,4 +1,7 @@
-import { createTaskRequestValidator } from "@lib/types";
+import {
+  createTaskRequestValidator,
+  updateTaskRequestValidator,
+} from "@lib/types";
 import { createTRPCRouter, protectedProcedure } from "@server/api/trpc";
 import { tasks, type TaskType } from "@server/db/schema";
 import { TRPCError } from "@trpc/server";
@@ -44,6 +47,25 @@ export const taskRouter = createTRPCRouter({
       return ctx.db.query.tasks.findMany({
         where: (task, { eq }) => eq(task.listId, input.listId),
       });
+    }),
+
+  update: protectedProcedure
+    .input(updateTaskRequestValidator)
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db
+        .update(tasks)
+        .set(input)
+        .where(and(eq(tasks.id, input.id)));
+
+      return {
+        ...input,
+        description: input.description ?? null,
+        dueDate: input.dueDate ?? null,
+        isCompleted: input.isCompleted ?? false,
+        isImportant: input.isImportant ?? false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      } as TaskType;
     }),
 
   // TODO: make sure the userId is the same

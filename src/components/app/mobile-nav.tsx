@@ -11,11 +11,10 @@ import {
 } from "@components/ui/context-menu";
 import { DialogTrigger } from "@components/ui/dialog";
 import { Input } from "@components/ui/input";
-import { queryKeys, useCreateListMutation } from "@lib/hooks/query";
 import { useToast } from "@lib/hooks/use-toast";
+import { api } from "@lib/trpc/react";
 import type { ListType } from "@server/db/schema";
 import { IconEdit, IconList, IconPlus, IconTrash } from "@tabler/icons-react";
-import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { Fragment, useState, type FormEventHandler } from "react";
 import RemoveList from "./remove-list";
@@ -24,18 +23,14 @@ type Props = {
   initialLists: ListType[];
 };
 
-function MobileNav({ initialLists }: Props) {
+function MobileNav({ initialLists: lists }: Props) {
   const { toast } = useToast();
   const pathname = usePathname();
-  const { data: lists } = useQuery<ListType[]>({
-    queryKey: [queryKeys.lists],
-    initialData: initialLists,
-  });
 
   const [name, setName] = useState<string>("");
   const submitDisabled = name.trim().length === 0;
 
-  const { mutate, isPending } = useCreateListMutation();
+  const { mutate, isPending } = api.list.create.useMutation({});
 
   if (pathname !== "/app") return;
 

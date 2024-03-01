@@ -7,11 +7,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@components/ui/popover";
-import { queryKeys, useCreateListMutation } from "@lib/hooks/query";
+import { toast } from "@lib/hooks/use-toast";
+import { api } from "@lib/trpc/react";
 import { PopoverClose } from "@radix-ui/react-popover";
 import type { ListType } from "@server/db/schema";
 import { IconPlus } from "@tabler/icons-react";
-import { useQuery } from "@tanstack/react-query";
 import { useState, type FormEventHandler } from "react";
 import SideNavItem from "./side-nav-item";
 
@@ -19,15 +19,28 @@ type Props = {
   initialLists: ListType[];
 };
 
-function SideNav({ initialLists }: Props) {
-  const { data: lists } = useQuery<ListType[]>({
-    queryKey: [queryKeys.lists],
-    initialData: initialLists,
-  });
-
+function SideNav({ initialLists: lists }: Props) {
   const [name, setName] = useState<string>("");
 
-  const { mutate, isPending } = useCreateListMutation();
+  const utils = api.useUtils();
+  const { mutate, isPending } = api.list.create.useMutation({
+    onError() {
+      toast({
+        variant: "destructive",
+        title: "Failed to create list.",
+      });
+    },
+
+    onSuccess(data) {
+      utils.list.get.setData(undefined, (lists) => {
+        if (!lists) return [];
+
+        lists.push(data);
+
+        return lists;
+      });
+    },
+  });
 
   const handleOnSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
