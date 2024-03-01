@@ -62,10 +62,11 @@ function MobileForm({ listId }: Props) {
 
       const previousTasks = utils.task.get.getData();
 
-      utils.task.get.setData({ listId: listId }, (old) => [
-        ...[old ?? []],
-        newTask,
-      ]);
+      utils.task.get.setData({ listId: listId }, (old) => {
+        const arr = old ?? [];
+        arr.push(newTask);
+        return arr;
+      });
 
       return { previousTasks, taskId };
     },
