@@ -1,4 +1,4 @@
-import type { InferModel } from "drizzle-orm";
+import type { InferSelectModel } from "drizzle-orm";
 import {
   boolean,
   date,
@@ -26,7 +26,7 @@ export const tasks = mysqlTable("tasks", {
   priority: mysqlEnum("priority", ["P1", "P2", "P3", "P4"]).notNull(),
 });
 
-export type TaskType = InferModel<typeof tasks>;
+export type TaskType = InferSelectModel<typeof tasks>;
 
 export const lists = mysqlTable("lists", {
   id: varchar("id", { length: 255 }).primaryKey().notNull(),
@@ -36,7 +36,7 @@ export const lists = mysqlTable("lists", {
   name: text("name").notNull(),
 });
 
-export type ListType = InferModel<typeof lists>;
+export type ListType = InferSelectModel<typeof lists>;
 
 export const accounts = mysqlTable(
   "accounts",
