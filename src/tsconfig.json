@@ -25,7 +25,7 @@
       "@lib/*": ["lib/*"],
       "@images/*": ["public/static/images/*"],
       "@server/*": ["server/*"],
-      "@styles/*": ["styles/*"],
+      "@styles/*": ["app/_styles/*"],
       "@ui/*": ["components/ui/*"]
     },
     "noFallthroughCasesInSwitch": true,
