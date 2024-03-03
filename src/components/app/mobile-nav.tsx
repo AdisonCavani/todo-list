@@ -12,13 +12,13 @@ import {
 import { DialogTrigger } from "@components/ui/dialog";
 import { Input } from "@components/ui/input";
 import { api } from "@lib/trpc/react";
-import { useToast } from "@lib/use-toast";
 import { toast } from "@lib/use-toast";
 import type { ListType } from "@server/db/schema";
 import { IconEdit, IconList, IconPlus, IconTrash } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
 import { Fragment, useState, type FormEventHandler } from "react";
 import RemoveList from "./remove-list";
+import RenameList from "./rename-list";
 
 type Props = {
   initialLists: ListType[];
@@ -29,8 +29,8 @@ function MobileNav({ initialLists }: Props) {
     initialData: initialLists,
   });
 
-  const { toast } = useToast();
   const pathname = usePathname();
+  const [hidden, setHidden] = useState<boolean>(false);
 
   const [name, setName] = useState<string>("");
   const submitDisabled = name.trim().length === 0;
@@ -76,53 +76,64 @@ function MobileNav({ initialLists }: Props) {
         .sort((a, b) => a.name.localeCompare(b.name))
         .map(({ id, name }) => (
           <Fragment key={id}>
-            <RemoveList listId={id} listName={name}>
-              <ContextMenu>
-                <ContextMenuTrigger asChild>
-                  <Link
-                    href={`/app/${id}`}
-                    className="z-10 flex items-center gap-x-5 p-4 font-medium transition-all duration-300 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:bg-accent active:text-accent-foreground"
-                  >
-                    <IconList size={20} />
-                    {name}
-                  </Link>
-                </ContextMenuTrigger>
+            <ContextMenu
+              onOpenChange={(open) => {
+                setHidden(!open);
+              }}
+            >
+              <ContextMenuTrigger asChild>
+                <Link
+                  href={`/app/${id}`}
+                  className="z-10 flex items-center gap-x-5 p-4 font-medium transition-all duration-300 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:bg-accent active:text-accent-foreground"
+                >
+                  <IconList size={20} />
+                  {name}
+                </Link>
+              </ContextMenuTrigger>
 
-                <ContextMenuContent>
+              <ContextMenuContent
+                className={hidden ? "invisible" : "visible"}
+                onFocusCapture={(event) => event.stopPropagation()}
+              >
+                <RenameList listId={id} listName={name}>
                   <ContextMenuItem
                     onClick={(event) => {
                       event.stopPropagation();
-                      toast({
-                        title: "This feature is not available yet.",
-                        description:
-                          "Work in progress. Sorry for the inconvenience.",
-                      });
+                      setHidden(true);
                     }}
+                    onSelect={(event) => event.preventDefault()}
                   >
                     <IconEdit size={16} />
                     Edit
                   </ContextMenuItem>
+                </RenameList>
 
-                  <ContextMenuSeparator />
+                <ContextMenuSeparator />
 
-                  <DialogTrigger
-                    asChild
-                    onClick={(event) => event.stopPropagation()}
+                <RemoveList listId={id} listName={name}>
+                  <ContextMenuItem
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setHidden(true);
+                    }}
+                    onSelect={(event) => event.preventDefault()}
+                    className="text-red-600 focus:text-red-600 dark:text-red-400"
                   >
-                    <ContextMenuItem className="text-red-600 focus:text-red-600 dark:text-red-400">
-                      <IconTrash size={16} />
-                      Remove
-                    </ContextMenuItem>
-                  </DialogTrigger>
-                </ContextMenuContent>
-              </ContextMenu>
-            </RemoveList>
+                    <IconTrash size={16} />
+                    Remove
+                  </ContextMenuItem>
+                </RemoveList>
+              </ContextMenuContent>
+            </ContextMenu>
 
             <hr className="w-full" />
           </Fragment>
         ))}
 
-      <form className="mt-auto flex gap-x-2 px-5" onSubmit={handleOnSubmit}>
+      <form
+        className="mt-auto flex gap-x-2 px-5 pt-8"
+        onSubmit={handleOnSubmit}
+      >
         <Button
           type="submit"
           icon={<IconPlus size={20} />}
