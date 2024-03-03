@@ -79,10 +79,28 @@ export const taskRouter = createTRPCRouter({
       } as TaskType;
     }),
 
-  // TODO: make sure the userId is the same
   delete: protectedProcedure
     .input(z.object({ id: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {
+      const task = await ctx.db.query.tasks.findFirst({
+        where: (task, { eq }) => eq(task.id, input.id),
+      });
+
+      if (!task)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+        });
+
+      const list = await ctx.db.query.lists.findFirst({
+        where: (list, { and, eq }) =>
+          and(eq(list.id, task.listId), eq(list.userId, ctx.session.user.id!)),
+      });
+
+      if (!list)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+        });
+
       await ctx.db.delete(tasks).where(and(eq(tasks.id, input.id)));
     }),
 });
