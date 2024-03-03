@@ -90,7 +90,7 @@ function MobileNav({ initialLists }: Props) {
                     asChild
                     onClick={(event) => event.stopPropagation()}
                   >
-                    <ContextMenuItem className="text-red-600 dark:text-red-400">
+                    <ContextMenuItem className="text-red-600 focus:text-red-600 dark:text-red-400">
                       <IconTrash size={16} />
                       Remove
                     </ContextMenuItem>

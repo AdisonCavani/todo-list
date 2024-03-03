@@ -55,7 +55,7 @@ function SideNavItem({ id, name }: Props) {
           <DropdownMenuContent align="center" sideOffset={16}>
             <DropdownMenuItem
               onClick={(event) => {
-                event.preventDefault();
+                event.stopPropagation();
                 toast({
                   title: "This feature is not available yet.",
                   description: "Work in progress. Sorry for the inconvenience.",
@@ -71,7 +71,7 @@ function SideNavItem({ id, name }: Props) {
             <DialogTrigger asChild onClick={(event) => event.stopPropagation()}>
               <DropdownMenuItem
                 onClick={(event) => event.stopPropagation()}
-                className="text-red-600 dark:text-red-400"
+                className="text-red-600 focus:text-red-600 dark:text-red-400"
               >
                 <IconTrash size={16} />
                 Remove
