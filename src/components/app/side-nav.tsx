@@ -106,7 +106,7 @@ function SideNav({ initialLists }: Props) {
 
       <hr className="my-1 w-full" />
 
-      <div className="flex max-h-[calc(100vh-120px)] w-full flex-col gap-y-3 overflow-y-auto">
+      <div className="flex max-h-[calc(100vh-120px)] w-full flex-col gap-y-3 overflow-y-auto p-0.5">
         {lists
           .sort((a, b) => a.name.localeCompare(b.name))
           .map(({ id, name }) => (
