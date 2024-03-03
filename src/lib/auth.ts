@@ -1,8 +1,19 @@
 import { db } from "@server/db/sql";
-import NextAuth, { type User } from "next-auth";
+import NextAuth, { type DefaultSession, type User } from "next-auth";
 import Github, { type GitHubProfile } from "next-auth/providers/github";
 import Google, { type GoogleProfile } from "next-auth/providers/google";
 import { DrizzleAdapter } from "./drizzle-adapter";
+
+declare module "next-auth" {
+  interface Session extends DefaultSession {
+    user: DefaultSession["user"] & User;
+  }
+
+  interface User {
+    firstName: string;
+    lastName: string;
+  }
+}
 
 export const {
   handlers: { GET, POST },
@@ -80,8 +91,6 @@ export const {
     session({ session, token }) {
       // TODO: refactor this
       const token2 = token as any;
-
-      session.error = token2.error;
 
       if (token) {
         session.user.id = token2.id;
