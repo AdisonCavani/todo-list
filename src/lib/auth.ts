@@ -65,7 +65,7 @@ export const {
     authorized({ auth }) {
       return !!auth?.user;
     },
-    jwt({ token, user, account }) {
+    jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.firstName = user.firstName;
@@ -74,30 +74,15 @@ export const {
         token.image = user.image;
       }
 
-      // Initial sign in
-      if (account) {
-        token.access_token = account.id_token!;
-        token.expires_at = account.expires_at!;
-        token.refresh_token = account.refresh_token!;
-
-        return token;
-      }
-
-      // Not yet expired
-      if (Date.now() < (token as any).expires_at * 1000) return token;
-
-      return token; // See: https://github.com/nextauthjs/next-auth/issues/7025
+      return token;
     },
     session({ session, token }) {
-      // TODO: refactor this
-      const token2 = token as any;
-
       if (token) {
-        session.user.id = token2.id;
-        session.user.firstName = token2.firstName;
-        session.user.lastName = token2.lastName;
-        session.user.email = token2.email;
-        session.user.image = token2.image;
+        session.user.id = token.id as string;
+        session.user.firstName = token.firstName as string;
+        session.user.lastName = token.lastName as string;
+        session.user.email = token.email as string;
+        session.user.image = token.image as string;
       }
 
       return session;
