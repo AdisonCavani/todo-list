@@ -21,7 +21,6 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@api/*": ["lib/api/*"],
       "@components/*": ["components/*"],
       "@lib/*": ["lib/*"],
       "@images/*": ["public/static/images/*"],
