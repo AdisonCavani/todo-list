@@ -13,6 +13,7 @@ import { DialogTrigger } from "@components/ui/dialog";
 import { Input } from "@components/ui/input";
 import { api } from "@lib/trpc/react";
 import { useToast } from "@lib/use-toast";
+import { toast } from "@lib/use-toast";
 import type { ListType } from "@server/db/schema";
 import { IconEdit, IconList, IconPlus, IconTrash } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
@@ -34,7 +35,25 @@ function MobileNav({ initialLists }: Props) {
   const [name, setName] = useState<string>("");
   const submitDisabled = name.trim().length === 0;
 
-  const { mutate, isPending } = api.list.create.useMutation({});
+  const utils = api.useUtils();
+  const { mutate, isPending } = api.list.create.useMutation({
+    onError() {
+      toast({
+        variant: "destructive",
+        title: "Failed to create list.",
+      });
+    },
+
+    onSuccess(data) {
+      utils.list.get.setData(undefined, (lists) => {
+        if (!lists) return [];
+
+        lists.push(data);
+
+        return lists;
+      });
+    },
+  });
 
   if (pathname !== "/app") return;
 
