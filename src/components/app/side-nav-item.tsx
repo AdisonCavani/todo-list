@@ -2,7 +2,6 @@
 
 import Link from "@components/router/link";
 import { Button } from "@components/ui/button";
-import { DialogTrigger } from "@components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,11 +9,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
-import { useToast } from "@lib/use-toast";
 import { cn } from "@lib/utils";
 import { IconDots, IconEdit, IconList, IconTrash } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import RemoveList from "./remove-list";
+import RenameList from "./rename-list";
 
 type Props = {
   id: string;
@@ -22,8 +22,8 @@ type Props = {
 };
 
 function SideNavItem({ id, name }: Props) {
-  const { toast } = useToast();
   const pathname = usePathname();
+  const [hidden, setHidden] = useState<boolean>(false);
 
   return (
     <Link
@@ -41,45 +41,59 @@ function SideNavItem({ id, name }: Props) {
         {name}
       </div>
 
-      <RemoveList listId={id} listName={name}>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              size="xxs"
-              variant="ghost"
-              icon={<IconDots size={18} />}
-              className="invisible text-muted-foreground group-hover:visible"
-              onClick={(event) => event.preventDefault()}
-            />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="center" sideOffset={16}>
+      <DropdownMenu
+        onOpenChange={(open) => {
+          setHidden(!open);
+        }}
+      >
+        <DropdownMenuTrigger asChild>
+          <Button
+            size="xxs"
+            variant="ghost"
+            icon={<IconDots size={18} />}
+            className="invisible text-muted-foreground group-hover:visible"
+            onClick={(event) => event.preventDefault()}
+          />
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent
+          align={"center"}
+          className={hidden ? "invisible" : "visible"}
+          sideOffset={16}
+          onFocusCapture={(event) => {
+            event.stopPropagation();
+          }}
+        >
+          <RenameList listId={id} listName={name}>
             <DropdownMenuItem
               onClick={(event) => {
                 event.stopPropagation();
-                toast({
-                  title: "This feature is not available yet.",
-                  description: "Work in progress. Sorry for the inconvenience.",
-                });
+                setHidden(true);
               }}
+              onSelect={(event) => event.preventDefault()}
             >
               <IconEdit size={16} />
               Edit
             </DropdownMenuItem>
+          </RenameList>
 
-            <DropdownMenuSeparator />
+          <DropdownMenuSeparator />
 
-            <DialogTrigger asChild onClick={(event) => event.stopPropagation()}>
-              <DropdownMenuItem
-                onClick={(event) => event.stopPropagation()}
-                className="text-red-600 focus:text-red-600 dark:text-red-400"
-              >
-                <IconTrash size={16} />
-                Remove
-              </DropdownMenuItem>
-            </DialogTrigger>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </RemoveList>
+          <RemoveList listId={id} listName={name}>
+            <DropdownMenuItem
+              onClick={(event) => {
+                event.stopPropagation();
+                setHidden(true);
+              }}
+              onSelect={(event) => event.preventDefault()}
+              className="text-red-600 focus:text-red-600 dark:text-red-400"
+            >
+              <IconTrash size={16} />
+              Remove
+            </DropdownMenuItem>
+          </RemoveList>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </Link>
   );
 }

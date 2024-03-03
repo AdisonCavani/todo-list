@@ -7,6 +7,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@components/ui/dialog";
 import { Input } from "@components/ui/input";
 import { api } from "@lib/trpc/react";
@@ -69,7 +70,7 @@ function RemoveList({ children, listId, listName }: PropsWithChildren<Props>) {
         setInput("");
       }}
     >
-      {children}
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Delete list</DialogTitle>
