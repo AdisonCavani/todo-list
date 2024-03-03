@@ -4,13 +4,13 @@ import { and, eq } from "drizzle-orm";
 import { v4 } from "uuid";
 import { z } from "zod";
 
+const createRequestSchema = z.object({
+  name: z.string(),
+});
+
 export const listRouter = createTRPCRouter({
   create: protectedProcedure
-    .input(
-      z.object({
-        name: z.string(),
-      }),
-    )
+    .input(createRequestSchema)
     .mutation(async ({ ctx, input }) => {
       const entity = {
         ...input,
@@ -40,6 +40,28 @@ export const listRouter = createTRPCRouter({
         where: (list, { and, eq }) =>
           and(eq(list.id, input.id), eq(list.userId, ctx.session.user.id!)),
       });
+    }),
+
+  update: protectedProcedure
+    .input(
+      createRequestSchema.extend({
+        id: z.string().uuid(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db
+        .update(lists)
+        .set(input)
+        .where(
+          and(eq(lists.id, input.id), eq(lists.userId, ctx.session.user.id!)),
+        );
+
+      return {
+        ...input,
+        userId: ctx.session.user.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      } as ListType;
     }),
 
   delete: protectedProcedure
