@@ -160,7 +160,14 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
       <DialogTrigger asChild>
         <li
           ref={ref}
-          className="flex cursor-pointer flex-row items-center gap-x-2 rounded-md bg-white px-4 shadow-ms transition-colors hover:bg-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-700"
+          tabIndex={0}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.currentTarget.click();
+            }
+          }}
+          className="flex cursor-pointer flex-row items-center gap-x-2 rounded-md bg-white px-4 text-left shadow-ms transition-colors hover:bg-neutral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-neutral-800 dark:hover:bg-neutral-700"
         >
           <button
             aria-label="Toggle task completion"
