@@ -12,7 +12,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "studio": "drizzle-kit studio",
-    "db:generate": "drizzle-kit generate:mysql --schema=./db/schema.ts --out=./db/migrations",
+    "db:generate": "drizzle-kit generate:mysql --schema=./server/db/schema.ts --out=./server/db/migrations",
     "db:migrate": "ts-node-esm migrate.ts",
     "prepare": "cd .. && husky install src/.husky"
   },
