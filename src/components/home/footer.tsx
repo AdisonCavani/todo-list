@@ -1,6 +1,6 @@
 import Link from "@components/router/link";
 import { MenuEntries, type MenuEntry } from "@lib/data";
-import { isUrlInternal } from "@lib/helpers";
+import { isUrlInternal } from "@lib/utils";
 import { Fragment } from "react";
 
 const FooterEntries: MenuEntry[] = [

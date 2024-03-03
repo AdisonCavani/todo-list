@@ -1,10 +1,10 @@
 "use client";
 
 import { addDays, getShortDayName } from "@lib/date";
-import { getPriorityColor, getPriorityText } from "@lib/helpers";
-import { toast } from "@lib/hooks/use-toast";
 import { api } from "@lib/trpc/react";
 import type { TaskPriorityEnum, TaskRenderType } from "@lib/types";
+import { toast } from "@lib/use-toast";
+import { getPriorityColor, getPriorityText } from "@lib/utils";
 import {
   IconBell,
   IconCalendar,

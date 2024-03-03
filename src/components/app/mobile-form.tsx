@@ -1,10 +1,10 @@
 import { Button } from "@components/ui/button";
 import { Input } from "@components/ui/input";
 import { addDays, getShortDayName } from "@lib/date";
-import { getPriorityColor, getPriorityText } from "@lib/helpers";
-import { useToast } from "@lib/hooks/use-toast";
 import { api } from "@lib/trpc/react";
 import type { TaskPriorityEnum, TaskRenderType } from "@lib/types";
+import { useToast } from "@lib/use-toast";
+import { getPriorityColor, getPriorityText } from "@lib/utils";
 import * as Dialog from "@radix-ui/react-dialog";
 import {
   IconArrowUp,

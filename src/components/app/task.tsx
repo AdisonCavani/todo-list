@@ -1,11 +1,10 @@
 "use client";
 
 import { addDays, getShortDayName } from "@lib/date";
-import { getPriorityColor, getPriorityText } from "@lib/helpers";
-import { toast } from "@lib/hooks/use-toast";
 import { api } from "@lib/trpc/react";
 import type { TaskPriorityEnum } from "@lib/types";
-import { cn } from "@lib/utils";
+import { toast } from "@lib/use-toast";
+import { cn, getPriorityColor, getPriorityText } from "@lib/utils";
 import { DialogClose } from "@radix-ui/react-dialog";
 import type { TaskType } from "@server/db/schema";
 import {

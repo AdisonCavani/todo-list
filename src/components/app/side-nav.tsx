@@ -7,8 +7,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@components/ui/popover";
-import { toast } from "@lib/hooks/use-toast";
 import { api } from "@lib/trpc/react";
+import { toast } from "@lib/use-toast";
 import { PopoverClose } from "@radix-ui/react-popover";
 import type { ListType } from "@server/db/schema";
 import { IconPlus } from "@tabler/icons-react";

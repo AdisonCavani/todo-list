@@ -9,8 +9,8 @@ import {
   DialogTitle,
 } from "@components/ui/dialog";
 import { Input } from "@components/ui/input";
-import { toast } from "@lib/hooks/use-toast";
 import { api } from "@lib/trpc/react";
+import { toast } from "@lib/use-toast";
 import { usePathname, useRouter } from "next/navigation";
 import {
   useState,

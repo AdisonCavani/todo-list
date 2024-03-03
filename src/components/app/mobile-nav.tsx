@@ -11,8 +11,8 @@ import {
 } from "@components/ui/context-menu";
 import { DialogTrigger } from "@components/ui/dialog";
 import { Input } from "@components/ui/input";
-import { useToast } from "@lib/hooks/use-toast";
 import { api } from "@lib/trpc/react";
+import { useToast } from "@lib/use-toast";
 import type { ListType } from "@server/db/schema";
 import { IconEdit, IconList, IconPlus, IconTrash } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
