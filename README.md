@@ -18,7 +18,7 @@ Deployed on [`todo.k1ng.dev`](https://todo.k1ng.dev).
 - 🌗 Light & dark theme
 - 📱 Progressive Web App
 - 🙍‍♂️ Github & Google OAuth 2.0 login
-- 📈 Self-hosted Plausible Analytics
+- 📈 Self-hosted Umami Analytics
 - 📕 Storybook - on [storybook.todo.k1ng.dev](https://storybook.todo.k1ng.dev)
 
 ## Architecture
