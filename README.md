@@ -34,7 +34,7 @@ Deployed on [`todo.k1ng.dev`](https://todo.k1ng.dev).
 - **Auth providers**: [Github](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps) & [Google](https://developers.google.com/identity/protocols/oauth2)
 - **ORM**: [Drizzle ORM](https://orm.drizzle.team)
 - **Database**: MySql managed instance on [Planetscale](https://planetscale.com)
-- **API request validation**: [Zod](https://zod.dev)
+- **API**: [tRPC](https://trpc.io)
 
 ## Pictures
 
