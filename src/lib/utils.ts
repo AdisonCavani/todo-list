@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { Inter } from "next/font/google";
 import type { TaskPriorityEnum } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
@@ -8,6 +9,11 @@ export function cn(...inputs: ClassValue[]) {
 
 export const isUrlInternal = (href: string) =>
   href && (href.startsWith("/") || href.startsWith("#"));
+
+export const fontInter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
 
 export function getPriorityText(priority: TaskPriorityEnum, long?: boolean) {
   const prefix = long ? "Priority " : "P";

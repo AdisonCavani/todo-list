@@ -5,7 +5,7 @@ import { twindConfig, type ColorRecordType } from "@lib/twind";
 import { cn } from "@lib/utils";
 import type { Viewport } from "next";
 import { AxiomWebVitals } from "next-axiom";
-import { Inter } from "next/font/google";
+import { fontInter } from "@lib/utils";
 import Script from "next/script";
 import type { PropsWithChildren } from "react";
 
@@ -53,11 +53,6 @@ export const metadata = {
     ],
   },
 };
-
-const fontInter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
 
 function RootLayout({ children }: PropsWithChildren) {
   return (

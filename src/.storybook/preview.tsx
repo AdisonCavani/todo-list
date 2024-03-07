@@ -2,7 +2,7 @@ import type { Preview } from "@storybook/react";
 import "@styles/globals.css";
 import { ThemeProvider } from "next-themes";
 import React from "react";
-import { fontInter } from "../lib/font";
+import { fontInter } from "../lib/utils";
 import Theme from "./theme";
 
 document.body.classList.add("font-sans");
