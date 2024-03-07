@@ -71,12 +71,9 @@ function RootLayout({ children }: PropsWithChildren) {
           <>
             <Script
               strategy="lazyOnload"
-              data-domain="todo.k1ng.dev"
-              src="https://insights.k1ng.dev/js/script.js"
+              data-website-id="338df046-c426-48aa-b730-f3c253e6e0c5"
+              src="https://insights.k1ng.dev/script.js"
             />
-            <Script strategy="lazyOnload" id="plausible-script">
-              {`window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }`}
-            </Script>
             <AxiomWebVitals />
           </>
         )}
