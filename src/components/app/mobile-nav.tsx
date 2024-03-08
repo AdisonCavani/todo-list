@@ -9,7 +9,6 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@components/ui/context-menu";
-import { DialogTrigger } from "@components/ui/dialog";
 import { Input } from "@components/ui/input";
 import { api } from "@lib/trpc/react";
 import { toast } from "@lib/use-toast";

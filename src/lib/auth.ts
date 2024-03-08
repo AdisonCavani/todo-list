@@ -1,4 +1,6 @@
+import { users } from "@server/db/schema";
 import { db } from "@server/db/sql";
+import { type InferSelectModel } from "drizzle-orm";
 import NextAuth, { type DefaultSession, type User } from "next-auth";
 import Github, { type GitHubProfile } from "next-auth/providers/github";
 import Google, { type GoogleProfile } from "next-auth/providers/google";
@@ -10,6 +12,13 @@ declare module "next-auth" {
   }
 
   interface User {
+    firstName: string;
+    lastName: string;
+  }
+}
+
+declare module "@auth/core/adapters" {
+  interface AdapterUser extends InferSelectModel<typeof users> {
     firstName: string;
     lastName: string;
   }
@@ -32,9 +41,6 @@ export const {
 
   providers: [
     Github({
-      clientId: process.env.AUTH_GITHUB_ID,
-      clientSecret: process.env.AUTH_GITHUB_SECRET,
-
       profile(profile: GitHubProfile) {
         return {
           id: profile.id.toString(),
@@ -46,9 +52,6 @@ export const {
       },
     }),
     Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
-
       profile(profile: GoogleProfile): User {
         return {
           id: profile.sub,

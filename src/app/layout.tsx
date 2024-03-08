@@ -2,10 +2,9 @@ import "@styles/globals.css";
 import NProgressWrapper from "@components/nprogress-wrapper";
 import NextThemeProvider from "@components/theme-provider";
 import { twindConfig, type ColorRecordType } from "@lib/twind";
-import { cn } from "@lib/utils";
+import { cn, fontInter } from "@lib/utils";
 import type { Viewport } from "next";
 import { AxiomWebVitals } from "next-axiom";
-import { fontInter } from "@lib/utils";
 import Script from "next/script";
 import type { PropsWithChildren } from "react";
 

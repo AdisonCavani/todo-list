@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
 import { Inter } from "next/font/google";
+import { twMerge } from "tailwind-merge";
 import type { TaskPriorityEnum } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
