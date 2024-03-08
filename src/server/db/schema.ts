@@ -1,44 +1,46 @@
-import type { InferSelectModel } from "drizzle-orm";
+import { sql, type InferSelectModel } from "drizzle-orm";
 import {
   boolean,
-  date,
-  datetime,
   index,
-  int,
-  mysqlEnum,
-  mysqlTable,
+  integer,
+  pgEnum,
+  pgTable,
   text,
   timestamp,
   uniqueIndex,
   varchar,
-} from "drizzle-orm/mysql-core";
+} from "drizzle-orm/pg-core";
 
-export const tasks = mysqlTable("tasks", {
+export const tasks = pgTable("tasks", {
   id: varchar("id", { length: 255 }).primaryKey().notNull(),
   listId: varchar("list_id", { length: 255 }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
+    .notNull(),
   title: text("title").notNull(),
   description: text("description"),
-  dueDate: date("due_date"),
+  dueDate: timestamp("due_date"),
   isCompleted: boolean("is_completed").notNull(),
   isImportant: boolean("is_important").notNull(),
-  priority: mysqlEnum("priority", ["P1", "P2", "P3", "P4"]).notNull(),
+  priority: pgEnum("priority", ["P1", "P2", "P3", "P4"])("priority").notNull(),
 });
 
 export type TaskType = InferSelectModel<typeof tasks>;
 
-export const lists = mysqlTable("lists", {
+export const lists = pgTable("lists", {
   id: varchar("id", { length: 255 }).primaryKey().notNull(),
   userId: varchar("user_id", { length: 255 }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
+    .notNull(),
   name: text("name").notNull(),
 });
 
 export type ListType = InferSelectModel<typeof lists>;
 
-export const accounts = mysqlTable(
+export const accounts = pgTable(
   "accounts",
   {
     id: varchar("id", { length: 255 }).primaryKey().notNull(),
@@ -49,14 +51,16 @@ export const accounts = mysqlTable(
       length: 255,
     }).notNull(),
     access_token: text("access_token"),
-    expires_in: int("expires_in"),
+    expires_in: integer("expires_in"),
     id_token: text("id_token"),
     refresh_token: text("refresh_token"),
-    refresh_token_expires_in: int("refresh_token_expires_in"),
+    refresh_token_expires_in: integer("refresh_token_expires_in"),
     scope: varchar("scope", { length: 255 }),
     token_type: varchar("token_type", { length: 255 }),
     createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
+      .notNull(),
   },
   (account) => ({
     providerProviderAccountIdIndex: uniqueIndex(
@@ -66,15 +70,17 @@ export const accounts = mysqlTable(
   }),
 );
 
-export const sessions = mysqlTable(
+export const sessions = pgTable(
   "sessions",
   {
     id: varchar("id", { length: 255 }).primaryKey().notNull(),
     sessionToken: varchar("session_token", { length: 255 }).notNull(),
     userId: varchar("user_id", { length: 255 }).notNull(),
-    expires: datetime("expires").notNull(),
+    expires: timestamp("expires").notNull(),
     created_at: timestamp("created_at").notNull().defaultNow(),
-    updated_at: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
+    updated_at: timestamp("updated_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`),
   },
   (session) => ({
     sessionTokenIndex: uniqueIndex("sessions__sessionToken__idx").on(
@@ -84,7 +90,7 @@ export const sessions = mysqlTable(
   }),
 );
 
-export const users = mysqlTable(
+export const users = pgTable(
   "users",
   {
     id: varchar("id", { length: 255 }).primaryKey().notNull(),
@@ -94,21 +100,25 @@ export const users = mysqlTable(
     emailVerified: timestamp("email_verified"),
     image: varchar("image", { length: 255 }),
     created_at: timestamp("created_at").notNull().defaultNow(),
-    updated_at: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
+    updated_at: timestamp("updated_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`),
   },
   (user) => ({
     emailIndex: uniqueIndex("users__email__idx").on(user.email),
   }),
 );
 
-export const verificationTokens = mysqlTable(
+export const verificationTokens = pgTable(
   "verification_tokens",
   {
     identifier: varchar("identifier", { length: 255 }).primaryKey().notNull(),
     token: varchar("token", { length: 255 }).notNull(),
-    expires: datetime("expires").notNull(),
+    expires: timestamp("expires").notNull(),
     created_at: timestamp("created_at").notNull().defaultNow(),
-    updated_at: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
+    updated_at: timestamp("updated_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`),
   },
   (verificationToken) => ({
     tokenIndex: uniqueIndex("verification_tokens__token__idx").on(
