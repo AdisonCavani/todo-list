@@ -63,7 +63,7 @@ function App({ initialTasks, listId }: Props) {
       <Form listId={listId} />
       <MobileForm listId={listId} />
 
-      <ul className="relative flex flex-col gap-y-2">
+      <ul className="relative flex flex-col gap-y-2 px-0.5">
         <FlipMove typeName={null}>
           {notFinishedTasks.map((task: TaskRenderType) => (
             <Task key={task.renderId ?? task.id} {...task} />
@@ -83,7 +83,7 @@ function App({ initialTasks, listId }: Props) {
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <ul className="relative flex flex-col gap-y-2">
+              <ul className="relative flex flex-col gap-y-2 px-0.5">
                 <FlipMove typeName={null}>
                   {finishedTasks.map((task: TaskRenderType) => (
                     <Task key={task.renderId ?? task.id} {...task} />
