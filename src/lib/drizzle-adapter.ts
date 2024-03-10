@@ -8,11 +8,9 @@ import {
 } from "@server/db/schema";
 import * as schema from "@server/db/schema";
 import { and, eq } from "drizzle-orm";
-import type { PlanetScaleDatabase } from "drizzle-orm/planetscale-serverless";
+import type { NeonHttpDatabase } from "drizzle-orm/neon-http";
 
-export function DrizzleAdapter(
-  db: PlanetScaleDatabase<typeof schema>,
-): Adapter {
+export function DrizzleAdapter(db: NeonHttpDatabase<typeof schema>): Adapter {
   return {
     async createUser(userData) {
       await db.insert(users).values({

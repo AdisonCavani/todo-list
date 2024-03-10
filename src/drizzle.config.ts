@@ -6,10 +6,10 @@ dotenv.config({
 });
 
 export default defineConfig({
-  driver: "mysql2",
+  driver: "pg",
   schema: "./server/db/schema.ts",
   out: "./server/db/migrations",
   dbCredentials: {
-    uri: process.env.DATABASE_CONNECTION_STRING,
+    connectionString: process.env.DATABASE_CONNECTION_STRING,
   },
 });
