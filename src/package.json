@@ -11,9 +11,9 @@
     "format:write": "prettier -w . --cache",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "studio": "drizzle-kit studio",
+    "db:studio": "drizzle-kit studio",
     "db:generate": "drizzle-kit generate:pg --schema=./server/db/schema.ts --out=./server/db/migrations",
-    "db:migrate": "ts-node-esm migrate.ts",
+    "db:migrate": "tsx migrate.ts",
     "prepare": "cd .. && husky install src/.husky"
   },
   "dependencies": {
@@ -93,6 +93,7 @@
     "tailwind-merge": "^2.2.2",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",
+    "tsx": "^4.7.1",
     "typescript": "^5.4.3"
   }
 }

@@ -14,7 +14,7 @@ function SettingsNavigation() {
     <>
       <aside
         className={cn(
-          "sticky top-[72px] mt-8 hidden size-full max-w-[16rem] flex-col lg:flex",
+          "sticky top-[72px] mt-8 hidden size-full max-w-64 flex-col lg:flex",
         )}
       >
         <NavLink href="/app/settings" altHref="/app/settings/general">
