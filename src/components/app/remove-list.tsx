@@ -74,7 +74,7 @@ function RemoveList({
   return (
     <Dialog onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-sm">
         <DialogHeader>
           <DialogTitle>Delete list</DialogTitle>
           <DialogDescription>
@@ -83,8 +83,8 @@ function RemoveList({
         </DialogHeader>
 
         <Input
-          placeholder={listName}
           value={input}
+          placeholder={listName}
           onChange={(event) => setInput(event.currentTarget.value)}
         />
         <Button
