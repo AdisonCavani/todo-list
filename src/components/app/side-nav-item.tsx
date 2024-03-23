@@ -1,16 +1,16 @@
 "use client";
 
 import Link from "@components/router/link";
-import { Button } from "@components/ui/button";
+import { cn } from "@lib/utils";
+import { IconDots, IconEdit, IconList, IconTrash } from "@tabler/icons-react";
+import { Button } from "@ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@components/ui/dropdown-menu";
-import { cn } from "@lib/utils";
-import { IconDots, IconEdit, IconList, IconTrash } from "@tabler/icons-react";
+} from "@ui/dropdown-menu";
 import { usePathname } from "next/navigation";
 import { useRef, useState } from "react";
 import RemoveList from "./remove-list";

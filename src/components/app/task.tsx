@@ -5,7 +5,6 @@ import { api } from "@lib/trpc/react";
 import type { TaskPriorityEnum } from "@lib/types";
 import { toast } from "@lib/use-toast";
 import { cn, getPriorityColor, getPriorityText } from "@lib/utils";
-import { DialogClose } from "@radix-ui/react-dialog";
 import type { TaskType } from "@server/db/schema";
 import {
   IconCalendar,
@@ -24,6 +23,7 @@ import {
 import { Button } from "@ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,

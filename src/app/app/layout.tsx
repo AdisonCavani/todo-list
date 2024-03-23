@@ -1,9 +1,9 @@
 import ProfileMenu from "@components/app/profile-menu";
 import Link from "@components/router/link";
-import { buttonVariants } from "@components/ui/button";
 import { auth } from "@lib/auth";
 import { twindConfig, type ColorRecordType } from "@lib/twind";
 import { IconChecklist } from "@tabler/icons-react";
+import { buttonVariants } from "@ui/button";
 import { Toaster } from "@ui/toaster";
 import type { Viewport } from "next";
 import type { PropsWithChildren } from "react";

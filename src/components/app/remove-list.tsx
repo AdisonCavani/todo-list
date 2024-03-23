@@ -1,18 +1,18 @@
 "use client";
 
-import { Button } from "@components/ui/button";
+import { api } from "@lib/trpc/react";
+import { toast } from "@lib/use-toast";
+import { Button } from "@ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@components/ui/dialog";
-import { Input } from "@components/ui/input";
-import { api } from "@lib/trpc/react";
-import { toast } from "@lib/use-toast";
-import { DialogClose } from "@radix-ui/react-dialog";
+} from "@ui/dialog";
+import { Input } from "@ui/input";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, type FormEventHandler, type PropsWithChildren } from "react";
 

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "@components/router/link";
-import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import {
   IconDeviceLaptop,
   IconLogout,
@@ -20,6 +19,7 @@ import {
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
 } from "@ui/dropdown-menu";
 import type { User } from "next-auth";
 import { signOut } from "next-auth/react";

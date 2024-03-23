@@ -1,17 +1,17 @@
 "use client";
 
-import { Button } from "@components/ui/button";
-import { Input } from "@components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@components/ui/popover";
 import { api } from "@lib/trpc/react";
 import { toast } from "@lib/use-toast";
-import { PopoverClose } from "@radix-ui/react-popover";
 import type { ListType } from "@server/db/schema";
 import { IconPlus } from "@tabler/icons-react";
+import { Button } from "@ui/button";
+import { Input } from "@ui/input";
+import {
+  Popover,
+  PopoverClose,
+  PopoverContent,
+  PopoverTrigger,
+} from "@ui/popover";
 import { useState, type FormEventHandler } from "react";
 import SideNavItem from "./side-nav-item";
 
