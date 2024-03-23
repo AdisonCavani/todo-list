@@ -238,8 +238,13 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
 
       <DialogContent className="max-w-lg dark:bg-neutral-800">
         <DialogHeader>
+          <DialogTitle>Update task</DialogTitle>
           <div className="flex justify-between">
-            <DialogTitle>Update task</DialogTitle>
+            <DialogDescription>
+              Make changes to your task.
+              <br />
+              Click save when you&apos;re done.
+            </DialogDescription>
 
             <DialogClose asChild>
               <Button
@@ -251,9 +256,6 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
               />
             </DialogClose>
           </div>
-          <DialogDescription>
-            Make changes to your task here. Click save when you&apos;re done.
-          </DialogDescription>
         </DialogHeader>
 
         <div className="mt-2 flex flex-col gap-y-3">
