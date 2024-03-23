@@ -96,6 +96,7 @@ function SideNavItem({ id, name }: Props) {
             <DropdownMenuItem
               onSelect={handleOnSelect}
               onClick={(event) => event.stopPropagation()}
+              onFocusCapture={(event) => event.stopPropagation()}
             >
               <IconEdit size={16} />
               Edit
@@ -112,6 +113,7 @@ function SideNavItem({ id, name }: Props) {
             <DropdownMenuItem
               onSelect={handleOnSelect}
               onClick={(event) => event.stopPropagation()}
+              onFocusCapture={(event) => event.stopPropagation()}
               className="text-red-600 focus:text-red-600 dark:text-red-400"
             >
               <IconTrash size={16} />
