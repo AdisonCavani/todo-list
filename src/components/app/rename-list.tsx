@@ -1,21 +1,24 @@
 import { Button } from "@components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@components/ui/dialog";
 import { Input } from "@components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@components/ui/popover";
 import { api } from "@lib/trpc/react";
 import { toast } from "@lib/use-toast";
-import { PopoverClose } from "@radix-ui/react-popover";
+import { DialogClose } from "@radix-ui/react-dialog";
 import { useState, type FormEventHandler, type PropsWithChildren } from "react";
 
 type Props = {
   listId: string;
   listName: string;
+
+  onOpenChange: (open: boolean) => void;
 };
 
-function RenameList({ children, listId, listName }: PropsWithChildren<Props>) {
+function RenameList({
+  children,
+  listId,
+  listName,
+  onOpenChange,
+}: PropsWithChildren<Props>) {
   const utils = api.useUtils();
   const { mutate, isPending } = api.list.update.useMutation({
     async onMutate(input) {
@@ -53,12 +56,9 @@ function RenameList({ children, listId, listName }: PropsWithChildren<Props>) {
   };
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>{children}</PopoverTrigger>
-      <PopoverContent
-        className="w-80"
-        onClick={(event) => event.stopPropagation()}
-      >
+    <Dialog onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent className="max-w-md">
         <div className="grid gap-4">
           <div className="space-y-2">
             <h4 className="font-medium leading-none">List name</h4>
@@ -77,7 +77,7 @@ function RenameList({ children, listId, listName }: PropsWithChildren<Props>) {
                 className="col-span-2 h-8"
               />
 
-              <PopoverClose asChild>
+              <DialogClose asChild>
                 <Button
                   size="xs"
                   disabled={
@@ -88,12 +88,12 @@ function RenameList({ children, listId, listName }: PropsWithChildren<Props>) {
                 >
                   Save
                 </Button>
-              </PopoverClose>
+              </DialogClose>
             </form>
           </div>
         </div>
-      </PopoverContent>
-    </Popover>
+      </DialogContent>
+    </Dialog>
   );
 }
 

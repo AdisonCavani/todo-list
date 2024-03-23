@@ -22,9 +22,16 @@ import {
 type Props = {
   listId: string;
   listName: string;
+
+  onOpenChange: (open: boolean) => void;
 };
 
-function RemoveList({ children, listId, listName }: PropsWithChildren<Props>) {
+function RemoveList({
+  children,
+  listId,
+  listName,
+  onOpenChange,
+}: PropsWithChildren<Props>) {
   const { push } = useRouter();
   const pathname = usePathname();
 
@@ -65,11 +72,7 @@ function RemoveList({ children, listId, listName }: PropsWithChildren<Props>) {
   };
 
   return (
-    <Dialog
-      onOpenChange={() => {
-        setInput("");
-      }}
-    >
+    <Dialog onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader>

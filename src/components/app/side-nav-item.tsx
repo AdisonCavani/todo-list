@@ -12,7 +12,7 @@ import {
 import { cn } from "@lib/utils";
 import { IconDots, IconEdit, IconList, IconTrash } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import RemoveList from "./remove-list";
 import RenameList from "./rename-list";
 
@@ -23,7 +23,28 @@ type Props = {
 
 function SideNavItem({ id, name }: Props) {
   const pathname = usePathname();
-  const [hidden, setHidden] = useState<boolean>(false);
+
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+  const [hasOpenDialog, setHasOpenDialog] = useState<boolean>(false);
+  const dropdownTriggerRef = useRef<HTMLButtonElement>(null);
+  const focusRef = useRef<HTMLButtonElement | null>(null);
+
+  function handleDialogItemSelect() {
+    focusRef.current = dropdownTriggerRef.current;
+  }
+
+  function handleDialogItemOpenChange(open: boolean) {
+    setHasOpenDialog(open);
+
+    if (!open) {
+      setDropdownOpen(false);
+    }
+  }
+
+  function handleOnSelect(event: Event) {
+    event.preventDefault();
+    handleDialogItemSelect && handleDialogItemSelect();
+  }
 
   return (
     <Link
@@ -41,13 +62,10 @@ function SideNavItem({ id, name }: Props) {
         {name}
       </div>
 
-      <DropdownMenu
-        onOpenChange={(open) => {
-          setHidden(!open);
-        }}
-      >
+      <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
         <DropdownMenuTrigger asChild>
           <Button
+            ref={dropdownTriggerRef}
             size="xxs"
             variant="ghost"
             icon={<IconDots size={18} />}
@@ -58,19 +76,24 @@ function SideNavItem({ id, name }: Props) {
 
         <DropdownMenuContent
           align={"center"}
-          className={hidden ? "invisible" : "visible"}
           sideOffset={16}
-          onFocusCapture={(event) => {
-            event.stopPropagation();
+          hidden={hasOpenDialog}
+          onCloseAutoFocus={(event) => {
+            if (focusRef.current) {
+              focusRef.current.focus();
+              focusRef.current = null;
+              event.preventDefault();
+            }
           }}
         >
-          <RenameList listId={id} listName={name}>
+          <RenameList
+            listId={id}
+            listName={name}
+            onOpenChange={handleDialogItemOpenChange}
+          >
             <DropdownMenuItem
-              onClick={(event) => {
-                event.stopPropagation();
-                setHidden(true);
-              }}
-              onSelect={(event) => event.preventDefault()}
+              onSelect={handleOnSelect}
+              onClick={(event) => event.stopPropagation()}
             >
               <IconEdit size={16} />
               Edit
@@ -79,13 +102,14 @@ function SideNavItem({ id, name }: Props) {
 
           <DropdownMenuSeparator />
 
-          <RemoveList listId={id} listName={name}>
+          <RemoveList
+            listId={id}
+            listName={name}
+            onOpenChange={handleDialogItemOpenChange}
+          >
             <DropdownMenuItem
-              onClick={(event) => {
-                event.stopPropagation();
-                setHidden(true);
-              }}
-              onSelect={(event) => event.preventDefault()}
+              onSelect={handleOnSelect}
+              onClick={(event) => event.stopPropagation()}
               className="text-red-600 focus:text-red-600 dark:text-red-400"
             >
               <IconTrash size={16} />
