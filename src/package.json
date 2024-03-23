@@ -14,7 +14,7 @@
     "db:studio": "drizzle-kit studio",
     "db:generate": "drizzle-kit generate:pg --schema=./server/db/schema.ts --out=./server/db/migrations",
     "db:migrate": "tsx migrate.ts",
-    "prepare": "cd .. && husky install src/.husky"
+    "prepare": "cd .. && husky src/.husky"
   },
   "dependencies": {
     "@auth/core": "^0.28.0",
