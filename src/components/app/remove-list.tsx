@@ -12,12 +12,9 @@ import {
 import { Input } from "@components/ui/input";
 import { api } from "@lib/trpc/react";
 import { toast } from "@lib/use-toast";
+import { DialogClose } from "@radix-ui/react-dialog";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  useState,
-  type MouseEventHandler,
-  type PropsWithChildren,
-} from "react";
+import { useState, type FormEventHandler, type PropsWithChildren } from "react";
 
 type Props = {
   listId: string;
@@ -59,11 +56,9 @@ function RemoveList({
   });
 
   const [input, setInput] = useState<string>("");
+  const submitDisabled = input.trim() !== listName.trim();
 
-  const removeDisabled = input.trim() !== listName.trim();
-
-  // TODO: use <form />
-  const handleOnRemove: MouseEventHandler<HTMLButtonElement> = (event) => {
+  const handleOnSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
 
     deleteList.mutate({ id: listId });
@@ -82,20 +77,24 @@ function RemoveList({
           </DialogDescription>
         </DialogHeader>
 
-        <Input
-          value={input}
-          placeholder={listName}
-          onChange={(event) => setInput(event.currentTarget.value)}
-        />
-        <Button
-          variant="destructive"
-          className="w-full"
-          disabled={removeDisabled}
-          loading={deleteList.isPending}
-          onClick={handleOnRemove}
-        >
-          Delete this list
-        </Button>
+        <form onSubmit={handleOnSubmit} className="flex flex-col gap-y-4">
+          <Input
+            value={input}
+            placeholder={listName}
+            onChange={(event) => setInput(event.currentTarget.value)}
+          />
+
+          <DialogClose asChild>
+            <Button
+              type="submit"
+              variant="destructive"
+              disabled={submitDisabled}
+              loading={deleteList.isPending}
+            >
+              Delete this list
+            </Button>
+          </DialogClose>
+        </form>
       </DialogContent>
     </Dialog>
   );

@@ -27,7 +27,7 @@ function RenameList({
   onOpenChange,
 }: PropsWithChildren<Props>) {
   const utils = api.useUtils();
-  const { mutate, isPending } = api.list.update.useMutation({
+  const updateList = api.list.update.useMutation({
     async onMutate(input) {
       await utils.list.get.cancel();
 
@@ -52,11 +52,13 @@ function RenameList({
   });
 
   const [name, setName] = useState<string>("");
+  const submitDisabled =
+    name.trim().length === 0 || name.trim() === listName.trim();
 
   const handleOnSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
 
-    mutate({
+    updateList.mutate({
       id: listId,
       name: name.trim(),
     });
@@ -80,11 +82,9 @@ function RenameList({
 
           <DialogClose asChild>
             <Button
-              disabled={
-                name.trim().length === 0 || name.trim() === listName.trim()
-              }
-              loading={isPending}
               type="submit"
+              disabled={submitDisabled}
+              loading={updateList.isPending}
             >
               Save changes
             </Button>
