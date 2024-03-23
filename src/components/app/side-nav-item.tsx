@@ -50,11 +50,13 @@ function SideNavItem({ id, name }: Props) {
     <Link
       key={id}
       href={`/app/${id}`}
+      aria-disabled={dropdownOpen}
       className={cn(
         "group inline-flex items-center justify-between rounded-md px-3 text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         pathname === `/app/${id}`
           ? "bg-neutral-100 font-semibold text-neutral-900 hover:bg-neutral-200 dark:bg-neutral-600 dark:text-neutral-100 dark:hover:bg-neutral-700"
           : "hover:bg-accent hover:text-accent-foreground",
+        dropdownOpen && "pointer-events-none",
       )}
     >
       <div className="flex items-center gap-x-5 py-2">
