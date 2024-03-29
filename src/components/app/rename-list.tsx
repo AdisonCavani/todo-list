@@ -3,7 +3,6 @@ import { toast } from "@lib/use-toast";
 import { Button } from "@ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -26,6 +25,8 @@ function RenameList({
   listName,
   onOpenChange,
 }: PropsWithChildren<Props>) {
+  const [open, setOpen] = useState<boolean>(false);
+
   const utils = api.useUtils();
   const updateList = api.list.update.useMutation({
     async onMutate(input) {
@@ -55,17 +56,25 @@ function RenameList({
   const submitDisabled =
     name.trim().length === 0 || name.trim() === listName.trim();
 
-  const handleOnSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+  const handleOnSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    updateList.mutate({
+    await updateList.mutateAsync({
       id: listId,
       name: name.trim(),
     });
+
+    setOpen(false);
   };
 
   return (
-    <Dialog onOpenChange={onOpenChange}>
+    <Dialog
+      open={open}
+      onOpenChange={(value) => {
+        onOpenChange(value);
+        setOpen(value);
+      }}
+    >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-sm">
         <DialogHeader>
@@ -80,15 +89,13 @@ function RenameList({
             className="col-span-2"
           />
 
-          <DialogClose asChild>
-            <Button
-              type="submit"
-              disabled={submitDisabled}
-              loading={updateList.isPending}
-            >
-              Save changes
-            </Button>
-          </DialogClose>
+          <Button
+            type="submit"
+            disabled={submitDisabled}
+            loading={updateList.isPending}
+          >
+            Save changes
+          </Button>
         </form>
       </DialogContent>
     </Dialog>

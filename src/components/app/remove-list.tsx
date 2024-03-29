@@ -5,7 +5,6 @@ import { toast } from "@lib/use-toast";
 import { Button } from "@ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -29,6 +28,8 @@ function RemoveList({
   listName,
   onOpenChange,
 }: PropsWithChildren<Props>) {
+  const [open, setOpen] = useState<boolean>(false);
+
   const { push } = useRouter();
   const pathname = usePathname();
 
@@ -58,16 +59,22 @@ function RemoveList({
   const [input, setInput] = useState<string>("");
   const submitDisabled = input.trim() !== listName.trim();
 
-  const handleOnSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+  const handleOnSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    deleteList.mutate({ id: listId });
+    await deleteList.mutateAsync({ id: listId });
 
     if (pathname === `/app/${listId}`) push("/app");
   };
 
   return (
-    <Dialog onOpenChange={onOpenChange}>
+    <Dialog
+      open={open}
+      onOpenChange={(value) => {
+        onOpenChange(value);
+        setOpen(value);
+      }}
+    >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-sm">
         <DialogHeader>
@@ -84,16 +91,14 @@ function RemoveList({
             onChange={(event) => setInput(event.currentTarget.value)}
           />
 
-          <DialogClose asChild>
-            <Button
-              type="submit"
-              variant="destructive"
-              disabled={submitDisabled}
-              loading={deleteList.isPending}
-            >
-              Delete this list
-            </Button>
-          </DialogClose>
+          <Button
+            type="submit"
+            variant="destructive"
+            disabled={submitDisabled}
+            loading={deleteList.isPending}
+          >
+            Delete this list
+          </Button>
         </form>
       </DialogContent>
     </Dialog>
