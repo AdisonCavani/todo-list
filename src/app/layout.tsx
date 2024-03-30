@@ -72,7 +72,7 @@ function RootLayout({ children }: PropsWithChildren) {
           </>
         )}
       </head>
-      <body className="flex min-h-svh flex-col">
+      <body className="flex min-h-dvh flex-col">
         <NextThemeProvider>
           <NProgressWrapper>{children}</NProgressWrapper>
         </NextThemeProvider>
