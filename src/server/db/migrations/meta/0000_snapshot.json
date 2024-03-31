@@ -1,42 +1,42 @@
 {
-  "id": "911d6b38-470d-4916-b6d6-4c41069175c7",
+  "id": "1d62fca5-9165-41d6-ac29-494ebe92e51a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
   "tables": {
-    "accounts": {
-      "name": "accounts",
+    "todo-list-prod_account": {
+      "name": "todo-list-prod_account",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(255)",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "varchar(255)",
+        "userId": {
+          "name": "userId",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "type": {
           "name": "type",
-          "type": "varchar(255)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "provider": {
           "name": "provider",
-          "type": "varchar(255)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "provider_account_id": {
-          "name": "provider_account_id",
-          "type": "varchar(255)",
+        "providerAccountId": {
+          "name": "providerAccountId",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "refresh_token": {
+          "name": "refresh_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "access_token": {
           "name": "access_token",
@@ -44,9 +44,21 @@
           "primaryKey": false,
           "notNull": false
         },
-        "expires_in": {
-          "name": "expires_in",
+        "expires_at": {
+          "name": "expires_at",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "token_type": {
+          "name": "token_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scope": {
+          "name": "scope",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -56,96 +68,83 @@
           "primaryKey": false,
           "notNull": false
         },
-        "refresh_token": {
-          "name": "refresh_token",
+        "session_state": {
+          "name": "session_state",
           "type": "text",
           "primaryKey": false,
           "notNull": false
-        },
-        "refresh_token_expires_in": {
-          "name": "refresh_token_expires_in",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "scope": {
-          "name": "scope",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "token_type": {
-          "name": "token_type",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
       "indexes": {
-        "accounts__provider__providerAccountId__idx": {
-          "name": "accounts__provider__providerAccountId__idx",
-          "columns": ["provider", "provider_account_id"],
-          "isUnique": true
-        },
-        "accounts__userId__idx": {
-          "name": "accounts__userId__idx",
-          "columns": ["user_id"],
+        "account_userId_idx": {
+          "name": "account_userId_idx",
+          "columns": [
+            "userId"
+          ],
           "isUnique": false
         }
       },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
+      "foreignKeys": {
+        "todo-list-prod_account_userId_todo-list-prod_user_id_fk": {
+          "name": "todo-list-prod_account_userId_todo-list-prod_user_id_fk",
+          "tableFrom": "todo-list-prod_account",
+          "tableTo": "todo-list-prod_user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "todo-list-prod_account_provider_providerAccountId_pk": {
+          "name": "todo-list-prod_account_provider_providerAccountId_pk",
+          "columns": [
+            "provider",
+            "providerAccountId"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
-    "lists": {
-      "name": "lists",
+    "todo-list-prod_list": {
+      "name": "todo-list-prod_list",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(255)",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
-        "user_id": {
-          "name": "user_id",
-          "type": "varchar(255)",
+        "userId": {
+          "name": "userId",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -153,25 +152,19 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "sessions": {
-      "name": "sessions",
+    "todo-list-prod_session": {
+      "name": "todo-list-prod_session",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(255)",
+        "sessionToken": {
+          "name": "sessionToken",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
-        "session_token": {
-          "name": "session_token",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "varchar(255)",
+        "userId": {
+          "name": "userId",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -180,67 +173,50 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
       "indexes": {
-        "sessions__sessionToken__idx": {
-          "name": "sessions__sessionToken__idx",
-          "columns": ["session_token"],
-          "isUnique": true
-        },
-        "sessions__userId__idx": {
-          "name": "sessions__userId__idx",
-          "columns": ["user_id"],
+        "session_userId_idx": {
+          "name": "session_userId_idx",
+          "columns": [
+            "userId"
+          ],
           "isUnique": false
         }
       },
-      "foreignKeys": {},
+      "foreignKeys": {
+        "todo-list-prod_session_userId_todo-list-prod_user_id_fk": {
+          "name": "todo-list-prod_session_userId_todo-list-prod_user_id_fk",
+          "tableFrom": "todo-list-prod_session",
+          "tableTo": "todo-list-prod_user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "tasks": {
-      "name": "tasks",
+    "todo-list-prod_task": {
+      "name": "todo-list-prod_task",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(255)",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
-        "list_id": {
-          "name": "list_id",
-          "type": "varchar(255)",
+        "listId": {
+          "name": "listId",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         },
         "title": {
           "name": "title",
@@ -254,20 +230,20 @@
           "primaryKey": false,
           "notNull": false
         },
-        "due_date": {
-          "name": "due_date",
+        "dueDate": {
+          "name": "dueDate",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false
         },
-        "is_completed": {
-          "name": "is_completed",
+        "isCompleted": {
+          "name": "isCompleted",
           "type": "boolean",
           "primaryKey": false,
           "notNull": true
         },
-        "is_important": {
-          "name": "is_important",
+        "isImportant": {
+          "name": "isImportant",
           "type": "boolean",
           "primaryKey": false,
           "notNull": true
@@ -277,6 +253,20 @@
           "type": "priority",
           "primaryKey": false,
           "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -284,85 +274,60 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "users": {
-      "name": "users",
+    "todo-list-prod_user": {
+      "name": "todo-list-prod_user",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(255)",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
-        "first_name": {
-          "name": "first_name",
-          "type": "varchar(255)",
+        "name": {
+          "name": "name",
+          "type": "text",
           "primaryKey": false,
-          "notNull": true
-        },
-        "last_name": {
-          "name": "last_name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "email": {
           "name": "email",
-          "type": "varchar(255)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "email_verified": {
-          "name": "email_verified",
+        "emailVerified": {
+          "name": "emailVerified",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
         },
         "image": {
           "name": "image",
-          "type": "varchar(255)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
-      "indexes": {
-        "users__email__idx": {
-          "name": "users__email__idx",
-          "columns": ["email"],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "verification_tokens": {
-      "name": "verification_tokens",
+    "todo-list-prod_verificationToken": {
+      "name": "todo-list-prod_verificationToken",
       "schema": "",
       "columns": {
         "identifier": {
           "name": "identifier",
-          "type": "varchar(255)",
-          "primaryKey": true,
+          "type": "text",
+          "primaryKey": false,
           "notNull": true
         },
         "token": {
           "name": "token",
-          "type": "varchar(255)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -371,35 +336,33 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
-      "indexes": {
-        "verification_tokens__token__idx": {
-          "name": "verification_tokens__token__idx",
-          "columns": ["token"],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "todo-list-prod_verificationToken_identifier_token_pk": {
+          "name": "todo-list-prod_verificationToken_identifier_token_pk",
+          "columns": [
+            "identifier",
+            "token"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     }
   },
-  "enums": {},
+  "enums": {
+    "priority": {
+      "name": "priority",
+      "values": {
+        "P1": "P1",
+        "P2": "P2",
+        "P3": "P3",
+        "P4": "P4"
+      }
+    }
+  },
   "schemas": {},
   "_meta": {
     "columns": {},

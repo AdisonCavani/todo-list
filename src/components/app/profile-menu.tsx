@@ -25,9 +25,10 @@ import type { User } from "next-auth";
 import { signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
 
-function ProfileMenu({ firstName, lastName, email, image }: User) {
+function ProfileMenu({ name, email, image }: User) {
   const { setTheme } = useTheme();
-  const initials = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
+  const initials =
+    (name?.split(" ")?.[0]?.[0] ?? "") + (name?.split(" ")?.[1]?.[0] ?? "");
 
   return (
     <DropdownMenu>
@@ -46,9 +47,7 @@ function ProfileMenu({ firstName, lastName, email, image }: User) {
       <DropdownMenuContent align="end" sideOffset={12}>
         <DropdownMenuItem asChild alignLeft>
           <Link className="flex-col" href="/app/settings/profile">
-            <p className="font-medium">
-              {firstName} {lastName}
-            </p>
+            <p className="font-medium">{name}</p>
             <p className="text-muted-foreground">{email}</p>
           </Link>
         </DropdownMenuItem>

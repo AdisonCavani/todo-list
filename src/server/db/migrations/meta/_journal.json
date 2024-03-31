@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1711891457116,
-      "tag": "0000_blue_iron_monger",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1711891482883,
-      "tag": "0001_public_iron_monger",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1711910216086,
-      "tag": "0002_clumsy_exodus",
+      "when": 1711919835646,
+      "tag": "0000_heavy_iceman",
       "breakpoints": true
     }
   ]

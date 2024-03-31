@@ -9,6 +9,7 @@ const dbPrefix = process.env.NODE_ENV === "production" ? "prod" : "dev";
 
 export default defineConfig({
   driver: "pg",
+  strict: true,
   schema: "./server/db/schema.ts",
   out: "./server/db/migrations",
   dbCredentials: {

@@ -1,26 +1,14 @@
+import type { DefaultSession } from "@auth/core/types";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { pgTable, users } from "@server/db/schema";
+import { createTable } from "@server/db/schema";
 import { db } from "@server/db/sql";
-import { type InferSelectModel } from "drizzle-orm";
-import NextAuth, { type DefaultSession, type User } from "next-auth";
+import NextAuth, { type User } from "next-auth";
 import Github, { type GitHubProfile } from "next-auth/providers/github";
 import Google, { type GoogleProfile } from "next-auth/providers/google";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: DefaultSession["user"] & User;
-  }
-
-  interface User {
-    firstName: string;
-    lastName: string;
-  }
-}
-
-declare module "@auth/core/adapters" {
-  interface AdapterUser extends InferSelectModel<typeof users> {
-    firstName: string;
-    lastName: string;
   }
 }
 
@@ -34,7 +22,7 @@ export const {
     signIn: "/auth",
   },
 
-  adapter: DrizzleAdapter(db, pgTable),
+  adapter: DrizzleAdapter(db, createTable),
   session: {
     strategy: "jwt",
   },
@@ -44,9 +32,8 @@ export const {
       profile(profile: GitHubProfile) {
         return {
           id: profile.id.toString(),
-          firstName: profile.name!.split(" ")[0]!,
-          lastName: profile.name!.split(" ")[1]!,
-          email: profile.email!,
+          name: profile.name,
+          email: profile.email,
           image: profile.avatar_url,
         };
       },
@@ -55,8 +42,7 @@ export const {
       profile(profile: GoogleProfile): User {
         return {
           id: profile.sub,
-          firstName: profile.given_name,
-          lastName: profile.family_name!,
+          name: `${profile.given_name} ${profile.family_name}`.trim(),
           email: profile.email,
           image: profile.picture,
         };
@@ -71,8 +57,7 @@ export const {
     jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.firstName = user.firstName;
-        token.lastName = user.lastName;
+        token.name = user.name;
         token.email = user.email;
         token.image = user.image;
       }
@@ -82,8 +67,7 @@ export const {
     session({ session, token }) {
       if (token) {
         session.user.id = token.id as string;
-        session.user.firstName = token.firstName as string;
-        session.user.lastName = token.lastName as string;
+        session.user.name = token.name as string;
         session.user.email = token.email as string;
         session.user.image = token.image as string;
       }

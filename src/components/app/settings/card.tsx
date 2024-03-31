@@ -11,11 +11,11 @@ type Props = {
   hint: ReactNode;
 
   avatarSrc?: string;
-  avatarFallback?: string;
+  avatarFallback?: string | null;
 
   inputDisabled?: boolean;
   inputPlaceholder?: string;
-  inputValue?: string;
+  inputValue?: string | null;
 };
 
 function SettingsCard({
@@ -55,7 +55,7 @@ function SettingsCard({
           <Input
             disabled={inputDisabled}
             placeholder={inputPlaceholder}
-            defaultValue={inputValue}
+            defaultValue={inputValue ?? undefined}
             className="max-w-xs"
           />
         )}

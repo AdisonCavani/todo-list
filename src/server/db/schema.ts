@@ -1,7 +1,8 @@
 import type { AdapterAccount } from "@auth/core/adapters";
-import type { InferSelectModel } from "drizzle-orm";
+import { relations, sql, type InferSelectModel } from "drizzle-orm";
 import {
   boolean,
+  index,
   integer,
   pgEnum,
   pgTableCreator,
@@ -11,44 +12,60 @@ import {
 } from "drizzle-orm/pg-core";
 
 const tablePrefix = process.env.NODE_ENV === "production" ? "prod" : "dev";
-export const pgTable = pgTableCreator(
+export const createTable = pgTableCreator(
   (name) => `todo-list-${tablePrefix}_${name}`,
 );
 
-export const tasks = pgTable("tasks", {
+export const taskPriorityEnum = pgEnum("priority", ["P1", "P2", "P3", "P4"]);
+
+export const tasks = createTable("task", {
   id: text("id").primaryKey().notNull(),
-  listId: text("list_id").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  listId: text("listId").notNull(),
   title: text("title").notNull(),
   description: text("description"),
-  dueDate: timestamp("due_date"),
-  isCompleted: boolean("is_completed").notNull(),
-  isImportant: boolean("is_important").notNull(),
-  priority: pgEnum("priority", ["P1", "P2", "P3", "P4"])("priority").notNull(),
+  dueDate: timestamp("dueDate"),
+  isCompleted: boolean("isCompleted").notNull(),
+  isImportant: boolean("isImportant").notNull(),
+  priority: taskPriorityEnum("priority").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 
 export type TaskType = InferSelectModel<typeof tasks>;
 
-export const lists = pgTable("lists", {
+export const lists = createTable("list", {
   id: text("id").primaryKey().notNull(),
-  userId: text("user_id").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  userId: text("userId").notNull(),
   name: text("name").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
 
 export type ListType = InferSelectModel<typeof lists>;
 
-export const accounts = pgTable(
-  "accounts",
+export const users = createTable("user", {
+  id: text("id").notNull().primaryKey(),
+  name: text("name"),
+  email: text("email").notNull(),
+  emailVerified: timestamp("emailVerified", { mode: "date" }).default(
+    sql`CURRENT_TIMESTAMP`,
+  ),
+  image: text("image"),
+});
+
+export const usersRelations = relations(users, ({ many }) => ({
+  accounts: many(accounts),
+}));
+
+export const accounts = createTable(
+  "account",
   {
-    userId: text("user_id")
+    userId: text("userId")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => users.id),
     type: text("type").$type<AdapterAccount["type"]>().notNull(),
     provider: text("provider").notNull(),
-    providerAccountId: text("provider_account_id").notNull(),
+    providerAccountId: text("providerAccountId").notNull(),
     refresh_token: text("refresh_token"),
     access_token: text("access_token"),
     expires_at: integer("expires_at"),
@@ -56,49 +73,45 @@ export const accounts = pgTable(
     scope: text("scope"),
     id_token: text("id_token"),
     session_state: text("session_state"),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
   (account) => ({
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
+    userIdIdx: index("account_userId_idx").on(account.userId),
   }),
 );
 
-export const sessions = pgTable("sessions", {
-  sessionToken: text("session_token").notNull().primaryKey(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  expires: timestamp("expires", { mode: "date" }).notNull(),
-  created_at: timestamp("created_at").defaultNow().notNull(),
-  updated_at: timestamp("updated_at").defaultNow().notNull(),
-});
+export const accountsRelations = relations(accounts, ({ one }) => ({
+  user: one(users, { fields: [accounts.userId], references: [users.id] }),
+}));
 
-export const users = pgTable("users", {
-  id: text("id").primaryKey().notNull(),
-  firstName: text("first_name").notNull(),
-  lastName: text("last_name").notNull(),
-  email: text("email").notNull(),
-  emailVerified: timestamp("email_verified", { mode: "date" }),
-  image: text("image"),
-  created_at: timestamp("created_at").defaultNow().notNull(),
-  updated_at: timestamp("updated_at").defaultNow().notNull(),
-});
+export const sessions = createTable(
+  "session",
+  {
+    sessionToken: text("sessionToken").notNull().primaryKey(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
+  },
+  (session) => ({
+    userIdIdx: index("session_userId_idx").on(session.userId),
+  }),
+);
 
-export const verificationTokens = pgTable(
-  "verification_tokens",
+export const sessionsRelations = relations(sessions, ({ one }) => ({
+  user: one(users, { fields: [sessions.userId], references: [users.id] }),
+}));
+
+export const verificationTokens = createTable(
+  "verificationToken",
   {
     identifier: text("identifier").notNull(),
     token: text("token").notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
-    created_at: timestamp("created_at").defaultNow().notNull(),
-    updated_at: timestamp("updated_at").defaultNow().notNull(),
   },
-  (verificationToken) => ({
-    compoundKey: primaryKey({
-      columns: [verificationToken.identifier, verificationToken.token],
-    }),
+  (vt) => ({
+    compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   }),
 );

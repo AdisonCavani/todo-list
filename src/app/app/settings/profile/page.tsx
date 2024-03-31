@@ -3,7 +3,7 @@ import { auth } from "@lib/auth";
 
 async function Page() {
   const session = await auth();
-  const { email, firstName, lastName, image } = session!.user;
+  const { email, name, image } = session!.user;
 
   return (
     <>
@@ -22,14 +22,14 @@ async function Page() {
         summary="This is your first and last name."
         hint="You can change your name in your OAuth2 provider."
         inputDisabled
-        inputValue={`${firstName} ${lastName}`}
+        inputValue={name}
       />
 
       <SettingsCard
         type="avatar"
         title="Your Avatar"
         summary="This is your avatar."
-        avatarFallback={`${firstName} ${lastName}`}
+        avatarFallback={name}
         avatarSrc={image ?? undefined}
         hint="You can change your avatar in your OAuth2 provider."
       />
