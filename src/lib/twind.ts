@@ -1,7 +1,7 @@
 import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "../tailwind.config.js";
+import config from "../tailwind.config";
 
-const cfg = resolveConfig(tailwindConfig).theme!;
+const cfg = resolveConfig(config).theme!;
 
 type NonNullableConfig = {
   [K in keyof typeof cfg]-?: NonNullable<(typeof cfg)[K]>;
