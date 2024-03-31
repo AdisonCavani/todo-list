@@ -5,6 +5,8 @@ dotenv.config({
   path: ".env.local",
 });
 
+const dbPrefix = process.env.NODE_ENV === "production" ? "prod" : "dev";
+
 export default defineConfig({
   driver: "pg",
   schema: "./server/db/schema.ts",
@@ -12,4 +14,5 @@ export default defineConfig({
   dbCredentials: {
     connectionString: process.env.DATABASE_CONNECTION_STRING,
   },
+  tablesFilter: [`todo-list-${dbPrefix}_*`],
 });

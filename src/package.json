@@ -12,8 +12,9 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "db:studio": "drizzle-kit studio",
-    "db:generate": "drizzle-kit generate:pg --schema=./server/db/schema.ts --out=./server/db/migrations",
+    "db:generate": "drizzle-kit generate:pg",
     "db:migrate": "tsx migrate.ts",
+    "db:push": "drizzle-kit push:pg",
     "update-pkg": "bunx npm-check-updates --upgrade --interactive",
     "prepare": "cd .. && husky src/.husky"
   },
