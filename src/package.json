@@ -12,7 +12,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "db:studio": "drizzle-kit studio",
-    "db:generate": "drizzle-kit generate:pg",
+    "db:generate": "NODE_ENV=production drizzle-kit generate:pg",
     "db:migrate": "tsx migrate.ts",
     "db:push": "drizzle-kit push:pg",
     "update-pkg": "bunx npm-check-updates --upgrade --interactive",
@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.28.2",
+    "@auth/drizzle-adapter": "^0.8.2",
     "@ducanh2912/next-pwa": "^10.2.5",
     "@mdx-js/loader": "^3.0.1",
     "@mdx-js/react": "^3.0.1",

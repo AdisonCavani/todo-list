@@ -1,10 +1,10 @@
-import { users } from "@server/db/schema";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import { pgTable, users } from "@server/db/schema";
 import { db } from "@server/db/sql";
 import { type InferSelectModel } from "drizzle-orm";
 import NextAuth, { type DefaultSession, type User } from "next-auth";
 import Github, { type GitHubProfile } from "next-auth/providers/github";
 import Google, { type GoogleProfile } from "next-auth/providers/google";
-import { DrizzleAdapter } from "./drizzle-adapter";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -34,7 +34,7 @@ export const {
     signIn: "/auth",
   },
 
-  adapter: DrizzleAdapter(db),
+  adapter: DrizzleAdapter(db, pgTable),
   session: {
     strategy: "jwt",
   },

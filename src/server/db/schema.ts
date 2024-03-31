@@ -1,22 +1,23 @@
+import type { AdapterAccount } from "@auth/core/adapters";
 import type { InferSelectModel } from "drizzle-orm";
 import {
   boolean,
-  index,
   integer,
   pgEnum,
   pgTableCreator,
+  primaryKey,
   text,
   timestamp,
-  uniqueIndex,
-  varchar,
 } from "drizzle-orm/pg-core";
 
 const tablePrefix = process.env.NODE_ENV === "production" ? "prod" : "dev";
-const pgTable = pgTableCreator((name) => `todo-list-${tablePrefix}_${name}`);
+export const pgTable = pgTableCreator(
+  (name) => `todo-list-${tablePrefix}_${name}`,
+);
 
 export const tasks = pgTable("tasks", {
-  id: varchar("id", { length: 255 }).primaryKey().notNull(),
-  listId: varchar("list_id", { length: 255 }).notNull(),
+  id: text("id").primaryKey().notNull(),
+  listId: text("list_id").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   title: text("title").notNull(),
@@ -30,8 +31,8 @@ export const tasks = pgTable("tasks", {
 export type TaskType = InferSelectModel<typeof tasks>;
 
 export const lists = pgTable("lists", {
-  id: varchar("id", { length: 255 }).primaryKey().notNull(),
-  userId: varchar("user_id", { length: 255 }).notNull(),
+  id: text("id").primaryKey().notNull(),
+  userId: text("user_id").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   name: text("name").notNull(),
@@ -42,78 +43,62 @@ export type ListType = InferSelectModel<typeof lists>;
 export const accounts = pgTable(
   "accounts",
   {
-    id: varchar("id", { length: 255 }).primaryKey().notNull(),
-    userId: varchar("user_id", { length: 255 }).notNull(),
-    type: varchar("type", { length: 255 }).notNull(),
-    provider: varchar("provider", { length: 255 }).notNull(),
-    providerAccountId: varchar("provider_account_id", {
-      length: 255,
-    }).notNull(),
-    access_token: text("access_token"),
-    expires_in: integer("expires_in"),
-    id_token: text("id_token"),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    type: text("type").$type<AdapterAccount["type"]>().notNull(),
+    provider: text("provider").notNull(),
+    providerAccountId: text("provider_account_id").notNull(),
     refresh_token: text("refresh_token"),
-    refresh_token_expires_in: integer("refresh_token_expires_in"),
-    scope: varchar("scope", { length: 255 }),
-    token_type: varchar("token_type", { length: 255 }),
+    access_token: text("access_token"),
+    expires_at: integer("expires_at"),
+    token_type: text("token_type"),
+    scope: text("scope"),
+    id_token: text("id_token"),
+    session_state: text("session_state"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
   (account) => ({
-    providerProviderAccountIdIndex: uniqueIndex(
-      "accounts__provider__providerAccountId__idx",
-    ).on(account.provider, account.providerAccountId),
-    userIdIndex: index("accounts__userId__idx").on(account.userId),
+    compoundKey: primaryKey({
+      columns: [account.provider, account.providerAccountId],
+    }),
   }),
 );
 
-export const sessions = pgTable(
-  "sessions",
-  {
-    id: varchar("id", { length: 255 }).primaryKey().notNull(),
-    sessionToken: varchar("session_token", { length: 255 }).notNull(),
-    userId: varchar("user_id", { length: 255 }).notNull(),
-    expires: timestamp("expires").notNull(),
-    created_at: timestamp("created_at").defaultNow().notNull(),
-    updated_at: timestamp("updated_at").defaultNow().notNull(),
-  },
-  (session) => ({
-    sessionTokenIndex: uniqueIndex("sessions__sessionToken__idx").on(
-      session.sessionToken,
-    ),
-    userIdIndex: index("sessions__userId__idx").on(session.userId),
-  }),
-);
+export const sessions = pgTable("sessions", {
+  sessionToken: text("session_token").notNull().primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  expires: timestamp("expires", { mode: "date" }).notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+});
 
-export const users = pgTable(
-  "users",
-  {
-    id: varchar("id", { length: 255 }).primaryKey().notNull(),
-    firstName: varchar("first_name", { length: 255 }).notNull(),
-    lastName: varchar("last_name", { length: 255 }).notNull(),
-    email: varchar("email", { length: 255 }).notNull(),
-    emailVerified: timestamp("email_verified"),
-    image: varchar("image", { length: 255 }),
-    created_at: timestamp("created_at").defaultNow().notNull(),
-    updated_at: timestamp("updated_at").defaultNow().notNull(),
-  },
-  (user) => ({
-    emailIndex: uniqueIndex("users__email__idx").on(user.email),
-  }),
-);
+export const users = pgTable("users", {
+  id: text("id").primaryKey().notNull(),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  email: text("email").notNull(),
+  emailVerified: timestamp("email_verified", { mode: "date" }),
+  image: text("image"),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+});
 
 export const verificationTokens = pgTable(
   "verification_tokens",
   {
-    identifier: varchar("identifier", { length: 255 }).primaryKey().notNull(),
-    token: varchar("token", { length: 255 }).notNull(),
-    expires: timestamp("expires").notNull(),
+    identifier: text("identifier").notNull(),
+    token: text("token").notNull(),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
     created_at: timestamp("created_at").defaultNow().notNull(),
     updated_at: timestamp("updated_at").defaultNow().notNull(),
   },
   (verificationToken) => ({
-    tokenIndex: uniqueIndex("verification_tokens__token__idx").on(
-      verificationToken.token,
-    ),
+    compoundKey: primaryKey({
+      columns: [verificationToken.identifier, verificationToken.token],
+    }),
   }),
 );

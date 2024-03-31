@@ -15,6 +15,13 @@
       "when": 1711891482883,
       "tag": "0001_public_iron_monger",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1711910216086,
+      "tag": "0002_clumsy_exodus",
+      "breakpoints": true
     }
   ]
 }
