@@ -1,23 +1,24 @@
-import { sql, type InferSelectModel } from "drizzle-orm";
+import type { InferSelectModel } from "drizzle-orm";
 import {
   boolean,
   index,
   integer,
   pgEnum,
-  pgTable,
+  pgTableCreator,
   text,
   timestamp,
   uniqueIndex,
   varchar,
 } from "drizzle-orm/pg-core";
 
+const tablePrefix = process.env.NODE_ENV === "production" ? "prod" : "dev";
+const pgTable = pgTableCreator((name) => `todo-list-${tablePrefix}_${name}`);
+
 export const tasks = pgTable("tasks", {
   id: varchar("id", { length: 255 }).primaryKey().notNull(),
   listId: varchar("list_id", { length: 255 }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
-    .notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
   title: text("title").notNull(),
   description: text("description"),
   dueDate: timestamp("due_date"),
@@ -32,9 +33,7 @@ export const lists = pgTable("lists", {
   id: varchar("id", { length: 255 }).primaryKey().notNull(),
   userId: varchar("user_id", { length: 255 }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
-    .notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
   name: text("name").notNull(),
 });
 
@@ -58,9 +57,7 @@ export const accounts = pgTable(
     scope: varchar("scope", { length: 255 }),
     token_type: varchar("token_type", { length: 255 }),
     createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at")
-      .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
-      .notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
   (account) => ({
     providerProviderAccountIdIndex: uniqueIndex(
@@ -77,10 +74,8 @@ export const sessions = pgTable(
     sessionToken: varchar("session_token", { length: 255 }).notNull(),
     userId: varchar("user_id", { length: 255 }).notNull(),
     expires: timestamp("expires").notNull(),
-    created_at: timestamp("created_at").notNull().defaultNow(),
-    updated_at: timestamp("updated_at")
-      .notNull()
-      .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`),
+    created_at: timestamp("created_at").defaultNow().notNull(),
+    updated_at: timestamp("updated_at").defaultNow().notNull(),
   },
   (session) => ({
     sessionTokenIndex: uniqueIndex("sessions__sessionToken__idx").on(
@@ -99,10 +94,8 @@ export const users = pgTable(
     email: varchar("email", { length: 255 }).notNull(),
     emailVerified: timestamp("email_verified"),
     image: varchar("image", { length: 255 }),
-    created_at: timestamp("created_at").notNull().defaultNow(),
-    updated_at: timestamp("updated_at")
-      .notNull()
-      .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`),
+    created_at: timestamp("created_at").defaultNow().notNull(),
+    updated_at: timestamp("updated_at").defaultNow().notNull(),
   },
   (user) => ({
     emailIndex: uniqueIndex("users__email__idx").on(user.email),
@@ -115,10 +108,8 @@ export const verificationTokens = pgTable(
     identifier: varchar("identifier", { length: 255 }).primaryKey().notNull(),
     token: varchar("token", { length: 255 }).notNull(),
     expires: timestamp("expires").notNull(),
-    created_at: timestamp("created_at").notNull().defaultNow(),
-    updated_at: timestamp("updated_at")
-      .notNull()
-      .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`),
+    created_at: timestamp("created_at").defaultNow().notNull(),
+    updated_at: timestamp("updated_at").defaultNow().notNull(),
   },
   (verificationToken) => ({
     tokenIndex: uniqueIndex("verification_tokens__token__idx").on(

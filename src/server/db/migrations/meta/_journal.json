@@ -1,19 +1,19 @@
 {
   "version": "5",
-  "dialect": "mysql",
+  "dialect": "pg",
   "entries": [
     {
       "idx": 0,
       "version": "5",
-      "when": 1688581399821,
-      "tag": "0000_mixed_robbie_robertson",
+      "when": 1711891457116,
+      "tag": "0000_blue_iron_monger",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "5",
-      "when": 1692821433271,
-      "tag": "0001_yielding_squadron_supreme",
+      "when": 1711891482883,
+      "tag": "0001_public_iron_monger",
       "breakpoints": true
     }
   ]
