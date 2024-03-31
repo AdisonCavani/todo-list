@@ -1,8 +1,12 @@
-import { addDays, getShortDayName } from "@lib/date";
 import { api } from "@lib/trpc/react";
 import type { TaskPriorityEnum, TaskRenderType } from "@lib/types";
 import { useToast } from "@lib/use-toast";
-import { getPriorityColor, getPriorityText } from "@lib/utils";
+import {
+  addDays,
+  getPriorityColor,
+  getPriorityText,
+  getShortDayName,
+} from "@lib/utils";
 import * as Dialog from "@radix-ui/react-dialog";
 import {
   IconArrowUp,

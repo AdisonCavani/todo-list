@@ -1,10 +1,15 @@
 "use client";
 
-import { addDays, getShortDayName } from "@lib/date";
 import { api } from "@lib/trpc/react";
 import type { TaskPriorityEnum } from "@lib/types";
 import { toast } from "@lib/use-toast";
-import { cn, getPriorityColor, getPriorityText } from "@lib/utils";
+import {
+  addDays,
+  cn,
+  getPriorityColor,
+  getPriorityText,
+  getShortDayName,
+} from "@lib/utils";
 import type { TaskType } from "@server/db/schema";
 import {
   IconCalendar,

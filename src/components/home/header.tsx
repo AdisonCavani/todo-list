@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "@components/router/link";
-import { MenuEntries } from "@lib/data";
+import type { MenuEntry } from "@lib/types";
 import { cn } from "@lib/utils";
 import styles from "@styles/header.module.css";
 import { IconChecklist, IconMenu } from "@tabler/icons-react";
@@ -9,6 +9,11 @@ import type { Session } from "next-auth";
 import { useState } from "react";
 import HeaderLink from "./header-link";
 import MobileMenu from "./mobile-menu";
+
+export const menuEntries: MenuEntry[] = [
+  { name: "Privacy", href: "/privacy" },
+  { name: "Terms of Service", href: "/terms-of-service" },
+];
 
 type Props = {
   session: Session | null;
@@ -37,7 +42,7 @@ function Header({ session }: Props) {
               <span className="select-none">To Do</span>
             </Link>
           </li>
-          {MenuEntries.map((entry, index) => (
+          {menuEntries.map((entry, index) => (
             <HeaderLink key={index} {...entry} className="hidden sm:block" />
           ))}
 
@@ -61,7 +66,12 @@ function Header({ session }: Props) {
           </li>
         </ul>
 
-        {open && <MobileMenu onClick={() => setOpen(false)} />}
+        {open && (
+          <MobileMenu
+            menuEntries={menuEntries}
+            onClick={() => setOpen(false)}
+          />
+        )}
       </nav>
     </header>
   );

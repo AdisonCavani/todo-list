@@ -42,3 +42,17 @@ export function getPriorityColor(priority: TaskPriorityEnum) {
       throw new Error("Out of range");
   }
 }
+
+export function addDays(date: Date, days: number): Date {
+  if (!days) return date;
+
+  date.setDate(date.getDate() + days);
+
+  return date;
+}
+
+export function getShortDayName(date: Date): string {
+  return Intl.DateTimeFormat("en-US", {
+    weekday: "short",
+  }).format(date);
+}

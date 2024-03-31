@@ -1,11 +1,12 @@
 import Link from "@components/router/link";
-import { MenuEntries, type MenuEntry } from "@lib/data";
+import type { MenuEntry } from "@lib/types";
 import { isUrlInternal } from "@lib/utils";
 import { Fragment } from "react";
+import { menuEntries } from "./header";
 
 const FooterEntries: MenuEntry[] = [
   { name: "Analytics", href: "https://insights.k1ng.dev" },
-  ...MenuEntries,
+  ...menuEntries,
 ];
 
 function Footer() {
