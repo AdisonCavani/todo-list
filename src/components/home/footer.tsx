@@ -2,28 +2,32 @@ import Link from "@components/router/link";
 import type { MenuEntry } from "@lib/types";
 import { isUrlInternal } from "@lib/utils";
 import { Fragment } from "react";
-import { menuEntries } from "./header";
 
-const FooterEntries: MenuEntry[] = [
-  { name: "Analytics", href: "https://insights.k1ng.dev" },
-  ...menuEntries,
-];
+type Props = {
+  menuEntries: MenuEntry[];
+};
 
-function Footer() {
+function Footer({ menuEntries }: Props) {
+  const footerEntries: MenuEntry[] = [
+    { name: "Analytics", href: "https://insights.k1ng.dev" },
+    ...menuEntries,
+  ];
+
   return (
     <footer className="border-t py-10">
       <p className="px-8 text-sm leading-6 sm:px-0 sm:text-center">
         © {new Date().getUTCFullYear()} Adrian Środoń. All rights reserved.
       </p>
+
       <div className="mt-8 flex flex-col justify-center gap-y-2 px-8 text-sm font-semibold leading-6 text-muted-foreground sm:flex-row sm:items-center sm:space-x-4 sm:px-0">
-        {FooterEntries.map(({ name, href }, index) => (
+        {footerEntries.map(({ name, href }, index) => (
           <Fragment key={index}>
             {isUrlInternal(href) ? (
               <>
                 <Link href={href} prefetch={false}>
                   {name}
                 </Link>
-                <Divider index={index} />
+                <Divider menuEntries={footerEntries} index={index} />
               </>
             ) : (
               <>
@@ -35,7 +39,7 @@ function Footer() {
                 >
                   {name}
                 </a>
-                <Divider index={index} />
+                <Divider menuEntries={footerEntries} index={index} />
               </>
             )}
           </Fragment>
@@ -45,10 +49,10 @@ function Footer() {
   );
 }
 
-function Divider({ index }: { index: number }) {
+function Divider({ menuEntries, index }: Props & { index: number }) {
   return (
     <>
-      {index !== FooterEntries.length - 1 && (
+      {index !== menuEntries.length - 1 && (
         <hr className="hidden h-4 w-px border-0 bg-muted sm:block" />
       )}
     </>

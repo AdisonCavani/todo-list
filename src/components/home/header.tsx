@@ -10,16 +10,12 @@ import { useState } from "react";
 import HeaderLink from "./header-link";
 import MobileMenu from "./mobile-menu";
 
-export const menuEntries: MenuEntry[] = [
-  { name: "Privacy", href: "/privacy" },
-  { name: "Terms of Service", href: "/terms-of-service" },
-];
-
 type Props = {
+  menuEntries: MenuEntry[];
   session: Session | null;
 };
 
-function Header({ session }: Props) {
+function Header({ menuEntries, session }: Props) {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
