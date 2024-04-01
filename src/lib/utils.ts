@@ -26,7 +26,7 @@ export function getPriorityText(priority: TaskPriorityEnum, long?: boolean) {
     case "P3":
       return prefix + 3;
     default:
-      return "Set priority";
+      return "Priority";
   }
 }
 

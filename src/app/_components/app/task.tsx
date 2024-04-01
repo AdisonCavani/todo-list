@@ -54,30 +54,6 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
     task;
 
   const utils = api.useUtils();
-  const deleteTask = api.task.delete.useMutation({
-    async onMutate(input) {
-      await utils.task.get.invalidate({
-        listId: task.listId,
-      });
-
-      const prevData = utils.task.get.getData({ listId: task.listId });
-
-      utils.task.get.setData({ listId: task.listId }, (old) =>
-        old?.filter((task) => task.id !== input.id),
-      );
-
-      return { prevData };
-    },
-    onError(_, __, ctx) {
-      utils.task.get.setData({ listId: task.listId }, ctx?.prevData);
-
-      toast({
-        variant: "destructive",
-        title: "Failed to delete task.",
-      });
-    },
-  });
-
   const updateTask = api.task.update.useMutation({
     async onMutate(input) {
       await utils.task.get.invalidate({
@@ -126,10 +102,6 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
       dueDate: dialogDate,
       priority: dialogPriority,
     });
-  }
-
-  function handleOnDelete() {
-    deleteTask.mutate({ id: task.id });
   }
 
   const handleOnClick: MouseEventHandler<HTMLButtonElement> = async (event) => {
@@ -241,26 +213,10 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
         </li>
       </DialogTrigger>
 
-      <DialogContent className="max-w-lg dark:bg-neutral-800">
+      <DialogContent className="max-w-none sm:max-w-sm">
         <DialogHeader>
           <DialogTitle>Update task</DialogTitle>
-          <div className="flex justify-between">
-            <DialogDescription>
-              Make changes to your task.
-              <br />
-              Click save when you&apos;re done.
-            </DialogDescription>
-
-            <DialogClose asChild>
-              <Button
-                size="xs"
-                loading={deleteTask.isPending}
-                icon={<IconTrash size={18} />}
-                variant="destructive"
-                onClick={handleOnDelete}
-              />
-            </DialogClose>
-          </div>
+          <DialogDescription>Make changes to your task.</DialogDescription>
         </DialogHeader>
 
         <div className="mt-2 flex flex-col gap-y-3">
@@ -292,176 +248,177 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
             />
           </div>
 
-          <div className="relative">
-            <input
-              type="date"
-              min={new Date().toISOString().split("T")[0]}
-              ref={dialogDateRef}
-              value={dialogDate?.toISOString().split("T")[0] ?? ""}
-              onChange={(event) => setDialogDate(event.target.valueAsDate)}
-              className="invisible absolute left-0 top-0 -ml-1 mt-9 size-0"
-            />
+          <div className="flex flex-row gap-x-3">
+            <div className="relative w-full">
+              <input
+                type="date"
+                min={new Date().toISOString().split("T")[0]}
+                ref={dialogDateRef}
+                value={dialogDate?.toISOString().split("T")[0] ?? ""}
+                onChange={(event) => setDialogDate(event.target.valueAsDate)}
+                className="invisible absolute left-0 top-0 -ml-1 mt-9 size-0"
+              />
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  aria-label="Due Date"
-                  variant="outline"
-                  className="w-full"
-                  onClick={(event) => event.stopPropagation()}
-                >
-                  <IconCalendarEvent className="size-4" />
-                  {dialogDate ? (
-                    <DateComponent date={dialogDate} textCss="font-semibold" />
-                  ) : (
-                    "Add due date"
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    aria-label="Due Date"
+                    variant="outline"
+                    className="w-full"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <IconCalendarEvent className="size-4" />
+                    {dialogDate ? (
+                      <DateComponent
+                        date={dialogDate}
+                        textCss="font-semibold"
+                      />
+                    ) : (
+                      "Add due date"
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>Due Date</DropdownMenuLabel>
+
+                  <DropdownMenuSeparator />
+
+                  <DropdownMenuItem onClick={() => setDialogDate(new Date())}>
+                    <IconCalendar className="size-5" />
+                    <div className="flex w-full justify-between">
+                      <span>Today</span>
+                      <span className="pl-8 text-neutral-500">Wed</span>
+                    </div>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    onClick={() => {
+                      const date = new Date();
+                      date.setDate(date.getDate() + 1);
+                      setDialogDate(date);
+                    }}
+                  >
+                    <IconCalendarDue className="size-5" />
+                    <div className="flex w-full justify-between">
+                      <span>Tomorrow</span>
+                      <span className="pl-8 text-neutral-500">
+                        {getShortDayName(addDays(new Date(), 1))}
+                      </span>
+                    </div>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    onClick={() => {
+                      const date = new Date();
+                      date.setDate(date.getDate() + 7);
+                      setDialogDate(date);
+                    }}
+                  >
+                    <IconCalendarPlus className="size-5" />
+                    <div className="flex w-full justify-between">
+                      <span>Next week</span>
+                      <span className="pl-8 text-neutral-500">
+                        {getShortDayName(addDays(new Date(), 7))}
+                      </span>
+                    </div>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuSeparator />
+
+                  <DropdownMenuItem
+                    onClick={() => dialogDateRef.current?.showPicker()}
+                  >
+                    <IconCalendarStats className="size-4" />
+                    <span>Pick a date</span>
+                  </DropdownMenuItem>
+
+                  {dialogDate && (
+                    <>
+                      <DropdownMenuSeparator />
+
+                      <DropdownMenuItem
+                        onClick={() => setDialogDate(null)}
+                        className="text-red-600 dark:text-red-400"
+                      >
+                        <IconTrash size={24} className="size-4" />
+                        <span>Remove due date</span>
+                      </DropdownMenuItem>
+                    </>
                   )}
-                </Button>
-              </DropdownMenuTrigger>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
 
-              <DropdownMenuContent>
-                <DropdownMenuLabel>Due Date</DropdownMenuLabel>
+            <div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    aria-label="Priority"
+                    variant="outline"
+                    className="w-[125px]"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    {dialogPriority !== "P4" ? (
+                      <IconFlag2Filled
+                        size={20}
+                        className={getPriorityColor(dialogPriority)}
+                      />
+                    ) : (
+                      <IconFlag2 size={20} />
+                    )}
+                    <span>{getPriorityText(dialogPriority)}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>Priority</DropdownMenuLabel>
 
-                <DropdownMenuSeparator />
+                  <DropdownMenuSeparator />
 
-                <DropdownMenuItem onClick={() => setDialogDate(new Date())}>
-                  <IconCalendar className="size-5" />
-                  <div className="flex w-full justify-between">
-                    <span>Today</span>
-                    <span className="pl-8 text-neutral-500">Wed</span>
-                  </div>
-                </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setDialogPriority("P1")}>
+                    <IconFlag2Filled className="size-5 text-red-500" />
+                    <div className="flex w-full justify-between">
+                      <span>Priority 1</span>
+                    </div>
+                  </DropdownMenuItem>
 
-                <DropdownMenuItem
-                  onClick={() => {
-                    const date = new Date();
-                    date.setDate(date.getDate() + 1);
-                    setDialogDate(date);
-                  }}
-                >
-                  <IconCalendarDue className="size-5" />
-                  <div className="flex w-full justify-between">
-                    <span>Tomorrow</span>
-                    <span className="pl-8 text-neutral-500">
-                      {getShortDayName(addDays(new Date(), 1))}
-                    </span>
-                  </div>
-                </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setDialogPriority("P2")}>
+                    <IconFlag2Filled className="size-5 text-orange-400" />
+                    <div className="flex w-full justify-between">
+                      <span>Priority 2</span>
+                    </div>
+                  </DropdownMenuItem>
 
-                <DropdownMenuItem
-                  onClick={() => {
-                    const date = new Date();
-                    date.setDate(date.getDate() + 7);
-                    setDialogDate(date);
-                  }}
-                >
-                  <IconCalendarPlus className="size-5" />
-                  <div className="flex w-full justify-between">
-                    <span>Next week</span>
-                    <span className="pl-8 text-neutral-500">
-                      {getShortDayName(addDays(new Date(), 7))}
-                    </span>
-                  </div>
-                </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setDialogPriority("P3")}>
+                    <IconFlag2Filled className="size-5 text-blue-500" />
+                    <div className="flex w-full justify-between">
+                      <span>Priority 3</span>
+                    </div>
+                  </DropdownMenuItem>
 
-                <DropdownMenuSeparator />
-
-                <DropdownMenuItem
-                  onClick={() => dialogDateRef.current?.showPicker()}
-                >
-                  <IconCalendarStats className="size-4" />
-                  <span>Pick a date</span>
-                </DropdownMenuItem>
-
-                {dialogDate && (
-                  <>
-                    <DropdownMenuSeparator />
-
-                    <DropdownMenuItem
-                      onClick={() => setDialogDate(null)}
-                      className="text-red-600 dark:text-red-400"
-                    >
-                      <IconTrash size={24} className="size-4" />
-                      <span>Remove due date</span>
-                    </DropdownMenuItem>
-                  </>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-
-          <div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  aria-label="Priority"
-                  variant="outline"
-                  className="w-full"
-                  onClick={(event) => event.stopPropagation()}
-                >
-                  {dialogPriority !== "P4" ? (
-                    <IconFlag2Filled
-                      size={20}
-                      className={getPriorityColor(dialogPriority)}
-                    />
-                  ) : (
-                    <IconFlag2 size={20} />
-                  )}
-                  <span>{getPriorityText(dialogPriority)}</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>Priority</DropdownMenuLabel>
-
-                <DropdownMenuSeparator />
-
-                <DropdownMenuItem onClick={() => setDialogPriority("P1")}>
-                  <IconFlag2Filled className="size-5 text-red-500" />
-                  <div className="flex w-full justify-between">
-                    <span>Priority 1</span>
-                  </div>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem onClick={() => setDialogPriority("P2")}>
-                  <IconFlag2Filled className="size-5 text-orange-400" />
-                  <div className="flex w-full justify-between">
-                    <span>Priority 2</span>
-                  </div>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem onClick={() => setDialogPriority("P3")}>
-                  <IconFlag2Filled className="size-5 text-blue-500" />
-                  <div className="flex w-full justify-between">
-                    <span>Priority 3</span>
-                  </div>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem onClick={() => setDialogPriority("P4")}>
-                  <IconFlag2 className="size-5" />
-                  <div className="flex w-full justify-between">
-                    <span>Priority 4</span>
-                  </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  <DropdownMenuItem onClick={() => setDialogPriority("P4")}>
+                    <IconFlag2 className="size-5" />
+                    <div className="flex w-full justify-between">
+                      <span>Priority 4</span>
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
         </div>
 
         <DialogFooter>
           <DialogClose asChild>
+            <Button variant="ghost">Cancel</Button>
+          </DialogClose>
+          <DialogClose asChild>
             <Button
-              variant="blue"
               loading={updateTask.isPending}
               disabled={isSubmitDisabled}
               onClick={handleOnSubmit}
-              className="w-full"
             >
-              <p>Save</p>
-            </Button>
-          </DialogClose>
-          <DialogClose asChild>
-            <Button variant="subtle" className="w-full">
-              Cancel
+              Save changes
             </Button>
           </DialogClose>
         </DialogFooter>
