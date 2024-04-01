@@ -28,7 +28,9 @@ export const tasks = createTable("task", {
   isImportant: boolean("isImportant").notNull(),
   priority: taskPriorityEnum("priority").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt")
+    .$onUpdateFn(() => new Date())
+    .notNull(),
 });
 
 export type TaskType = InferSelectModel<typeof tasks>;
@@ -38,7 +40,9 @@ export const lists = createTable("list", {
   userId: text("userId").notNull(),
   name: text("name").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt")
+    .$onUpdateFn(() => new Date())
+    .notNull(),
 });
 
 export type ListType = InferSelectModel<typeof lists>;
@@ -51,6 +55,10 @@ export const users = createTable("user", {
     sql`CURRENT_TIMESTAMP`,
   ),
   image: text("image"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt")
+    .$onUpdateFn(() => new Date())
+    .notNull(),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -73,6 +81,10 @@ export const accounts = createTable(
     scope: text("scope"),
     id_token: text("id_token"),
     session_state: text("session_state"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt")
+      .$onUpdateFn(() => new Date())
+      .notNull(),
   },
   (account) => ({
     compoundKey: primaryKey({
@@ -94,6 +106,10 @@ export const sessions = createTable(
       .notNull()
       .references(() => users.id),
     expires: timestamp("expires", { mode: "date" }).notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt")
+      .$onUpdateFn(() => new Date())
+      .notNull(),
   },
   (session) => ({
     userIdIdx: index("session_userId_idx").on(session.userId),
@@ -110,6 +126,10 @@ export const verificationTokens = createTable(
     identifier: text("identifier").notNull(),
     token: text("token").notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt")
+      .$onUpdateFn(() => new Date())
+      .notNull(),
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
