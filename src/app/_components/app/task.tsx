@@ -208,7 +208,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
                   event.currentTarget.click();
                 }
               }}
-              className="flex cursor-pointer flex-row items-center gap-x-2 rounded-md bg-white px-4 text-left shadow-ms transition-colors hover:bg-neutral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-neutral-800 dark:hover:bg-neutral-700"
+              className="flex cursor-pointer select-none flex-row items-center gap-x-2 rounded-md bg-white px-4 text-left shadow-ms transition-colors hover:bg-neutral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-neutral-800 dark:hover:bg-neutral-700"
             >
               <button
                 aria-label="Toggle task completion"
