@@ -22,6 +22,13 @@
       "when": 1711960267311,
       "tag": "0002_bored_venus",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1711960651783,
+      "tag": "0003_living_grandmaster",
+      "breakpoints": true
     }
   ]
 }

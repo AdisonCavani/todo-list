@@ -33,6 +33,7 @@ export const tasks = createTable(
     priority: taskPriorityEnum("priority").notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     updatedAt: timestamp("updatedAt")
+      .defaultNow()
       .$onUpdateFn(() => new Date())
       .notNull(),
   },
@@ -57,6 +58,7 @@ export const lists = createTable(
     name: text("name").notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     updatedAt: timestamp("updatedAt")
+      .defaultNow()
       .$onUpdateFn(() => new Date())
       .notNull(),
   },
@@ -81,6 +83,7 @@ export const users = createTable("user", {
   image: text("image"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt")
+    .defaultNow()
     .$onUpdateFn(() => new Date())
     .notNull(),
 });
@@ -107,6 +110,7 @@ export const accounts = createTable(
     session_state: text("session_state"),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     updatedAt: timestamp("updatedAt")
+      .defaultNow()
       .$onUpdateFn(() => new Date())
       .notNull(),
   },
@@ -132,6 +136,7 @@ export const sessions = createTable(
     expires: timestamp("expires", { mode: "date" }).notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     updatedAt: timestamp("updatedAt")
+      .defaultNow()
       .$onUpdateFn(() => new Date())
       .notNull(),
   },
@@ -152,6 +157,7 @@ export const verificationTokens = createTable(
     expires: timestamp("expires", { mode: "date" }).notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     updatedAt: timestamp("updatedAt")
+      .defaultNow()
       .$onUpdateFn(() => new Date())
       .notNull(),
   },
