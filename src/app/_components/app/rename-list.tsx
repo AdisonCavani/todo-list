@@ -1,8 +1,10 @@
 import { api } from "@lib/trpc/react";
 import { toast } from "@lib/use-toast";
+import { IconX } from "@tabler/icons-react";
 import { Button } from "@ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -10,7 +12,12 @@ import {
   DialogTrigger,
 } from "@ui/dialog";
 import { Input } from "@ui/input";
-import { useState, type FormEventHandler, type PropsWithChildren } from "react";
+import {
+  useState,
+  type FormEventHandler,
+  type KeyboardEventHandler,
+  type PropsWithChildren,
+} from "react";
 
 type Props = {
   listId: string;
@@ -67,6 +74,15 @@ function RenameList({
     setOpen(false);
   };
 
+  const triggerFormSubmission: KeyboardEventHandler<HTMLFormElement> = (
+    event,
+  ) => {
+    if (event.key === "Enter" && !updateList.isPending && !submitDisabled)
+      event.currentTarget.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true }),
+      );
+  };
+
   return (
     <Dialog
       open={open}
@@ -76,26 +92,36 @@ function RenameList({
       }}
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="max-w-sm">
-        <DialogHeader>
-          <DialogTitle>Edit list</DialogTitle>
-          <DialogDescription>Set new name for this list</DialogDescription>
-        </DialogHeader>
+      <DialogContent asChild className="max-w-sm">
+        <form onSubmit={handleOnSubmit} onKeyDown={triggerFormSubmission}>
+          <DialogHeader>
+            <DialogTitle>Edit list</DialogTitle>
+            <DialogDescription>Set new name for this list</DialogDescription>
+          </DialogHeader>
 
-        <form onSubmit={handleOnSubmit} className="flex flex-col gap-y-4">
-          <Input
-            placeholder="My projects"
-            onChange={(event) => setName(event.currentTarget.value)}
-            className="col-span-2"
-          />
+          <div className="flex flex-col gap-y-4">
+            <Input
+              placeholder="My projects"
+              onChange={(event) => setName(event.currentTarget.value)}
+              className="col-span-2"
+            />
 
-          <Button
-            type="submit"
-            disabled={submitDisabled}
-            loading={updateList.isPending}
+            <Button
+              type="submit"
+              disabled={submitDisabled}
+              loading={updateList.isPending}
+            >
+              Save changes
+            </Button>
+          </div>
+
+          <DialogClose
+            type="button"
+            className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
           >
-            Save changes
-          </Button>
+            <IconX className="size-4" />
+            <span className="sr-only">Close</span>
+          </DialogClose>
         </form>
       </DialogContent>
     </Dialog>

@@ -46,7 +46,15 @@ import {
 } from "@ui/dropdown-menu";
 import { Input } from "@ui/input";
 import { Textarea } from "@ui/textarea";
-import { createRef, forwardRef, useState, type MouseEventHandler } from "react";
+import {
+  createRef,
+  forwardRef,
+  useRef,
+  useState,
+  type FormEventHandler,
+  type KeyboardEventHandler,
+  type MouseEventHandler,
+} from "react";
 import DateComponent from "./date";
 
 const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
@@ -79,6 +87,9 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
     },
   });
 
+  const formRef = useRef<HTMLFormElement>(null!);
+
+  const [open, setOpen] = useState<boolean>(false);
   const [dialogTitle, setDialogTitle] = useState<string>(title);
   const [dialogDescription, setDialogDescription] = useState<string>(
     description ?? "",
@@ -91,10 +102,12 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
 
   const dialogDateRef = createRef<HTMLInputElement>();
 
-  const isSubmitDisabled = dialogTitle.trim().length <= 0;
+  const submitDisabled = dialogTitle.trim().length <= 0;
 
-  function handleOnSubmit() {
-    updateTask.mutate({
+  const handleOnSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+    event.preventDefault();
+
+    await updateTask.mutateAsync({
       ...task,
       title: dialogTitle,
       description:
@@ -102,7 +115,18 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
       dueDate: dialogDate,
       priority: dialogPriority,
     });
-  }
+
+    setOpen(false);
+  };
+
+  const triggerFormSubmission: KeyboardEventHandler<HTMLFormElement> = (
+    event,
+  ) => {
+    if (event.key === "Enter" && !updateTask.isPending && !submitDisabled)
+      event.currentTarget.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true }),
+      );
+  };
 
   const handleOnClick: MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.stopPropagation();
@@ -124,13 +148,16 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
 
   return (
     <Dialog
-      onOpenChange={(event) => {
-        if (event) {
+      open={open}
+      onOpenChange={(value) => {
+        if (value) {
           setDialogTitle(title);
           setDialogDescription(description ?? "");
           setDialogDate(dueDate ? new Date(dueDate) : null);
           setDialogPriority(priority);
         }
+
+        setOpen(value);
       }}
     >
       <DialogTrigger asChild>
@@ -213,215 +240,228 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
         </li>
       </DialogTrigger>
 
-      <DialogContent className="max-w-none sm:max-w-sm">
-        <DialogHeader>
-          <DialogTitle>Update task</DialogTitle>
-          <DialogDescription>Make changes to your task.</DialogDescription>
-        </DialogHeader>
+      <DialogContent asChild className="max-w-none sm:max-w-sm">
+        <form
+          ref={formRef}
+          onSubmit={handleOnSubmit}
+          onKeyDown={triggerFormSubmission}
+        >
+          <DialogHeader>
+            <DialogTitle>Update task</DialogTitle>
+            <DialogDescription>Make changes to your task.</DialogDescription>
+          </DialogHeader>
 
-        <div className="mt-2 flex flex-col gap-y-3">
-          <div>
-            <label htmlFor="title" className="mb-2 block text-sm font-medium">
-              Title
-            </label>
-            <Input
-              id="title"
-              type="text"
-              placeholder="Do a homework"
-              value={dialogTitle}
-              onChange={(event) => setDialogTitle(event.target.value)}
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="description"
-              className="mb-2 block text-sm font-medium"
-            >
-              Description
-            </label>
-            <Textarea
-              id="description"
-              placeholder="Student's book, p.84, ex.1-3"
-              value={dialogDescription}
-              onChange={(event) => setDialogDescription(event.target.value)}
-            />
-          </div>
-
-          <div className="flex flex-row gap-x-3">
-            <div className="relative w-full">
-              <input
-                type="date"
-                min={new Date().toISOString().split("T")[0]}
-                ref={dialogDateRef}
-                value={dialogDate?.toISOString().split("T")[0] ?? ""}
-                onChange={(event) => setDialogDate(event.target.valueAsDate)}
-                className="invisible absolute left-0 top-0 -ml-1 mt-9 size-0"
+          <div className="mt-2 flex flex-col gap-y-3">
+            <div>
+              <label htmlFor="title" className="mb-2 block text-sm font-medium">
+                Title
+              </label>
+              <Input
+                id="title"
+                type="text"
+                placeholder="Do a homework"
+                value={dialogTitle}
+                onChange={(event) => setDialogTitle(event.target.value)}
               />
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    aria-label="Due Date"
-                    variant="outline"
-                    className="w-full"
-                    onClick={(event) => event.stopPropagation()}
-                  >
-                    <IconCalendarEvent className="size-4" />
-                    {dialogDate ? (
-                      <DateComponent
-                        date={dialogDate}
-                        textCss="font-semibold"
-                      />
-                    ) : (
-                      "Add due date"
-                    )}
-                  </Button>
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent>
-                  <DropdownMenuLabel>Due Date</DropdownMenuLabel>
-
-                  <DropdownMenuSeparator />
-
-                  <DropdownMenuItem onClick={() => setDialogDate(new Date())}>
-                    <IconCalendar className="size-5" />
-                    <div className="flex w-full justify-between">
-                      <span>Today</span>
-                      <span className="pl-8 text-neutral-500">Wed</span>
-                    </div>
-                  </DropdownMenuItem>
-
-                  <DropdownMenuItem
-                    onClick={() => {
-                      const date = new Date();
-                      date.setDate(date.getDate() + 1);
-                      setDialogDate(date);
-                    }}
-                  >
-                    <IconCalendarDue className="size-5" />
-                    <div className="flex w-full justify-between">
-                      <span>Tomorrow</span>
-                      <span className="pl-8 text-neutral-500">
-                        {getShortDayName(addDays(new Date(), 1))}
-                      </span>
-                    </div>
-                  </DropdownMenuItem>
-
-                  <DropdownMenuItem
-                    onClick={() => {
-                      const date = new Date();
-                      date.setDate(date.getDate() + 7);
-                      setDialogDate(date);
-                    }}
-                  >
-                    <IconCalendarPlus className="size-5" />
-                    <div className="flex w-full justify-between">
-                      <span>Next week</span>
-                      <span className="pl-8 text-neutral-500">
-                        {getShortDayName(addDays(new Date(), 7))}
-                      </span>
-                    </div>
-                  </DropdownMenuItem>
-
-                  <DropdownMenuSeparator />
-
-                  <DropdownMenuItem
-                    onClick={() => dialogDateRef.current?.showPicker()}
-                  >
-                    <IconCalendarStats className="size-4" />
-                    <span>Pick a date</span>
-                  </DropdownMenuItem>
-
-                  {dialogDate && (
-                    <>
-                      <DropdownMenuSeparator />
-
-                      <DropdownMenuItem
-                        onClick={() => setDialogDate(null)}
-                        className="text-red-600 dark:text-red-400"
-                      >
-                        <IconTrash size={24} className="size-4" />
-                        <span>Remove due date</span>
-                      </DropdownMenuItem>
-                    </>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
             </div>
 
             <div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    aria-label="Priority"
-                    variant="outline"
-                    className="w-[125px]"
-                    onClick={(event) => event.stopPropagation()}
-                  >
-                    {dialogPriority !== "P4" ? (
-                      <IconFlag2Filled
-                        size={20}
-                        className={getPriorityColor(dialogPriority)}
-                      />
-                    ) : (
-                      <IconFlag2 size={20} />
+              <label
+                htmlFor="description"
+                className="mb-2 block text-sm font-medium"
+              >
+                Description
+              </label>
+              <Textarea
+                id="description"
+                placeholder="Student's book, p.84, ex.1-3"
+                value={dialogDescription}
+                onChange={(event) => setDialogDescription(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.ctrlKey && event.key === "Enter") {
+                    formRef.current.dispatchEvent(
+                      new Event("submit", { bubbles: true, cancelable: true }),
+                    );
+                  }
+                }}
+              />
+            </div>
+
+            <div className="flex flex-row gap-x-3">
+              <div className="relative w-full">
+                <input
+                  type="date"
+                  min={new Date().toISOString().split("T")[0]}
+                  ref={dialogDateRef}
+                  value={dialogDate?.toISOString().split("T")[0] ?? ""}
+                  onChange={(event) => setDialogDate(event.target.valueAsDate)}
+                  className="invisible absolute left-0 top-0 -ml-1 mt-9 size-0"
+                />
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      aria-label="Due Date"
+                      variant="outline"
+                      className="w-full"
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      <IconCalendarEvent className="size-4" />
+                      {dialogDate ? (
+                        <DateComponent
+                          date={dialogDate}
+                          textCss="font-semibold"
+                        />
+                      ) : (
+                        "Add due date"
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>Due Date</DropdownMenuLabel>
+
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuItem onClick={() => setDialogDate(new Date())}>
+                      <IconCalendar className="size-5" />
+                      <div className="flex w-full justify-between">
+                        <span>Today</span>
+                        <span className="pl-8 text-neutral-500">Wed</span>
+                      </div>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                      onClick={() => {
+                        const date = new Date();
+                        date.setDate(date.getDate() + 1);
+                        setDialogDate(date);
+                      }}
+                    >
+                      <IconCalendarDue className="size-5" />
+                      <div className="flex w-full justify-between">
+                        <span>Tomorrow</span>
+                        <span className="pl-8 text-neutral-500">
+                          {getShortDayName(addDays(new Date(), 1))}
+                        </span>
+                      </div>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                      onClick={() => {
+                        const date = new Date();
+                        date.setDate(date.getDate() + 7);
+                        setDialogDate(date);
+                      }}
+                    >
+                      <IconCalendarPlus className="size-5" />
+                      <div className="flex w-full justify-between">
+                        <span>Next week</span>
+                        <span className="pl-8 text-neutral-500">
+                          {getShortDayName(addDays(new Date(), 7))}
+                        </span>
+                      </div>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuItem
+                      onClick={() => dialogDateRef.current?.showPicker()}
+                    >
+                      <IconCalendarStats className="size-4" />
+                      <span>Pick a date</span>
+                    </DropdownMenuItem>
+
+                    {dialogDate && (
+                      <>
+                        <DropdownMenuSeparator />
+
+                        <DropdownMenuItem
+                          onClick={() => setDialogDate(null)}
+                          className="text-red-600 dark:text-red-400"
+                        >
+                          <IconTrash size={24} className="size-4" />
+                          <span>Remove due date</span>
+                        </DropdownMenuItem>
+                      </>
                     )}
-                    <span>{getPriorityText(dialogPriority)}</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuLabel>Priority</DropdownMenuLabel>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
 
-                  <DropdownMenuSeparator />
+              <div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      aria-label="Priority"
+                      variant="outline"
+                      className="w-[125px]"
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      {dialogPriority !== "P4" ? (
+                        <IconFlag2Filled
+                          size={20}
+                          className={getPriorityColor(dialogPriority)}
+                        />
+                      ) : (
+                        <IconFlag2 size={20} />
+                      )}
+                      <span>{getPriorityText(dialogPriority)}</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>Priority</DropdownMenuLabel>
 
-                  <DropdownMenuItem onClick={() => setDialogPriority("P1")}>
-                    <IconFlag2Filled className="size-5 text-red-500" />
-                    <div className="flex w-full justify-between">
-                      <span>Priority 1</span>
-                    </div>
-                  </DropdownMenuItem>
+                    <DropdownMenuSeparator />
 
-                  <DropdownMenuItem onClick={() => setDialogPriority("P2")}>
-                    <IconFlag2Filled className="size-5 text-orange-400" />
-                    <div className="flex w-full justify-between">
-                      <span>Priority 2</span>
-                    </div>
-                  </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setDialogPriority("P1")}>
+                      <IconFlag2Filled className="size-5 text-red-500" />
+                      <div className="flex w-full justify-between">
+                        <span>Priority 1</span>
+                      </div>
+                    </DropdownMenuItem>
 
-                  <DropdownMenuItem onClick={() => setDialogPriority("P3")}>
-                    <IconFlag2Filled className="size-5 text-blue-500" />
-                    <div className="flex w-full justify-between">
-                      <span>Priority 3</span>
-                    </div>
-                  </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setDialogPriority("P2")}>
+                      <IconFlag2Filled className="size-5 text-orange-400" />
+                      <div className="flex w-full justify-between">
+                        <span>Priority 2</span>
+                      </div>
+                    </DropdownMenuItem>
 
-                  <DropdownMenuItem onClick={() => setDialogPriority("P4")}>
-                    <IconFlag2 className="size-5" />
-                    <div className="flex w-full justify-between">
-                      <span>Priority 4</span>
-                    </div>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                    <DropdownMenuItem onClick={() => setDialogPriority("P3")}>
+                      <IconFlag2Filled className="size-5 text-blue-500" />
+                      <div className="flex w-full justify-between">
+                        <span>Priority 3</span>
+                      </div>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem onClick={() => setDialogPriority("P4")}>
+                      <IconFlag2 className="size-5" />
+                      <div className="flex w-full justify-between">
+                        <span>Priority 4</span>
+                      </div>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
           </div>
-        </div>
 
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="ghost">Cancel</Button>
-          </DialogClose>
-          <DialogClose asChild>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button" variant="ghost">
+                Cancel
+              </Button>
+            </DialogClose>
             <Button
+              type="submit"
               loading={updateTask.isPending}
-              disabled={isSubmitDisabled}
-              onClick={handleOnSubmit}
+              disabled={submitDisabled}
             >
               Save changes
             </Button>
-          </DialogClose>
-        </DialogFooter>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

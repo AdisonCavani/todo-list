@@ -2,9 +2,11 @@
 
 import { api } from "@lib/trpc/react";
 import { toast } from "@lib/use-toast";
+import { IconX } from "@tabler/icons-react";
 import { Button } from "@ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -13,7 +15,12 @@ import {
 } from "@ui/dialog";
 import { Input } from "@ui/input";
 import { usePathname, useRouter } from "next/navigation";
-import { useState, type FormEventHandler, type PropsWithChildren } from "react";
+import {
+  useState,
+  type FormEventHandler,
+  type KeyboardEventHandler,
+  type PropsWithChildren,
+} from "react";
 
 type Props = {
   listId: string;
@@ -67,6 +74,15 @@ function RemoveList({
     if (pathname === `/app/${listId}`) push("/app");
   };
 
+  const triggerFormSubmission: KeyboardEventHandler<HTMLFormElement> = (
+    event,
+  ) => {
+    if (event.key === "Enter" && !deleteList.isPending && !submitDisabled)
+      event.currentTarget.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true }),
+      );
+  };
+
   return (
     <Dialog
       open={open}
@@ -76,29 +92,39 @@ function RemoveList({
       }}
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="max-w-sm">
-        <DialogHeader>
-          <DialogTitle>Delete list</DialogTitle>
-          <DialogDescription>
-            To confirm, type &quot;<b>{listName}</b>&quot; in the box below
-          </DialogDescription>
-        </DialogHeader>
+      <DialogContent asChild className="max-w-sm">
+        <form onSubmit={handleOnSubmit} onKeyDown={triggerFormSubmission}>
+          <DialogHeader>
+            <DialogTitle>Delete list</DialogTitle>
+            <DialogDescription>
+              To confirm, type &quot;<b>{listName}</b>&quot; in the box below
+            </DialogDescription>
+          </DialogHeader>
 
-        <form onSubmit={handleOnSubmit} className="flex flex-col gap-y-4">
-          <Input
-            value={input}
-            placeholder={listName}
-            onChange={(event) => setInput(event.currentTarget.value)}
-          />
+          <div className="flex flex-col gap-y-4">
+            <Input
+              value={input}
+              placeholder={listName}
+              onChange={(event) => setInput(event.currentTarget.value)}
+            />
 
-          <Button
-            type="submit"
-            variant="destructive"
-            disabled={submitDisabled}
-            loading={deleteList.isPending}
+            <Button
+              type="submit"
+              variant="destructive"
+              disabled={submitDisabled}
+              loading={deleteList.isPending}
+            >
+              Delete this list
+            </Button>
+          </div>
+
+          <DialogClose
+            type="button"
+            className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
           >
-            Delete this list
-          </Button>
+            <IconX className="size-4" />
+            <span className="sr-only">Close</span>
+          </DialogClose>
         </form>
       </DialogContent>
     </Dialog>
