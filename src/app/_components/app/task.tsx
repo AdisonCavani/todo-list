@@ -1,5 +1,12 @@
 "use client";
 
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "@components/ui/context-menu";
 import { api } from "@lib/trpc/react";
 import type { TaskPriorityEnum } from "@lib/types";
 import { toast } from "@lib/use-toast";
@@ -18,11 +25,14 @@ import {
   IconCalendarPlus,
   IconCalendarStats,
   IconCheck,
+  IconCircle,
+  IconCircleCheck,
   IconFlag2,
   IconFlag2Filled,
   IconNote,
   IconStar,
   IconStarFilled,
+  IconStarOff,
   IconTrash,
 } from "@tabler/icons-react";
 import { Button } from "@ui/button";
@@ -62,6 +72,30 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
     task;
 
   const utils = api.useUtils();
+  const deleteTask = api.task.delete.useMutation({
+    async onMutate(input) {
+      await utils.task.get.invalidate({
+        listId: task.listId,
+      });
+
+      const prevData = utils.task.get.getData({ listId: task.listId });
+
+      utils.task.get.setData({ listId: task.listId }, (old) =>
+        old?.filter((task) => task.id !== input.id),
+      );
+
+      return { prevData };
+    },
+    onError(_, __, ctx) {
+      utils.task.get.setData({ listId: task.listId }, ctx?.prevData);
+
+      toast({
+        variant: "destructive",
+        title: "Failed to delete task.",
+      });
+    },
+  });
+
   const updateTask = api.task.update.useMutation({
     async onMutate(input) {
       await utils.task.get.invalidate({
@@ -128,7 +162,11 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
       );
   };
 
-  const handleOnClick: MouseEventHandler<HTMLButtonElement> = async (event) => {
+  function handleOnDelete() {
+    deleteTask.mutate({ id: task.id });
+  }
+
+  const onCompletionChange: MouseEventHandler<HTMLElement> = async (event) => {
     event.stopPropagation();
     updateTask.mutate({
       ...task,
@@ -136,9 +174,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
     });
   };
 
-  const onImportantChange: MouseEventHandler<HTMLButtonElement> = async (
-    event,
-  ) => {
+  const onImportantChange: MouseEventHandler<HTMLElement> = async (event) => {
     event.stopPropagation();
     updateTask.mutate({
       ...task,
@@ -160,85 +196,126 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
         setOpen(value);
       }}
     >
-      <DialogTrigger asChild>
-        <li
-          ref={ref}
-          tabIndex={0}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" || event.key === " ") {
-              event.preventDefault();
-              event.currentTarget.click();
-            }
-          }}
-          className="flex cursor-pointer flex-row items-center gap-x-2 rounded-md bg-white px-4 text-left shadow-ms transition-colors hover:bg-neutral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-neutral-800 dark:hover:bg-neutral-700"
-        >
-          <button
-            aria-label="Toggle task completion"
-            onClick={handleOnClick}
-            className={cn(
-              "group ml-[6px] min-h-[18px] min-w-[18px] cursor-pointer appearance-none items-center justify-center rounded-full border-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-              getColor(priority, isCompleted),
-            )}
-          >
-            <IconCheck
-              className={cn(
-                "ml-px size-3",
-                isCompleted
-                  ? "text-white"
-                  : "text-inherit opacity-0 transition-opacity duration-200 group-hover:opacity-100",
-              )}
-            />
-          </button>
-
-          <div className="flex min-h-[52px] w-full flex-col justify-center px-4 py-2">
-            <p
-              className={`text-sm ${
-                isCompleted
-                  ? "text-neutral-500 line-through decoration-neutral-500"
-                  : "no-underline"
-              }`}
+      <ContextMenu>
+        <ContextMenuTrigger>
+          <DialogTrigger asChild>
+            <li
+              ref={ref}
+              tabIndex={0}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  event.currentTarget.click();
+                }
+              }}
+              className="flex cursor-pointer flex-row items-center gap-x-2 rounded-md bg-white px-4 text-left shadow-ms transition-colors hover:bg-neutral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-neutral-800 dark:hover:bg-neutral-700"
             >
-              {title}
-            </p>
-
-            <div className="flex items-center">
-              {dueDate && (
-                <DateComponent
+              <button
+                aria-label="Toggle task completion"
+                onClick={onCompletionChange}
+                className={cn(
+                  "group ml-[6px] min-h-[18px] min-w-[18px] cursor-pointer appearance-none items-center justify-center rounded-full border-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  getColor(priority, isCompleted),
+                )}
+              >
+                <IconCheck
                   className={cn(
-                    description &&
-                      "after:mx-1 after:text-xs after:leading-none after:text-neutral-500 after:content-['•'] after:dark:text-neutral-400",
+                    "ml-px size-3",
+                    isCompleted
+                      ? "text-white"
+                      : "text-inherit opacity-0 transition-opacity duration-200 group-hover:opacity-100",
                   )}
-                  date={new Date(dueDate)}
-                  icon={<IconCalendarEvent size={13} />}
-                  textCss="text-xs"
                 />
-              )}
+              </button>
 
-              {description && (
-                <IconNote
-                  size={13}
-                  className={cn("text-neutral-600 dark:text-neutral-300")}
-                />
-              )}
-            </div>
-          </div>
+              <div className="flex min-h-[52px] w-full flex-col justify-center px-4 py-2">
+                <p
+                  className={`text-sm ${
+                    isCompleted
+                      ? "text-neutral-500 line-through decoration-neutral-500"
+                      : "no-underline"
+                  }`}
+                >
+                  {title}
+                </p>
 
-          <button
-            aria-label="Toggle task importance"
-            onClick={onImportantChange}
-            className="group rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
+                <div className="flex items-center">
+                  {dueDate && (
+                    <DateComponent
+                      className={cn(
+                        description &&
+                          "after:mx-1 after:text-xs after:leading-none after:text-neutral-500 after:content-['•'] after:dark:text-neutral-400",
+                      )}
+                      date={new Date(dueDate)}
+                      icon={<IconCalendarEvent size={13} />}
+                      textCss="text-xs"
+                    />
+                  )}
+
+                  {description && (
+                    <IconNote
+                      size={13}
+                      className={cn("text-neutral-600 dark:text-neutral-300")}
+                    />
+                  )}
+                </div>
+              </div>
+
+              <button
+                aria-label="Toggle task importance"
+                onClick={onImportantChange}
+                className="group rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                {isImportant ? (
+                  <IconStarFilled size={18} className="text-yellow-400" />
+                ) : (
+                  <IconStar
+                    size={18}
+                    className="text-neutral-400 group-hover:text-yellow-400 dark:text-neutral-500"
+                  />
+                )}
+              </button>
+            </li>
+          </DialogTrigger>
+        </ContextMenuTrigger>
+
+        <ContextMenuContent>
+          <ContextMenuItem onClick={onImportantChange}>
             {isImportant ? (
-              <IconStarFilled size={18} className="text-yellow-400" />
+              <>
+                <IconStarOff size={16} /> Remove importance
+              </>
             ) : (
-              <IconStar
-                size={18}
-                className="text-neutral-400 group-hover:text-yellow-400 dark:text-neutral-500"
-              />
+              <>
+                <IconStar size={16} /> Mark as important
+              </>
             )}
-          </button>
-        </li>
-      </DialogTrigger>
+          </ContextMenuItem>
+          <ContextMenuItem onClick={onCompletionChange}>
+            {isCompleted ? (
+              <>
+                <IconCircle size={16} />
+                Mark as not completed
+              </>
+            ) : (
+              <>
+                <IconCircleCheck size={16} />
+                Mark as completed
+              </>
+            )}
+          </ContextMenuItem>
+
+          <ContextMenuSeparator />
+
+          <ContextMenuItem
+            onClick={handleOnDelete}
+            className="text-red-600 focus:text-red-600 dark:text-red-400"
+          >
+            <IconTrash size={16} />
+            Remove
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
 
       <DialogContent asChild className="max-w-none sm:max-w-sm">
         <form
