@@ -1,12 +1,5 @@
 "use client";
 
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuSeparator,
-  ContextMenuTrigger,
-} from "@components/ui/context-menu";
 import { api } from "@lib/trpc/react";
 import type { TaskPriorityEnum } from "@lib/types";
 import { toast } from "@lib/use-toast";
@@ -36,6 +29,13 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import { Button } from "@ui/button";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "@ui/context-menu";
 import {
   Dialog,
   DialogClose,
