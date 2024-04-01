@@ -18,37 +18,61 @@ export const createTable = pgTableCreator(
 
 export const taskPriorityEnum = pgEnum("priority", ["P1", "P2", "P3", "P4"]);
 
-export const tasks = createTable("task", {
-  id: text("id").primaryKey().notNull(),
-  listId: text("listId").notNull(),
-  title: text("title").notNull(),
-  description: text("description"),
-  dueDate: timestamp("dueDate"),
-  isCompleted: boolean("isCompleted").notNull(),
-  isImportant: boolean("isImportant").notNull(),
-  priority: taskPriorityEnum("priority").notNull(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt")
-    .$onUpdateFn(() => new Date())
-    .notNull(),
-});
+export const tasks = createTable(
+  "task",
+  {
+    id: text("id").primaryKey().notNull(),
+    listId: text("listId")
+      .references(() => lists.id)
+      .notNull(),
+    title: text("title").notNull(),
+    description: text("description"),
+    dueDate: timestamp("dueDate"),
+    isCompleted: boolean("isCompleted").notNull(),
+    isImportant: boolean("isImportant").notNull(),
+    priority: taskPriorityEnum("priority").notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt")
+      .$onUpdateFn(() => new Date())
+      .notNull(),
+  },
+  (task) => ({
+    listIdIdx: index("task_listId_idx").on(task.listId),
+  }),
+);
+
+export const tasksRelations = relations(tasks, ({ one }) => ({
+  list: one(lists, { fields: [tasks.listId], references: [lists.id] }),
+}));
 
 export type TaskType = InferSelectModel<typeof tasks>;
 
-export const lists = createTable("list", {
-  id: text("id").primaryKey().notNull(),
-  userId: text("userId").notNull(),
-  name: text("name").notNull(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt")
-    .$onUpdateFn(() => new Date())
-    .notNull(),
-});
+export const lists = createTable(
+  "list",
+  {
+    id: text("id").primaryKey().notNull(),
+    userId: text("userId")
+      .references(() => users.id)
+      .notNull(),
+    name: text("name").notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt")
+      .$onUpdateFn(() => new Date())
+      .notNull(),
+  },
+  (list) => ({
+    userIdIdx: index("list_userId_idx").on(list.userId),
+  }),
+);
+
+export const listsRelations = relations(lists, ({ one }) => ({
+  user: one(users, { fields: [lists.userId], references: [users.id] }),
+}));
 
 export type ListType = InferSelectModel<typeof lists>;
 
 export const users = createTable("user", {
-  id: text("id").notNull().primaryKey(),
+  id: text("id").primaryKey().notNull(),
   name: text("name"),
   email: text("email").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }).default(
@@ -69,8 +93,8 @@ export const accounts = createTable(
   "account",
   {
     userId: text("userId")
-      .notNull()
-      .references(() => users.id),
+      .references(() => users.id)
+      .notNull(),
     type: text("type").$type<AdapterAccount["type"]>().notNull(),
     provider: text("provider").notNull(),
     providerAccountId: text("providerAccountId").notNull(),
@@ -101,10 +125,10 @@ export const accountsRelations = relations(accounts, ({ one }) => ({
 export const sessions = createTable(
   "session",
   {
-    sessionToken: text("sessionToken").notNull().primaryKey(),
+    sessionToken: text("sessionToken").primaryKey().notNull(),
     userId: text("userId")
-      .notNull()
-      .references(() => users.id),
+      .references(() => users.id)
+      .notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     updatedAt: timestamp("updatedAt")
