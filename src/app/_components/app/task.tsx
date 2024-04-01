@@ -327,7 +327,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
         </ContextMenuContent>
       </ContextMenu>
 
-      <DialogContent asChild className="max-w-none sm:max-w-sm">
+      <DialogContent asChild>
         <form
           id="task-edit-form"
           ref={formRef}

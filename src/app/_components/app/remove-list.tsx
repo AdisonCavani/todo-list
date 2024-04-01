@@ -92,7 +92,7 @@ function RemoveList({
       }}
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent asChild link className="max-w-sm">
+      <DialogContent asChild link>
         <form onSubmit={handleOnSubmit} onKeyDown={triggerFormSubmission}>
           <DialogHeader>
             <DialogTitle>Delete list</DialogTitle>
