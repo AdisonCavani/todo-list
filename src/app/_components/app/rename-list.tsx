@@ -92,7 +92,7 @@ function RenameList({
       }}
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent asChild className="max-w-sm">
+      <DialogContent asChild link className="max-w-sm">
         <form onSubmit={handleOnSubmit} onKeyDown={triggerFormSubmission}>
           <DialogHeader>
             <DialogTitle>Edit list</DialogTitle>

@@ -16,11 +16,13 @@ const DialogClose = DialogPrimitive.Close;
 
 const DialogOverlay = forwardRef<
   ElementRef<typeof DialogPrimitive.Overlay>,
-  ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
->(({ className, ...props }, ref) => (
+  ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay> & { link?: boolean }
+>(({ className, link, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
-    onClick={(event) => event.stopPropagation()}
+    onClick={(event) => {
+      if (link) event.stopPropagation();
+    }}
     className={cn(
       "fixed inset-0 z-50 bg-black/30 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className,
@@ -32,10 +34,10 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = forwardRef<
   ElementRef<typeof DialogPrimitive.Content>,
-  ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+  ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & { link?: boolean }
+>(({ className, children, link, ...props }, ref) => (
   <DialogPortal>
-    <DialogOverlay />
+    <DialogOverlay link={link} />
     <DialogPrimitive.Content
       ref={ref}
       onClick={(event) => event.stopPropagation()}
