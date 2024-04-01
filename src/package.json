@@ -12,6 +12,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "db:studio": "drizzle-kit studio",
+    "db:studio-prod": "NODE_ENV=production drizzle-kit studio",
     "db:generate": "NODE_ENV=production drizzle-kit generate:pg",
     "db:migrate": "tsx migrate.ts",
     "db:push": "drizzle-kit push:pg",
