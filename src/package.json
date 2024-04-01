@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "analyze": "next build",
+    "analyze": "ANALYZE=true next build",
     "dev": "next dev",
     "dev:ts": "tsc --noEmit --incremental --watch",
     "ts": "tsc --noEmit",
