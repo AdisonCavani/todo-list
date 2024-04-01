@@ -161,7 +161,12 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
   const triggerFormSubmission: KeyboardEventHandler<HTMLFormElement> = (
     event,
   ) => {
-    if (event.key === "Enter" && !updateTask.isPending && !submitDisabled)
+    if (
+      event.key === "Enter" &&
+      !updateTask.isPending &&
+      !submitDisabled &&
+      document.activeElement?.id === formRef.current.id
+    )
       event.currentTarget.dispatchEvent(
         new Event("submit", { bubbles: true, cancelable: true }),
       );
@@ -324,6 +329,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
 
       <DialogContent asChild className="max-w-none sm:max-w-sm">
         <form
+          id="task-edit-form"
           ref={formRef}
           onSubmit={handleOnSubmit}
           onKeyDown={triggerFormSubmission}
