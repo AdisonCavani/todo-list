@@ -136,7 +136,12 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
 
   const dialogDateRef = createRef<HTMLInputElement>();
 
-  const submitDisabled = dialogTitle.trim().length <= 0;
+  const submitDisabled =
+    dialogTitle.trim().length <= 0 ||
+    (title === dialogTitle &&
+      (description ?? "") === dialogDescription &&
+      dueDate === dialogDate &&
+      priority === dialogPriority);
 
   const handleOnSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
