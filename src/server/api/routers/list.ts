@@ -5,7 +5,7 @@ import { v4 } from "uuid";
 import { z } from "zod";
 
 const createRequestSchema = z.object({
-  name: z.string(),
+  name: z.string().min(1),
 });
 
 export const listRouter = createTRPCRouter({

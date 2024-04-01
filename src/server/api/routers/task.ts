@@ -7,7 +7,7 @@ import { z } from "zod";
 
 const createRequestSchema = z.object({
   listId: z.string().uuid(),
-  title: z.string(),
+  title: z.string().min(1),
   dueDate: z.date().optional().nullable(),
   priority: z.enum(["P1", "P2", "P3", "P4"]),
 });
