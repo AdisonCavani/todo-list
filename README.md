@@ -12,9 +12,9 @@ Deployed on [`todo.k1ng.dev`](https://todo.k1ng.dev).
 
 - ✅ 100 Lighthouse score
 - 💨 Optimistic updates
-- 🛠️ Next.js 13 app directory
+- 🛠️ Next.js 14 app directory
 - 🔑 Serverless, edge REST API
-- 📄 Managed MySql database
+- 📄 Managed Postgres SQL database
 - 🌗 Light & dark theme
 - 📱 Progressive Web App
 - 🙍‍♂️ Github & Google OAuth 2.0 login
@@ -33,7 +33,7 @@ Deployed on [`todo.k1ng.dev`](https://todo.k1ng.dev).
 - **Auth**: [Auth.js (NextAuth.js)](https://next-auth.js.org)
 - **Auth providers**: [Github](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps) & [Google](https://developers.google.com/identity/protocols/oauth2)
 - **ORM**: [Drizzle ORM](https://orm.drizzle.team)
-- **Database**: MySql managed instance on [Planetscale](https://planetscale.com)
+- **Database**: Postgres SQL managed instance on [Neon](https://neon.tech)
 - **API**: [tRPC](https://trpc.io)
 
 ## Pictures
