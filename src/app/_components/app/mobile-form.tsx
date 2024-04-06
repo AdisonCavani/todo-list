@@ -141,7 +141,7 @@ function MobileForm({ listId }: Props) {
       }}
     >
       <Dialog.Trigger asChild>
-        <button className="fixed bottom-6 right-6 z-50 block rounded-full bg-primary p-4 text-primary-foreground shadow-xl transition-colors hover:bg-primary/90 lg:hidden">
+        <button className="fixed bottom-6 right-6 z-50 block rounded-full bg-primary p-4 text-primary-foreground shadow-xl transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:hidden">
           <IconPlus size={26} />
         </button>
       </Dialog.Trigger>
