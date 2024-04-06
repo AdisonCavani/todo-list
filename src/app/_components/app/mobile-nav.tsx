@@ -13,9 +13,10 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@ui/context-menu";
+import { Dialog } from "@ui/dialog";
 import { Input } from "@ui/input";
 import { usePathname } from "next/navigation";
-import { Fragment, useRef, useState, type FormEventHandler } from "react";
+import { Fragment, useState, type FormEventHandler } from "react";
 import RemoveList from "./remove-list";
 import RenameList from "./rename-list";
 
@@ -30,27 +31,8 @@ function MobileNav({ initialLists }: Props) {
 
   const pathname = usePathname();
 
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [hasOpenDialog, setHasOpenDialog] = useState<boolean>(false);
-  const dropdownTriggerRef = useRef<HTMLAnchorElement>(null);
-  const focusRef = useRef<HTMLAnchorElement | null>(null);
-
-  function handleDialogItemSelect() {
-    focusRef.current = dropdownTriggerRef.current;
-  }
-
-  function handleDialogItemOpenChange(open: boolean) {
-    setHasOpenDialog(open);
-
-    if (!open) {
-      setModalOpen(false);
-    }
-  }
-
-  function handleOnSelect(event: Event) {
-    event.preventDefault();
-    handleDialogItemSelect && handleDialogItemSelect();
-  }
+  const [open, setOpen] = useState<boolean>(false);
+  const [content, setContent] = useState<"rename" | "remove">(null!);
 
   const [name, setName] = useState<string>("");
   const submitDisabled = name.trim().length === 0;
@@ -96,60 +78,52 @@ function MobileNav({ initialLists }: Props) {
         .sort((a, b) => a.name.localeCompare(b.name))
         .map(({ id, name }) => (
           <Fragment key={id}>
-            <ContextMenu modal={modalOpen} onOpenChange={setModalOpen}>
-              <ContextMenuTrigger asChild>
-                <Link
-                  ref={dropdownTriggerRef}
-                  href={`/app/${id}`}
-                  className="z-10 flex items-center gap-x-5 p-4 font-medium transition-all duration-300 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:bg-accent active:text-accent-foreground"
-                >
-                  <IconList size={20} />
-                  {name}
-                </Link>
-              </ContextMenuTrigger>
+            <Dialog open={open} onOpenChange={setOpen}>
+              <ContextMenu>
+                <ContextMenuTrigger asChild>
+                  <Link
+                    href={`/app/${id}`}
+                    className="z-10 flex items-center gap-x-5 p-4 font-medium transition-all duration-300 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:bg-accent active:text-accent-foreground"
+                  >
+                    <IconList size={20} />
+                    {name}
+                  </Link>
+                </ContextMenuTrigger>
 
-              <ContextMenuContent
-                hidden={hasOpenDialog}
-                onCloseAutoFocus={(event) => {
-                  if (focusRef.current) {
-                    focusRef.current.focus();
-                    focusRef.current = null;
-                    event.preventDefault();
-                  }
-                }}
-              >
-                <RenameList
-                  listId={id}
-                  listName={name}
-                  onOpenChange={handleDialogItemOpenChange}
-                >
+                <ContextMenuContent>
                   <ContextMenuItem
-                    onSelect={handleOnSelect}
-                    onClick={(event) => event.stopPropagation()}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setContent("rename");
+                      setOpen(true);
+                    }}
                   >
                     <IconEdit size={16} />
                     Edit
                   </ContextMenuItem>
-                </RenameList>
 
-                <ContextMenuSeparator />
+                  <ContextMenuSeparator />
 
-                <RemoveList
-                  listId={id}
-                  listName={name}
-                  onOpenChange={handleDialogItemOpenChange}
-                >
                   <ContextMenuItem
-                    onSelect={handleOnSelect}
-                    onClick={(event) => event.stopPropagation()}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setContent("remove");
+                      setOpen(true);
+                    }}
                     className="text-red-600 focus:text-red-600 dark:text-red-400"
                   >
                     <IconTrash size={16} />
                     Remove
                   </ContextMenuItem>
-                </RemoveList>
-              </ContextMenuContent>
-            </ContextMenu>
+                </ContextMenuContent>
+              </ContextMenu>
+
+              {content === "rename" ? (
+                <RenameList listId={id} listName={name} />
+              ) : (
+                <RemoveList listId={id} listName={name} />
+              )}
+            </Dialog>
 
             <hr className="w-full" />
           </Fragment>

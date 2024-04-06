@@ -3,37 +3,25 @@ import { toast } from "@lib/use-toast";
 import { IconX } from "@tabler/icons-react";
 import { Button } from "@ui/button";
 import {
-  Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@ui/dialog";
 import { Input } from "@ui/input";
 import {
   useState,
   type FormEventHandler,
   type KeyboardEventHandler,
-  type PropsWithChildren,
 } from "react";
 
 type Props = {
   listId: string;
   listName: string;
-
-  onOpenChange: (open: boolean) => void;
 };
 
-function RenameList({
-  children,
-  listId,
-  listName,
-  onOpenChange,
-}: PropsWithChildren<Props>) {
-  const [open, setOpen] = useState<boolean>(false);
-
+function RenameList({ listId, listName }: Props) {
   const utils = api.useUtils();
   const updateList = api.list.update.useMutation({
     async onMutate(input) {
@@ -70,8 +58,6 @@ function RenameList({
       id: listId,
       name: name.trim(),
     });
-
-    setOpen(false);
   };
 
   const triggerFormSubmission: KeyboardEventHandler<HTMLFormElement> = (
@@ -84,28 +70,21 @@ function RenameList({
   };
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(value) => {
-        onOpenChange(value);
-        setOpen(value);
-      }}
-    >
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent asChild link>
-        <form onSubmit={handleOnSubmit} onKeyDown={triggerFormSubmission}>
-          <DialogHeader>
-            <DialogTitle>Edit list</DialogTitle>
-            <DialogDescription>Set new name for this list</DialogDescription>
-          </DialogHeader>
+    <DialogContent asChild link>
+      <form onSubmit={handleOnSubmit} onKeyDown={triggerFormSubmission}>
+        <DialogHeader>
+          <DialogTitle>Edit list</DialogTitle>
+          <DialogDescription>Set new name for this list</DialogDescription>
+        </DialogHeader>
 
-          <div className="flex flex-col gap-y-4">
-            <Input
-              placeholder="My projects"
-              onChange={(event) => setName(event.currentTarget.value)}
-              className="col-span-2"
-            />
+        <div className="flex flex-col gap-y-4">
+          <Input
+            placeholder="My projects"
+            onChange={(event) => setName(event.currentTarget.value)}
+            className="col-span-2"
+          />
 
+          <DialogClose asChild>
             <Button
               type="submit"
               disabled={submitDisabled}
@@ -113,18 +92,18 @@ function RenameList({
             >
               Save changes
             </Button>
-          </div>
-
-          <DialogClose
-            type="button"
-            className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
-          >
-            <IconX className="size-4" />
-            <span className="sr-only">Close</span>
           </DialogClose>
-        </form>
-      </DialogContent>
-    </Dialog>
+        </div>
+
+        <DialogClose
+          type="button"
+          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+        >
+          <IconX className="size-4" />
+          <span className="sr-only">Close</span>
+        </DialogClose>
+      </form>
+    </DialogContent>
   );
 }
 
