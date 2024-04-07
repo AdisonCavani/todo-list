@@ -2,7 +2,11 @@
 
 import { cn } from "@lib/utils";
 import * as ContextMenuPrimitive from "@radix-ui/react-context-menu";
-import { IconChevronRight } from "@tabler/icons-react";
+import {
+  IconCheck,
+  IconChevronRight,
+  IconPointFilled,
+} from "@tabler/icons-react";
 import {
   forwardRef,
   type ComponentPropsWithoutRef,
@@ -103,7 +107,7 @@ const ContextMenuCheckboxItem = forwardRef<
   >
     <span className="absolute left-2 flex size-3.5 items-center justify-center">
       <ContextMenuPrimitive.ItemIndicator>
-        {/* <CheckIcon className="h-4 w-4" /> */}
+        <IconCheck className="size-4" />
       </ContextMenuPrimitive.ItemIndicator>
     </span>
     {children}
@@ -126,7 +130,7 @@ const ContextMenuRadioItem = forwardRef<
   >
     <span className="absolute left-2 flex size-3.5 items-center justify-center">
       <ContextMenuPrimitive.ItemIndicator>
-        {/* <DotFilledIcon className="h-4 w-4 fill-current" /> */}
+        <IconPointFilled className="size-4 fill-current" />
       </ContextMenuPrimitive.ItemIndicator>
     </span>
     {children}

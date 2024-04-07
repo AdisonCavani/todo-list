@@ -1,9 +1,9 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { IconBrandGithub } from "@tabler/icons-react";
-import { Button } from "@ui/button";
+import { Button } from "./button";
 
 export default {
-  title: "Button",
+  title: "@ui/Button",
   component: Button,
   decorators: [
     (Story) => (
