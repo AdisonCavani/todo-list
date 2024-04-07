@@ -207,7 +207,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
       }}
     >
       <ContextMenu>
-        <ContextMenuTrigger>
+        <ContextMenuTrigger asChild>
           <DialogTrigger asChild>
             <li
               ref={ref}
