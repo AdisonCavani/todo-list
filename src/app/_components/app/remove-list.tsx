@@ -77,7 +77,9 @@ function RemoveList({ listId, listName }: Props) {
         <DialogHeader>
           <DialogTitle>Delete list</DialogTitle>
           <DialogDescription>
-            To confirm, type &quot;<b>{listName}</b>&quot; in the box below
+            To confirm, type &quot;
+            <b className="truncate whitespace-pre-wrap break-all">{listName}</b>
+            &quot; in the box below
           </DialogDescription>
         </DialogHeader>
 

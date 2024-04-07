@@ -39,9 +39,9 @@ function SideNavItem({ id, name }: Props) {
           : "hover:bg-accent hover:text-accent-foreground",
       )}
     >
-      <div className="flex items-center gap-x-5 py-2">
-        <IconList size={20} />
-        {name}
+      <div className="flex items-center gap-x-5 overflow-x-clip py-2">
+        <IconList size={20} className="min-w-5" />
+        <p className="truncate">{name}</p>
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>

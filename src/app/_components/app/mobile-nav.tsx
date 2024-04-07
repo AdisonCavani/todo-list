@@ -85,8 +85,8 @@ function MobileNav({ initialLists }: Props) {
                     href={`/app/${id}`}
                     className="z-10 flex items-center gap-x-5 p-4 font-medium transition-all duration-300 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:bg-accent active:text-accent-foreground"
                   >
-                    <IconList size={20} />
-                    {name}
+                    <IconList size={20} className="min-w-5" />
+                    <p className="truncate">{name}</p>
                   </Link>
                 </ContextMenuTrigger>
 
