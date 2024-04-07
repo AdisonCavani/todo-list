@@ -120,6 +120,11 @@
       radial-gradient(400px circle at 50% 50%, #60ffc7, 60%, transparent),
       radial-gradient(350px circle at 50% 80%, #7db5e3, 60%, transparent);
   }
+
+  .scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--accent)) transparent;
+  }
 }
 
 /* Make clicks pass-through */
