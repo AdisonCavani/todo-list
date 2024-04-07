@@ -1,7 +1,7 @@
 import type { StorybookConfig } from "@storybook/nextjs";
 
 const config: StorybookConfig = {
-  stories: ["../stories/**/*.stories.@(ts|tsx)"],
+  stories: ["../stories/**/*.stories.@(ts|tsx)", "../app/**/*.stories.tsx"],
   addons: [
     "@storybook/addon-a11y",
     "@storybook/addon-links",
@@ -10,10 +10,15 @@ const config: StorybookConfig = {
   ],
   framework: {
     name: "@storybook/nextjs",
-    options: {},
+    options: {
+      strictMode: true,
+    },
   },
-  docs: {
-    autodocs: "tag",
+  typescript: {
+    reactDocgen: "react-docgen-typescript",
+  },
+  features: {
+    experimentalRSC: true,
   },
 };
 export default config;
