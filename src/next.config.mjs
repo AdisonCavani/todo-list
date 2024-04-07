@@ -1,11 +1,12 @@
-const withPWA = require("@ducanh2912/next-pwa").default({
+import withPWAInit from "@ducanh2912/next-pwa";
+import withBundleAnalyzer from "@next/bundle-analyzer";
+import withMDX from "@next/mdx";
+import { withAxiom } from "next-axiom";
+
+const withPWA = withPWAInit({
   dest: "public",
   disable: process.env.NODE_ENV !== "production",
 });
-
-const withMDX = require("@next/mdx")();
-
-const { withAxiom } = require("next-axiom");
 
 /** @type {import('next').NextConfig} */
 let nextConfig = {
@@ -37,11 +38,13 @@ let nextConfig = {
 };
 
 if (process.env.ANALYZE === "true") {
-  const withBundleAnalyzer = require("@next/bundle-analyzer")({
-    openAnalyzer: true,
-    enabled: true,
-  });
-  nextConfig = withBundleAnalyzer(nextConfig);
+  nextConfig = withBundleAnalyzer(
+    {
+      openAnalyzer: true,
+      enabled: true,
+    },
+    nextConfig,
+  );
 }
 
 // https://nextjs.org/docs/app/api-reference/next-config-js/headers#content-security-policy
@@ -92,4 +95,4 @@ const securityHeaders = [
   },
 ];
 
-module.exports = withAxiom(withPWA(withMDX(nextConfig)));
+export default withAxiom(withPWA(withMDX(nextConfig)));
