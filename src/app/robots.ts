@@ -10,6 +10,7 @@ function robots(): MetadataRoute.Robots {
       disallow: "/app",
     },
     sitemap: "https://todo.k1ng.dev/sitemap.xml",
+    host: "https://todo.k1ng.dev",
   };
 }
 
