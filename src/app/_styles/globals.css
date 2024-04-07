@@ -124,6 +124,26 @@
   .scrollbar {
     scrollbar-width: thin;
     scrollbar-color: hsl(var(--accent)) transparent;
+
+    overflow-y: auto;
+    height: 300px;
+    padding-bottom: 8px;
+    padding-right: 20px;
+    mask-image: linear-gradient(
+        to bottom,
+        transparent,
+        black 8px,
+        black calc(100% - 8px),
+        transparent
+      ),
+      linear-gradient(black, black);
+    mask-size:
+      calc(100% - 8px) 100%,
+      8px 100%;
+    mask-position:
+      0 0,
+      100% 0;
+    mask-repeat: no-repeat, no-repeat;
   }
 }
 

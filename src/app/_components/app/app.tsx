@@ -65,8 +65,8 @@ function App({ initialTasks, listId }: Props) {
         <MobileForm listId={listId} />
       </div>
 
-      <div className="scrollbar flex flex-1 flex-col overflow-x-hidden overflow-y-scroll px-3 pb-24 pt-1 sm:pb-8 sm:pl-6 sm:pr-3">
-        <ul className="relative flex flex-col gap-y-2 px-0.5">
+      <div className="scrollbar flex flex-1 flex-col overflow-x-hidden overflow-y-scroll px-3 pb-24 sm:pb-8 sm:pl-6 sm:pr-3">
+        <ul className="relative flex flex-col gap-y-2 px-0.5 first:mt-4">
           <FlipMove typeName={null}>
             {notFinishedTasks.map((task: TaskRenderType) => (
               <Task key={task.renderId ?? task.id} {...task} />
