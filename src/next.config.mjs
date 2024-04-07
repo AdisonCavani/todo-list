@@ -96,4 +96,4 @@ const securityHeaders = [
   },
 ];
 
-export default withAxiom(withPWA(withMDX(nextConfig)));
+export default withAxiom(withPWA(withMDX()(nextConfig)));
