@@ -2,7 +2,7 @@ import { IconStarFilled } from "@tabler/icons-react";
 
 function Loading() {
   return (
-    <>
+    <div className="mt-1 flex size-full flex-col px-3 pb-24 pt-8 sm:px-6 sm:pb-8">
       {/* Tasks & sort button */}
       <div className="mb-3 flex justify-between">
         <div className="h-7 w-14 animate-pulse rounded-md bg-muted" />
@@ -38,7 +38,7 @@ function Loading() {
         </div>
       </div>
 
-      <ul className="flex flex-col gap-y-2 px-0.5">
+      <ul className="flex flex-col gap-y-2 px-0.5 pt-1">
         {[...Array(7).keys()].map((index) => (
           <li
             key={index}
@@ -56,7 +56,7 @@ function Loading() {
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 }
 
