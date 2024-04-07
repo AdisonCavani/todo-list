@@ -25,6 +25,7 @@ let nextConfig = {
 
   experimental: {
     mdxRs: true,
+    ppr: true,
   },
 
   headers() {
