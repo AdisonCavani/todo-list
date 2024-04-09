@@ -6,6 +6,9 @@ import { withAxiom } from "next-axiom";
 const withPWA = withPWAInit({
   dest: "public",
   disable: process.env.NODE_ENV !== "production",
+  dest: "public",
+  cacheOnFrontEndNav: true,
+  aggressiveFrontEndNavCaching: true,
 });
 
 /** @type {import('next').NextConfig} */
