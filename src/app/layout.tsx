@@ -7,6 +7,7 @@ import type { Viewport } from "next";
 import { AxiomWebVitals } from "next-axiom";
 import Script from "next/script";
 import type { PropsWithChildren } from "react";
+import PWALifeCycle from "@components/pwa-lifecycle";
 
 export const runtime = "edge";
 
@@ -75,6 +76,8 @@ function RootLayout({ children }: PropsWithChildren) {
         <NextThemeProvider>
           <NProgressWrapper>{children}</NProgressWrapper>
         </NextThemeProvider>
+
+        <PWALifeCycle />
       </body>
     </html>
   );
