@@ -70,7 +70,7 @@ function RenameList({ listId, listName }: Props) {
   };
 
   return (
-    <DialogContent asChild link>
+    <DialogContent asChild link className="xs:max-w-sm">
       <form onSubmit={handleOnSubmit} onKeyDown={triggerFormSubmission}>
         <DialogHeader>
           <DialogTitle>Edit list</DialogTitle>
