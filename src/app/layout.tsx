@@ -1,13 +1,14 @@
 import "@styles/globals.css";
 import NProgressWrapper from "@components/nprogress-wrapper";
+import PWALifeCycle from "@components/pwa-lifecycle";
 import NextThemeProvider from "@components/theme-provider";
 import { twindConfig, type ColorRecordType } from "@lib/twind";
 import { cn, fontInter } from "@lib/utils";
+import { Toaster } from "@ui/toaster";
 import type { Viewport } from "next";
 import { AxiomWebVitals } from "next-axiom";
 import Script from "next/script";
 import type { PropsWithChildren } from "react";
-import PWALifeCycle from "@components/pwa-lifecycle";
 
 export const runtime = "edge";
 
@@ -74,7 +75,10 @@ function RootLayout({ children }: PropsWithChildren) {
       </head>
       <body className="flex min-h-dvh flex-col">
         <NextThemeProvider>
-          <NProgressWrapper>{children}</NProgressWrapper>
+          <NProgressWrapper>
+            {children}
+            <Toaster />
+          </NProgressWrapper>
         </NextThemeProvider>
 
         <PWALifeCycle />
