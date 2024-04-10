@@ -20,8 +20,8 @@
     "prepare": "cd .. && husky src/.husky"
   },
   "dependencies": {
-    "@auth/core": "^0.28.2",
-    "@auth/drizzle-adapter": "^0.8.2",
+    "@auth/core": "^0.29.0",
+    "@auth/drizzle-adapter": "^0.9.0",
     "@ducanh2912/next-pwa": "^10.2.6",
     "@mdx-js/loader": "^3.0.1",
     "@mdx-js/react": "^3.0.1",
@@ -53,7 +53,7 @@
     "react-dom": "^18.2.0",
     "react-flip-move": "^3.0.5",
     "server-only": "^0.0.1",
-    "sharp": "^0.33.2",
+    "sharp": "^0.33.3",
     "superjson": "^2.2.1",
     "uuid": "^9.0.1",
     "zod": "^3.22.4"
@@ -72,9 +72,9 @@
     "@tailwindcss/typography": "^0.5.12",
     "@tanstack/react-query-devtools": "^5.29.0",
     "@types/mdx": "^2.0.12",
-    "@types/node": "^20.12.5",
+    "@types/node": "^20.12.7",
     "@types/nprogress": "^0.2.3",
-    "@types/react": "^18.2.74",
+    "@types/react": "^18.2.75",
     "@types/react-dom": "^18.2.24",
     "@types/uuid": "^9.0.8",
     "@types/workbox-window": "^5.0.0",
@@ -99,6 +99,6 @@
     "tailwindcss": "^3.4.3",
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.7.2",
-    "typescript": "^5.4.4"
+    "typescript": "^5.4.5"
   }
 }
