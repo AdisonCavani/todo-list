@@ -1,16 +1,11 @@
-import withPWAInit from "@ducanh2912/next-pwa";
-import withBundleAnalyzer from "@next/bundle-analyzer";
-import withMDX from "@next/mdx";
-import { withSentryConfig } from "@sentry/nextjs";
-import { withAxiom } from "next-axiom";
-
-const withPWA = withPWAInit({
+const withPWA = require("@ducanh2912/next-pwa").default({
   dest: "public",
   disable: process.env.NODE_ENV !== "production",
-  dest: "public",
-  cacheOnFrontEndNav: true,
-  aggressiveFrontEndNavCaching: true,
 });
+
+const withMDX = require("@next/mdx")();
+
+const { withAxiom } = require("next-axiom");
 
 /** @type {import('next').NextConfig} */
 let nextConfig = {
@@ -19,18 +14,15 @@ let nextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
-
   eslint: {
     ignoreDuringBuilds: true,
   },
   typescript: {
     ignoreBuildErrors: true,
   },
-
   experimental: {
     mdxRs: true,
   },
-
   headers() {
     return [
       {
@@ -42,13 +34,11 @@ let nextConfig = {
 };
 
 if (process.env.ANALYZE === "true") {
-  nextConfig = withBundleAnalyzer(
-    {
-      openAnalyzer: true,
-      enabled: true,
-    },
-    nextConfig,
-  );
+  const withBundleAnalyzer = require("@next/bundle-analyzer")({
+    openAnalyzer: true,
+    enabled: true,
+  });
+  nextConfig = withBundleAnalyzer(nextConfig);
 }
 
 // https://nextjs.org/docs/app/api-reference/next-config-js/headers#content-security-policy
@@ -58,11 +48,10 @@ const ContentSecurityPolicy = `
   style-src 'self' 'unsafe-inline';
   font-src 'self';
   img-src 'self' data: https://avatars.githubusercontent.com https://*.googleusercontent.com;
-  connect-src 'self' https://insights.k1ng.dev https://avatars.githubusercontent.com;
+  connect-src 'self' https://insights.k1ng.dev https://avatars.githubusercontent.com https://*.googleusercontent.com;
   worker-src 'self' blob:;
   child-src 'self' blob:;
 `;
-
 const securityHeaders = [
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
   {
@@ -101,8 +90,14 @@ const securityHeaders = [
   },
 ];
 
-export default withSentryConfig(
-  withAxiom(withPWA(withMDX()(nextConfig))),
+module.exports = withAxiom(withPWA(withMDX(nextConfig)));
+
+// Injected content via Sentry wizard below
+
+const { withSentryConfig } = require("@sentry/nextjs");
+
+module.exports = withSentryConfig(
+  module.exports,
   {
     // For all available options, see:
     // https://github.com/getsentry/sentry-webpack-plugin#options
