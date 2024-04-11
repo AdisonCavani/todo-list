@@ -1,6 +1,7 @@
 import withPWAInit from "@ducanh2912/next-pwa";
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import withMDX from "@next/mdx";
+import { withSentryConfig } from "@sentry/nextjs";
 import { withAxiom } from "next-axiom";
 
 const withPWA = withPWAInit({
@@ -58,6 +59,8 @@ const ContentSecurityPolicy = `
   font-src 'self';
   img-src 'self' data: https://avatars.githubusercontent.com https://*.googleusercontent.com;
   connect-src 'self' https://insights.k1ng.dev https://avatars.githubusercontent.com;
+  worker-src 'self' blob:;
+  child-src 'self' blob:;
 `;
 
 const securityHeaders = [
@@ -98,4 +101,40 @@ const securityHeaders = [
   },
 ];
 
-export default withAxiom(withPWA(withMDX()(nextConfig)));
+export default withSentryConfig(
+  withAxiom(withPWA(withMDX()(nextConfig))),
+  {
+    // For all available options, see:
+    // https://github.com/getsentry/sentry-webpack-plugin#options
+
+    // Suppresses source map uploading logs during build
+    silent: true,
+    org: "adrian-srodon",
+    project: "todo-list",
+  },
+  {
+    // For all available options, see:
+    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+
+    // Upload a larger set of source maps for prettier stack traces (increases build time)
+    widenClientFileUpload: true,
+
+    // Transpiles SDK to be compatible with IE11 (increases bundle size)
+    transpileClientSDK: true,
+
+    // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
+    tunnelRoute: "/monitoring",
+
+    // Hides source maps from generated client bundles
+    hideSourceMaps: true,
+
+    // Automatically tree-shake Sentry logger statements to reduce bundle size
+    disableLogger: true,
+
+    // Enables automatic instrumentation of Vercel Cron Monitors.
+    // See the following for more information:
+    // https://docs.sentry.io/product/crons/
+    // https://vercel.com/docs/cron-jobs
+    automaticVercelMonitors: true,
+  },
+);
