@@ -48,7 +48,7 @@ const ContentSecurityPolicy = `
   style-src 'self' 'unsafe-inline';
   font-src 'self';
   img-src 'self' data: https://avatars.githubusercontent.com https://*.googleusercontent.com;
-  connect-src 'self' https://insights.k1ng.dev https://avatars.githubusercontent.com https://*.googleusercontent.com;
+  connect-src 'self' https://insights.k1ng.dev https://avatars.githubusercontent.com https://*.googleusercontent.com https://*.sentry.io;
   worker-src 'self' blob:;
   child-src 'self' blob:;
 `;
