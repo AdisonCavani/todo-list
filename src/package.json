@@ -6,7 +6,7 @@
     "ts": "tsc --noEmit",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint --cache",
+    "lint": "next lint",
     "format:check": "prettier --check . --cache",
     "format:write": "prettier --write . --cache",
     "storybook": "storybook dev -p 6006",
