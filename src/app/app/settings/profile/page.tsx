@@ -1,9 +1,12 @@
 import SettingsCard from "@components/app/settings/card";
-import { auth } from "@lib/auth";
+import { validateRequest } from "@lib/auth";
 
 async function Page() {
-  const session = await auth();
-  const { email, name, image } = session!.user;
+  const { user } = await validateRequest();
+  // const { email, name, image } = user!;
+  const email = user!.id;
+  const name = user!.id;
+  const image = user!.id;
 
   return (
     <>

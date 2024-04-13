@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "@components/router/link";
+import type { UserType } from "@server/db/schema";
 import {
   IconDeviceLaptop,
   IconLogout,
@@ -21,11 +22,14 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@ui/dropdown-menu";
-import type { User } from "next-auth";
-import { signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
+import { logout } from "./auth";
 
-function ProfileMenu({ name, email, image }: User) {
+function ProfileMenu({ id }: UserType) {
+  const name = "Adrian Środoń";
+  const image = undefined;
+  const email = id;
+
   const { setTheme } = useTheme();
   const initials =
     (name?.split(" ")?.[0]?.[0] ?? "") + (name?.split(" ")?.[1]?.[0] ?? "");
@@ -84,15 +88,11 @@ function ProfileMenu({ name, email, image }: User) {
             Settings
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() =>
-            signOut({
-              callbackUrl: "/",
-            })
-          }
-        >
-          <IconLogout size={16} />
-          Logout
+        <DropdownMenuItem asChild>
+          <form action={logout}>
+            <IconLogout size={16} />
+            Logout
+          </form>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

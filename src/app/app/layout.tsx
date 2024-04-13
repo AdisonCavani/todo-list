@@ -1,6 +1,6 @@
 import ProfileMenu from "@components/app/profile-menu";
 import Link from "@components/router/link";
-import { auth } from "@lib/auth";
+import { validateRequest } from "@lib/auth";
 import { twindConfig, type ColorRecordType } from "@lib/twind";
 import { IconChecklist } from "@tabler/icons-react";
 import { buttonVariants } from "@ui/button";
@@ -25,7 +25,7 @@ export const viewport: Viewport = {
 };
 
 async function Layout({ children }: PropsWithChildren) {
-  const session = await auth();
+  const { user } = await validateRequest();
 
   return (
     <>
@@ -44,7 +44,7 @@ async function Layout({ children }: PropsWithChildren) {
           </Link>
         </div>
 
-        <ProfileMenu {...session!.user} />
+        <ProfileMenu {...user!} />
       </header>
 
       {children}

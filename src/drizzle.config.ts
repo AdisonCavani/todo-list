@@ -5,7 +5,7 @@ dotenv.config({
   path: ".env.local",
 });
 
-const dbPrefix = process.env.NODE_ENV === "production" ? "prod" : "dev";
+const dbPrefix = process.env.NODE_ENV === "production" ? "prod" : "dev2";
 
 export default defineConfig({
   driver: "pg",

@@ -1,78 +1,71 @@
-import type { DefaultSession } from "@auth/core/types";
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { createTable } from "@server/db/schema";
+import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
+import { sessions, users, type UserType } from "@server/db/schema";
 import { db } from "@server/db/sql";
-import NextAuth, { type User } from "next-auth";
-import Github, { type GitHubProfile } from "next-auth/providers/github";
-import Google, { type GoogleProfile } from "next-auth/providers/google";
+import { GitHub } from "arctic";
+import { Lucia } from "lucia";
+import { cookies } from "next/headers";
 
-declare module "next-auth" {
-  interface Session extends DefaultSession {
-    user: DefaultSession["user"] & User;
-  }
-}
+const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
 
-export const {
-  handlers: { GET, POST },
-  auth,
-} = NextAuth({
-  secret: process.env.NEXTAUTH_SECRET,
-
-  pages: {
-    signIn: "/auth",
-  },
-
-  adapter: DrizzleAdapter(db, createTable),
-  session: {
-    strategy: "jwt",
-  },
-
-  providers: [
-    Github({
-      profile(profile: GitHubProfile) {
-        return {
-          id: profile.id.toString(),
-          name: profile.name,
-          email: profile.email,
-          image: profile.avatar_url,
-        };
-      },
-    }),
-    Google({
-      profile(profile: GoogleProfile): User {
-        return {
-          id: profile.sub,
-          name: `${profile.given_name} ${profile.family_name}`.trim(),
-          email: profile.email,
-          image: profile.picture,
-        };
-      },
-    }),
-  ],
-
-  callbacks: {
-    authorized({ auth }) {
-      return !!auth?.user;
-    },
-    jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.name = user.name;
-        token.email = user.email;
-        token.image = user.image;
-      }
-
-      return token;
-    },
-    session({ session, token }) {
-      if (token) {
-        session.user.id = token.id as string;
-        session.user.name = token.name as string;
-        session.user.email = token.email as string;
-        session.user.image = token.image as string;
-      }
-
-      return session;
+export const lucia = new Lucia(adapter, {
+  sessionCookie: {
+    // this sets cookies with super long expiration
+    // since Next.js doesn't allow Lucia to extend cookie expiration when rendering pages
+    expires: false,
+    attributes: {
+      // set to `true` when using HTTPS
+      secure: process.env.NODE_ENV === "production",
     },
   },
 });
+
+// IMPORTANT!
+declare module "lucia" {
+  interface Register {
+    Lucia: typeof lucia;
+    DatabaseUserAttributes: Omit<UserType, "id">;
+  }
+}
+
+export const validateRequest = async () => {
+  const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+  if (!sessionId) {
+    return {
+      user: null,
+      session: null,
+    };
+  }
+
+  const result = await lucia.validateSession(sessionId);
+  // next.js throws when you attempt to set cookie when rendering page
+  try {
+    if (result.session && result.session.fresh) {
+      const sessionCookie = lucia.createSessionCookie(result.session.id);
+      cookies().set(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes,
+      );
+    }
+    if (!result.session) {
+      const sessionCookie = lucia.createBlankSessionCookie();
+      cookies().set(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes,
+      );
+    }
+  } catch {}
+  return result;
+};
+
+export const github = new GitHub(
+  process.env.AUTH_GITHUB_ID!,
+  process.env.AUTH_GITHUB_SECRET!,
+);
+
+// export const google = new Google(
+//   process.env.AUTH_GOOGLE_ID!,
+//   process.env.AUTH_GOOGLE_SECRET!,
+//   "",
+// );

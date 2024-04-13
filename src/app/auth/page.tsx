@@ -1,6 +1,6 @@
 import LoginButtons from "@components/auth/login-buttons";
 import Link from "@components/router/link";
-import { auth } from "@lib/auth";
+import { validateRequest } from "@lib/auth";
 import { cn } from "@lib/utils";
 import { IconChecklist, IconChevronLeft } from "@tabler/icons-react";
 import { buttonVariants } from "@ui/button";
@@ -11,9 +11,9 @@ export const metadata = {
 };
 
 async function Page() {
-  const session = await auth();
+  const { user } = await validateRequest();
 
-  if (session) redirect("/app");
+  if (user) redirect("/app");
 
   return (
     <main className="mx-auto flex h-screen w-screen flex-col items-center justify-center px-6">
