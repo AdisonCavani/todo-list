@@ -1,6 +1,7 @@
 import "@styles/globals.css";
 import NProgressWrapper from "@components/nprogress-wrapper";
 import PWALifeCycle from "@components/pwa-lifecycle";
+import SentryProvider from "@components/sentry-provider";
 import NextThemeProvider from "@components/theme-provider";
 import { twindConfig, type ColorRecordType } from "@lib/twind";
 import { cn, fontInter } from "@lib/utils";
@@ -70,6 +71,7 @@ function RootLayout({ children }: PropsWithChildren) {
               src="https://insights.k1ng.dev/script.js"
             />
             <AxiomWebVitals />
+            <SentryProvider />
           </>
         )}
       </head>
