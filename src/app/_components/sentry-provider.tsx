@@ -9,7 +9,7 @@ function SentryProvider() {
 
   useEffect(() => {
     const addIntegrations = async () => {
-      const { replayIntegration } = await import("@sentry/browser");
+      const { replayIntegration } = await import("@sentry/replay");
       Sentry.addIntegration(replayIntegration());
     };
 
