@@ -23,7 +23,6 @@ let nextConfig = {
     ignoreBuildErrors: true,
   },
   experimental: {
-    mdxRs: true,
     instrumentationHook: true,
   },
   headers() {
