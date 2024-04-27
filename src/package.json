@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "analyze": "ANALYZE=true next build",
+    "analyze": "cross-env ANALYZE=true next build",
     "dev": "next dev",
     "dev:ts": "tsc --noEmit --incremental --watch",
     "ts": "tsc --noEmit",
@@ -12,8 +12,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "db:studio": "drizzle-kit studio",
-    "db:studio-prod": "NODE_ENV=production drizzle-kit studio",
-    "db:generate": "NODE_ENV=production drizzle-kit generate:pg",
+    "db:studio-prod": "cross-env NODE_ENV=production drizzle-kit studio",
+    "db:generate": "cross-env NODE_ENV=production drizzle-kit generate:pg",
     "db:migrate": "node --env-file=.env.local --import tsx ./server/db/migrate.ts",
     "db:push": "drizzle-kit push:pg",
     "update-pkg": "bunx npm-check-updates --upgrade --interactive",
@@ -80,6 +80,7 @@
     "@types/uuid": "^9.0.8",
     "autoprefixer": "^10.4.19",
     "clsx": "^2.1.1",
+    "cross-env": "^7.0.3",
     "cva": "npm:class-variance-authority@^0.7.0",
     "dotenv": "^16.4.5",
     "drizzle-kit": "^0.20.17",

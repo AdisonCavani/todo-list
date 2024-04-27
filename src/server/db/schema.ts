@@ -1,5 +1,5 @@
 import type { AdapterAccount } from "@auth/core/adapters";
-import { relations, sql, type InferSelectModel } from "drizzle-orm";
+import { relations, type InferSelectModel } from "drizzle-orm";
 import {
   boolean,
   index,
@@ -23,7 +23,7 @@ export const tasks = createTable(
   {
     id: text("id").primaryKey().notNull(),
     listId: text("listId")
-      .references(() => lists.id)
+      .references(() => lists.id, { onDelete: "cascade" })
       .notNull(),
     title: text("title").notNull(),
     description: text("description"),
@@ -74,12 +74,10 @@ export const listsRelations = relations(lists, ({ one }) => ({
 export type ListType = InferSelectModel<typeof lists>;
 
 export const users = createTable("user", {
-  id: text("id").primaryKey().notNull(),
+  id: text("id").primaryKey(),
   name: text("name"),
   email: text("email").notNull(),
-  emailVerified: timestamp("emailVerified", { mode: "date" }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
+  emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt")
@@ -96,7 +94,7 @@ export const accounts = createTable(
   "account",
   {
     userId: text("userId")
-      .references(() => users.id)
+      .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
     type: text("type").$type<AdapterAccount["type"]>().notNull(),
     provider: text("provider").notNull(),
@@ -129,9 +127,9 @@ export const accountsRelations = relations(accounts, ({ one }) => ({
 export const sessions = createTable(
   "session",
   {
-    sessionToken: text("sessionToken").primaryKey().notNull(),
+    sessionToken: text("sessionToken").primaryKey(),
     userId: text("userId")
-      .references(() => users.id)
+      .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
