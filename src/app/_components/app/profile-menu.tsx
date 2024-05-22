@@ -21,81 +21,82 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@ui/dropdown-menu";
-import type { User } from "next-auth";
-import { signOut } from "next-auth/react";
+import type { User } from "lucia";
 import { useTheme } from "next-themes";
+import { logout } from "./auth";
 
-function ProfileMenu({ name, email, image }: User) {
+function ProfileMenu({ email }: User) {
+  const name = "Adrian Środoń";
+  const image = undefined;
+
   const { setTheme } = useTheme();
   const initials =
     (name?.split(" ")?.[0]?.[0] ?? "") + (name?.split(" ")?.[1]?.[0] ?? "");
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          className="size-8 rounded-full hover:bg-transparent"
-        >
-          <Avatar>
-            <AvatarImage src={image ?? undefined} alt="User avatar" />
-            <AvatarFallback>{initials}</AvatarFallback>
-          </Avatar>
-        </Button>
-      </DropdownMenuTrigger>
+    <div className="flex flex-row items-center gap-x-2">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className="size-8 rounded-full hover:bg-transparent"
+          >
+            <Avatar>
+              <AvatarImage src={image ?? undefined} alt="User avatar" />
+              <AvatarFallback>{initials}</AvatarFallback>
+            </Avatar>
+          </Button>
+        </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" sideOffset={12}>
-        <DropdownMenuItem asChild alignLeft>
-          <Link className="flex-col" href="/app/settings/profile">
-            <p className="font-medium">{name}</p>
-            <p className="text-muted-foreground">{email}</p>
-          </Link>
-        </DropdownMenuItem>
+        <DropdownMenuContent align="end" sideOffset={12}>
+          <DropdownMenuItem asChild alignLeft>
+            <Link className="flex-col" href="/app/settings/profile">
+              <p className="font-medium">{name}</p>
+              <p className="text-muted-foreground">{email}</p>
+            </Link>
+          </DropdownMenuItem>
 
-        <DropdownMenuSeparator />
+          <DropdownMenuSeparator />
 
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger>
-            <IconSun size={16} />
-            Theme
-          </DropdownMenuSubTrigger>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              <IconSun size={16} />
+              Theme
+            </DropdownMenuSubTrigger>
 
-          <DropdownMenuPortal>
-            <DropdownMenuSubContent>
-              <DropdownMenuItem onClick={() => setTheme("light")}>
-                <IconSun size={16} />
-                Light
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("dark")}>
-                <IconMoon size={16} />
-                Dark
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("system")}>
-                <IconDeviceLaptop size={16} />
-                System
-              </DropdownMenuItem>
-            </DropdownMenuSubContent>
-          </DropdownMenuPortal>
-        </DropdownMenuSub>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem onClick={() => setTheme("light")}>
+                  <IconSun size={16} />
+                  Light
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTheme("dark")}>
+                  <IconMoon size={16} />
+                  Dark
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTheme("system")}>
+                  <IconDeviceLaptop size={16} />
+                  System
+                </DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
 
-        <DropdownMenuItem asChild>
-          <Link href="/app/settings">
-            <IconSettings size={16} />
-            Settings
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() =>
-            signOut({
-              callbackUrl: "/",
-            })
-          }
-        >
+          <DropdownMenuItem asChild>
+            <Link href="/app/settings">
+              <IconSettings size={16} />
+              Settings
+            </Link>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <form action={logout}>
+        <Button type="submit" variant="ghost" size="sm">
           <IconLogout size={16} />
-          Logout
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        </Button>
+      </form>
+    </div>
   );
 }
 

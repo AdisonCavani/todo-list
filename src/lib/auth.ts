@@ -1,78 +1,79 @@
-import type { DefaultSession } from "@auth/core/types";
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { createTable } from "@server/db/schema";
+import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
+import { sessions, users, type UserType } from "@server/db/schema";
 import { db } from "@server/db/sql";
-import NextAuth, { type User } from "next-auth";
-import Github, { type GitHubProfile } from "next-auth/providers/github";
-import Google, { type GoogleProfile } from "next-auth/providers/google";
+import { GitHub, Google } from "arctic";
+import { Lucia } from "lucia";
+import { cookies } from "next/headers";
 
-declare module "next-auth" {
-  interface Session extends DefaultSession {
-    user: DefaultSession["user"] & User;
+const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
+
+export const lucia = new Lucia(adapter, {
+  sessionCookie: {
+    // This sets cookies with super long expiration
+    // Since Next.js doesn't allow Lucia to extend cookie expiration when rendering pages
+    expires: false,
+    attributes: {
+      secure: process.env.NODE_ENV === "production",
+    },
+  },
+  getUserAttributes: (attributes) => {
+    return {
+      email: attributes.email,
+      name: attributes.name,
+    };
+  },
+});
+
+// IMPORTANT!
+declare module "lucia" {
+  interface Register {
+    Lucia: typeof lucia;
+    DatabaseUserAttributes: Omit<UserType, "id">;
   }
 }
 
-export const {
-  handlers: { GET, POST },
-  auth,
-} = NextAuth({
-  secret: process.env.NEXTAUTH_SECRET,
+export const auth = async () => {
+  const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
 
-  pages: {
-    signIn: "/auth",
-  },
+  if (!sessionId) {
+    return {
+      user: null,
+      session: null,
+    };
+  }
 
-  adapter: DrizzleAdapter(db, createTable),
-  session: {
-    strategy: "jwt",
-  },
+  const result = await lucia.validateSession(sessionId);
 
-  providers: [
-    Github({
-      profile(profile: GitHubProfile) {
-        return {
-          id: profile.id.toString(),
-          name: profile.name,
-          email: profile.email,
-          image: profile.avatar_url,
-        };
-      },
-    }),
-    Google({
-      profile(profile: GoogleProfile): User {
-        return {
-          id: profile.sub,
-          name: `${profile.given_name} ${profile.family_name}`.trim(),
-          email: profile.email,
-          image: profile.picture,
-        };
-      },
-    }),
-  ],
+  // Next.js throws when you attempt to set cookie when rendering page
+  try {
+    if (result.session && result.session.fresh) {
+      const sessionCookie = lucia.createSessionCookie(result.session.id);
+      cookies().set(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes,
+      );
+    }
+    if (!result.session) {
+      const sessionCookie = lucia.createBlankSessionCookie();
+      cookies().set(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes,
+      );
+    }
+  } catch {}
 
-  callbacks: {
-    authorized({ auth }) {
-      return !!auth?.user;
-    },
-    jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.name = user.name;
-        token.email = user.email;
-        token.image = user.image;
-      }
+  return result;
+};
 
-      return token;
-    },
-    session({ session, token }) {
-      if (token) {
-        session.user.id = token.id as string;
-        session.user.name = token.name as string;
-        session.user.email = token.email as string;
-        session.user.image = token.image as string;
-      }
+export const github = new GitHub(
+  process.env.AUTH_GITHUB_ID!,
+  process.env.AUTH_GITHUB_SECRET!,
+);
 
-      return session;
-    },
-  },
-});
+export const google = new Google(
+  process.env.AUTH_GOOGLE_ID!,
+  process.env.AUTH_GOOGLE_SECRET!,
+  "",
+);

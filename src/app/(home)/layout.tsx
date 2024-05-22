@@ -10,11 +10,11 @@ const menuEntries: MenuEntry[] = [
 ];
 
 async function Layout({ children }: PropsWithChildren) {
-  const session = await auth();
+  const { user } = await auth();
 
   return (
     <>
-      <Header menuEntries={menuEntries} session={session} />
+      <Header menuEntries={menuEntries} session={user} />
       {children}
       <Footer menuEntries={menuEntries} />
     </>

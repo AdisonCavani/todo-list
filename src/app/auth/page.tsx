@@ -2,6 +2,7 @@ import LoginButtons from "@components/auth/login-buttons";
 import Link from "@components/router/link";
 import { auth } from "@lib/auth";
 import { cn } from "@lib/utils";
+import * as Sentry from "@sentry/nextjs";
 import { IconChecklist, IconChevronLeft } from "@tabler/icons-react";
 import { buttonVariants } from "@ui/button";
 import { redirect } from "next/navigation";
@@ -11,9 +12,16 @@ export const metadata = {
 };
 
 async function Page() {
-  const session = await auth();
+  const { user } = await auth();
 
-  if (session) redirect("/app");
+  if (user) {
+    Sentry.setUser({
+      id: user.id,
+      email: user.email,
+      username: user.name,
+    });
+    redirect("/app");
+  }
 
   return (
     <main className="mx-auto flex h-screen w-screen flex-col items-center justify-center px-6">

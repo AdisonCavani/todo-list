@@ -1,7 +1,7 @@
 "use client";
 
 import { api } from "@lib/trpc/react";
-import type { TaskPriorityEnum, TaskRenderType } from "@lib/types";
+import type { TaskRenderType } from "@lib/types";
 import { toast } from "@lib/use-toast";
 import {
   addDays,
@@ -9,6 +9,7 @@ import {
   getPriorityText,
   getShortDayName,
 } from "@lib/utils";
+import type { TaskPriorityEnum } from "@server/db/schema";
 import {
   IconBell,
   IconCalendar,

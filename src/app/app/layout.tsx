@@ -25,7 +25,7 @@ export const viewport: Viewport = {
 };
 
 async function Layout({ children }: PropsWithChildren) {
-  const session = await auth();
+  const { user } = await auth();
 
   return (
     <>
@@ -44,7 +44,7 @@ async function Layout({ children }: PropsWithChildren) {
           </Link>
         </div>
 
-        <ProfileMenu {...session!.user} />
+        <ProfileMenu {...user!} />
       </header>
 
       {children}

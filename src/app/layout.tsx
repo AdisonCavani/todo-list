@@ -7,7 +7,6 @@ import { twindConfig, type ColorRecordType } from "@lib/twind";
 import { cn, fontInter } from "@lib/utils";
 import { Toaster } from "@ui/toaster";
 import type { Viewport } from "next";
-import { SessionProvider } from "next-auth/react";
 import { AxiomWebVitals } from "next-axiom";
 import Script from "next/script";
 import type { PropsWithChildren } from "react";
@@ -78,11 +77,9 @@ function RootLayout({ children }: PropsWithChildren) {
       <body className="flex min-h-dvh flex-col">
         <NextThemeProvider>
           <NProgressWrapper>
-            <SessionProvider>
-              {children}
-              <Toaster />
-              {process.env.NODE_ENV === "production" && <SentryProvider />}
-            </SessionProvider>
+            {children}
+            <Toaster />
+            {process.env.NODE_ENV === "production" && <SentryProvider />}
           </NProgressWrapper>
         </NextThemeProvider>
 
