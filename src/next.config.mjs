@@ -62,13 +62,9 @@ const ContentSecurityPolicy = `
   style-src 'self' 'unsafe-inline';
   font-src 'self';
   img-src 'self' data: https://avatars.githubusercontent.com https://*.googleusercontent.com;
-<<<<<<< Updated upstream
   connect-src 'self' https://insights.k1ng.dev https://avatars.githubusercontent.com https://*.googleusercontent.com https://*.sentry.io;
   worker-src 'self' blob:;
   child-src 'self' blob:;
-=======
-  connect-src 'self' https://insights.k1ng.dev https://avatars.githubusercontent.com https://*.googleusercontent.com https://github.com;
->>>>>>> Stashed changes
 `;
 const securityHeaders = [
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP

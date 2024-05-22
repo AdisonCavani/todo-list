@@ -1,7 +1,7 @@
 import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
 import { sessions, users, type UserType } from "@server/db/schema";
 import { db } from "@server/db/sql";
-import { GitHub } from "arctic";
+import { GitHub, Google } from "arctic";
 import { Lucia } from "lucia";
 import { cookies } from "next/headers";
 
@@ -9,13 +9,18 @@ const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
 
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
-    // this sets cookies with super long expiration
-    // since Next.js doesn't allow Lucia to extend cookie expiration when rendering pages
+    // This sets cookies with super long expiration
+    // Since Next.js doesn't allow Lucia to extend cookie expiration when rendering pages
     expires: false,
     attributes: {
-      // set to `true` when using HTTPS
       secure: process.env.NODE_ENV === "production",
     },
+  },
+  getUserAttributes: (attributes) => {
+    return {
+      email: attributes.email,
+      name: attributes.name,
+    };
   },
 });
 
@@ -27,8 +32,9 @@ declare module "lucia" {
   }
 }
 
-export const validateRequest = async () => {
+export const auth = async () => {
   const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+
   if (!sessionId) {
     return {
       user: null,
@@ -37,7 +43,8 @@ export const validateRequest = async () => {
   }
 
   const result = await lucia.validateSession(sessionId);
-  // next.js throws when you attempt to set cookie when rendering page
+
+  // Next.js throws when you attempt to set cookie when rendering page
   try {
     if (result.session && result.session.fresh) {
       const sessionCookie = lucia.createSessionCookie(result.session.id);
@@ -56,6 +63,7 @@ export const validateRequest = async () => {
       );
     }
   } catch {}
+
   return result;
 };
 
@@ -64,8 +72,8 @@ export const github = new GitHub(
   process.env.AUTH_GITHUB_SECRET!,
 );
 
-// export const google = new Google(
-//   process.env.AUTH_GOOGLE_ID!,
-//   process.env.AUTH_GOOGLE_SECRET!,
-//   "",
-// );
+export const google = new Google(
+  process.env.AUTH_GOOGLE_ID!,
+  process.env.AUTH_GOOGLE_SECRET!,
+  "",
+);

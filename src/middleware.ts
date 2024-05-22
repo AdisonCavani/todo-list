@@ -1,8 +1,8 @@
-import { validateRequest } from "@lib/auth";
+import { auth } from "@lib/auth";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  const { user } = await validateRequest();
+  const { user } = await auth();
 
   if (!user) return NextResponse.redirect(new URL("/auth", request.url));
 
@@ -10,6 +10,6 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/app"],
+  matcher: ["/app/:path*"],
   runtime: "experimental-edge",
 };

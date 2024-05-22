@@ -1,6 +1,6 @@
 import Footer from "@components/home/footer";
 import Header from "@components/home/header";
-import { validateRequest } from "@lib/auth";
+import { auth } from "@lib/auth";
 import type { MenuEntry } from "@lib/types";
 import type { PropsWithChildren } from "react";
 
@@ -10,7 +10,7 @@ const menuEntries: MenuEntry[] = [
 ];
 
 async function Layout({ children }: PropsWithChildren) {
-  const { user } = await validateRequest();
+  const { user } = await auth();
 
   return (
     <>

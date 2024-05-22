@@ -1,8 +1,8 @@
 import { github, lucia } from "@lib/auth";
-import { users } from "@server/db/schema";
+import { accounts, users } from "@server/db/schema";
 import { db } from "@server/db/sql";
 import { OAuth2RequestError } from "arctic";
-import { generateId } from "lucia";
+import { generateIdFromEntropySize } from "lucia";
 import { cookies } from "next/headers";
 
 export async function GET(request: Request): Promise<Response> {
@@ -10,6 +10,7 @@ export async function GET(request: Request): Promise<Response> {
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
   const storedState = cookies().get("github_oauth_state")?.value ?? null;
+
   if (!code || !state || !storedState || state !== storedState) {
     return new Response(null, {
       status: 400,
@@ -19,40 +20,66 @@ export async function GET(request: Request): Promise<Response> {
   try {
     const tokens = await github.validateAuthorizationCode(code);
     const githubUserResponse = await fetch("https://api.github.com/user", {
-      mode: "cors",
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
-        "Access-Control-Allow-Origin": "*",
       },
     });
     const githubUser: GitHubUser = await githubUserResponse.json();
+
+    // const emailsResponse = await fetch("https://api.github.com/user/emails", {
+    //   headers: {
+    //     Authorization: `Bearer ${tokens.accessToken}`,
+    //   },
+    // });
+    // const emailsObj: GithubUserEmail[] = await emailsResponse.json();
+
+    // const verifiedEmails = emailsObj
+    //   .filter((obj) => obj.verified)
+    //   .map((obj) => obj.email);
+
+    // if (!verifiedEmails) {
+    //   return new Response("Unverified email", {
+    //     status: 400,
+    //   });
+    // }
+
+    // const existingUser = await db.query.users.findFirst({
+    //   where: (user, { inArray }) => inArray(user.email, verifiedEmails),
+    // });
+
     const existingUser = await db.query.users.findFirst({
-      where: (user, { eq }) => eq(user.id, githubUser.id),
+      where: (user, { inArray }) => inArray(user.email, [githubUser.email]),
     });
 
+    let userId, existingAccount;
+
     if (existingUser) {
-      const session = await lucia.createSession(existingUser.id, {});
-      const sessionCookie = lucia.createSessionCookie(session.id);
-      cookies().set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes,
-      );
-      return new Response(null, {
-        status: 302,
-        headers: {
-          Location: "/app",
-        },
+      userId = existingUser.id;
+
+      existingAccount = await db.query.accounts.findFirst({
+        where: (account, { and, eq }) =>
+          and(
+            eq(account.providerAccountId, githubUser.id),
+            eq(account.provider, "Github"),
+          ),
+      });
+    } else {
+      userId = generateIdFromEntropySize(10);
+
+      await db.insert(users).values({
+        id: userId,
+        name: githubUser.name,
+        email: githubUser.email,
       });
     }
 
-    const userId = generateId(15);
-
-    await db.insert(users).values({
-      id: userId,
-      // github_id: githubUser.id,
-      // github_login: githubUser.login,
-    });
+    if (!existingAccount) {
+      await db.insert(accounts).values({
+        provider: "Github",
+        providerAccountId: githubUser.id,
+        userId: userId,
+      });
+    }
 
     const session = await lucia.createSession(userId, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
@@ -73,20 +100,25 @@ export async function GET(request: Request): Promise<Response> {
     if (
       e instanceof OAuth2RequestError &&
       e.message === "bad_verification_code"
-    ) {
-      // invalid code
-      return new Response(null, {
+    )
+      return new Response("Invalid code", {
         status: 400,
       });
-    }
 
-    return new Response(null, {
+    return new Response("Internal server error", {
       status: 500,
     });
   }
 }
 
-interface GitHubUser {
+type GitHubUser = {
   id: string;
-  login: string;
-}
+  email: string;
+  name: string;
+};
+
+// type GithubUserEmail = {
+//   email: string;
+//   primary: boolean;
+//   verified: boolean;
+// };

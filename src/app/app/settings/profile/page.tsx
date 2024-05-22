@@ -1,12 +1,9 @@
 import SettingsCard from "@components/app/settings/card";
-import { validateRequest } from "@lib/auth";
+import { auth } from "@lib/auth";
 
 async function Page() {
-  const { user } = await validateRequest();
-  // const { email, name, image } = user!;
-  const email = user!.id;
-  const name = user!.id;
-  const image = user!.id;
+  const { user } = await auth();
+  const { email, name } = user!;
 
   return (
     <>
@@ -33,7 +30,7 @@ async function Page() {
         title="Your Avatar"
         summary="This is your avatar."
         avatarFallback={name}
-        avatarSrc={image ?? undefined}
+        avatarSrc={undefined} // TODO: use gravatar
         hint="You can change your avatar in your OAuth2 provider."
       />
     </>

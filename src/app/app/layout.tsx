@@ -1,6 +1,6 @@
 import ProfileMenu from "@components/app/profile-menu";
 import Link from "@components/router/link";
-import { validateRequest } from "@lib/auth";
+import { auth } from "@lib/auth";
 import { twindConfig, type ColorRecordType } from "@lib/twind";
 import { IconChecklist } from "@tabler/icons-react";
 import { buttonVariants } from "@ui/button";
@@ -25,7 +25,7 @@ export const viewport: Viewport = {
 };
 
 async function Layout({ children }: PropsWithChildren) {
-  const { user } = await validateRequest();
+  const { user } = await auth();
 
   return (
     <>

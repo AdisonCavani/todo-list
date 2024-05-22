@@ -4,23 +4,27 @@ import {
   index,
   pgEnum,
   pgTableCreator,
+  primaryKey,
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
+import { z } from "zod";
 
-const tablePrefix = process.env.NODE_ENV === "production" ? "prod" : "dev2";
+const tablePrefix = process.env.NODE_ENV === "production" ? "prod" : "dev";
 export const createTable = pgTableCreator(
   (name) => `todo-list-${tablePrefix}_${name}`,
 );
 
-export const taskPriorityEnum = pgEnum("priority", ["P1", "P2", "P3", "P4"]);
+const taskPriorityEnum = pgEnum("priority", ["P1", "P2", "P3", "P4"]);
+const taskPriorityEnumSchema = z.enum(taskPriorityEnum.enumValues)._type;
+export type TaskPriorityEnum = typeof taskPriorityEnumSchema;
 
 export const tasks = createTable(
   "task",
   {
     id: text("id").primaryKey().notNull(),
     listId: text("listId")
-      .references(() => lists.id)
+      .references(() => lists.id, { onDelete: "cascade" })
       .notNull(),
     title: text("title").notNull(),
     description: text("description"),
@@ -50,7 +54,7 @@ export const lists = createTable(
   {
     id: text("id").primaryKey().notNull(),
     userId: text("userId")
-      .references(() => users.id)
+      .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
     name: text("name").notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -72,17 +76,59 @@ export type ListType = InferSelectModel<typeof lists>;
 
 export const users = createTable("user", {
   id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdateFn(() => new Date())
+    .notNull(),
 });
+
+export const usersRelations = relations(users, ({ many }) => ({
+  accounts: many(accounts),
+}));
 
 export type UserType = InferSelectModel<typeof users>;
 
-export const sessions = createTable("session", {
-  id: text("id").primaryKey(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => users.id),
-  expiresAt: timestamp("expires_at", {
-    withTimezone: true,
-    mode: "date",
-  }).notNull(),
-});
+export const sessions = createTable(
+  "session",
+  {
+    id: text("id").primaryKey(),
+    userId: text("userId")
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
+    expiresAt: timestamp("expiresAt", {
+      withTimezone: true,
+      mode: "date",
+    }).notNull(),
+  },
+  (session) => ({
+    userIdIdx: index("session_userId_idx").on(session.userId),
+  }),
+);
+
+export const sessionsRelations = relations(sessions, ({ one }) => ({
+  user: one(users, { fields: [sessions.userId], references: [users.id] }),
+}));
+
+export const providerEnum = pgEnum("provider", ["Github", "Google"]);
+
+export const accounts = createTable(
+  "account",
+  {
+    providerAccountId: text("providerAccountId").notNull(),
+    provider: providerEnum("provider").notNull(),
+    userId: text("userId")
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
+  },
+  (account) => ({
+    id: primaryKey({ columns: [account.providerAccountId, account.provider] }),
+    userIdIdx: index("account_userId_idx").on(account.userId),
+  }),
+);
+
+export const accountsRelations = relations(accounts, ({ one }) => ({
+  user: one(users, { fields: [accounts.userId], references: [users.id] }),
+}));

@@ -1,10 +1,8 @@
 {
-  "id": "583f0e17-09b8-4b44-94a1-5d7ff16cd8ec",
-  "prevId": "1d62fca5-9165-41d6-ac29-494ebe92e51a",
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "todo-list-prod_account": {
+    "public.todo-list-prod_account": {
       "name": "todo-list-prod_account",
       "schema": "",
       "columns": {
@@ -101,15 +99,15 @@
         "todo-list-prod_account_userId_todo-list-prod_user_id_fk": {
           "name": "todo-list-prod_account_userId_todo-list-prod_user_id_fk",
           "tableFrom": "todo-list-prod_account",
-          "tableTo": "todo-list-prod_user",
           "columnsFrom": [
             "userId"
           ],
+          "tableTo": "todo-list-prod_user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -123,7 +121,7 @@
       },
       "uniqueConstraints": {}
     },
-    "todo-list-prod_list": {
+    "public.todo-list-prod_list": {
       "name": "todo-list-prod_list",
       "schema": "",
       "columns": {
@@ -164,7 +162,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "todo-list-prod_session": {
+    "public.todo-list-prod_session": {
       "name": "todo-list-prod_session",
       "schema": "",
       "columns": {
@@ -213,21 +211,21 @@
         "todo-list-prod_session_userId_todo-list-prod_user_id_fk": {
           "name": "todo-list-prod_session_userId_todo-list-prod_user_id_fk",
           "tableFrom": "todo-list-prod_session",
-          "tableTo": "todo-list-prod_user",
           "columnsFrom": [
             "userId"
           ],
+          "tableTo": "todo-list-prod_user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "todo-list-prod_task": {
+    "public.todo-list-prod_task": {
       "name": "todo-list-prod_task",
       "schema": "",
       "columns": {
@@ -298,7 +296,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "todo-list-prod_user": {
+    "public.todo-list-prod_user": {
       "name": "todo-list-prod_user",
       "schema": "",
       "columns": {
@@ -352,7 +350,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "todo-list-prod_verificationToken": {
+    "public.todo-list-prod_verificationToken": {
       "name": "todo-list-prod_verificationToken",
       "schema": "",
       "columns": {
@@ -403,20 +401,23 @@
     }
   },
   "enums": {
-    "priority": {
+    "public.priority": {
       "name": "priority",
-      "values": {
-        "P1": "P1",
-        "P2": "P2",
-        "P3": "P3",
-        "P4": "P4"
-      }
+      "schema": "public",
+      "values": [
+        "P1",
+        "P2",
+        "P3",
+        "P4"
+      ]
     }
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "583f0e17-09b8-4b44-94a1-5d7ff16cd8ec",
+  "prevId": "1d62fca5-9165-41d6-ac29-494ebe92e51a"
 }

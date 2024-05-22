@@ -7,7 +7,7 @@
  * need to use are documented accordingly near the end.
  */
 
-import { validateRequest } from "@lib/auth";
+import { auth } from "@lib/auth";
 import { db } from "@server/db/sql";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
@@ -26,7 +26,7 @@ import { ZodError } from "zod";
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  const { user, session } = await validateRequest();
+  const { user, session } = await auth();
 
   return {
     db,
