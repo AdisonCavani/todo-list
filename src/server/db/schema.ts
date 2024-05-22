@@ -112,7 +112,7 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, { fields: [sessions.userId], references: [users.id] }),
 }));
 
-export const providerEnum = pgEnum("provider", ["Github", "Google"]);
+export const providerEnum = pgEnum("provider", ["github", "google"]);
 
 export const accounts = createTable(
   "account",

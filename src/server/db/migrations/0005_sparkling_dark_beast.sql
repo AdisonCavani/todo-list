@@ -5,9 +5,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DROP TABLE "todo-list-prod_verificationToken";--> statement-breakpoint
-ALTER TABLE "todo-list-prod_list" DROP CONSTRAINT "todo-list-prod_list_userId_todo-list-prod_user_id_fk";
---> statement-breakpoint
-ALTER TABLE "todo-list-prod_account" DROP CONSTRAINT "undefined";--> statement-breakpoint
+ALTER TABLE "todo-list-prod_list" DROP CONSTRAINT "todo-list-prod_list_userId_todo-list-prod_user_id_fk";--> statement-breakpoint
 ALTER TABLE "todo-list-prod_account" ALTER COLUMN "provider" SET DATA TYPE provider;--> statement-breakpoint
 ALTER TABLE "todo-list-prod_user" ALTER COLUMN "name" SET NOT NULL;--> statement-breakpoint
 ALTER TABLE "todo-list-prod_account" ADD CONSTRAINT "todo-list-prod_account_providerAccountId_provider_pk" PRIMARY KEY("providerAccountId","provider");--> statement-breakpoint

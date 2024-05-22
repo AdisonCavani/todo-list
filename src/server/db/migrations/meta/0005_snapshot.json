@@ -320,8 +320,8 @@
       "name": "provider",
       "schema": "public",
       "values": [
-        "Github",
-        "Google"
+        "github",
+        "google"
       ]
     }
   },

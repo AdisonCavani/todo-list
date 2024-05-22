@@ -60,7 +60,7 @@ export async function GET(request: Request): Promise<Response> {
         where: (account, { and, eq }) =>
           and(
             eq(account.providerAccountId, githubUser.id),
-            eq(account.provider, "Github"),
+            eq(account.provider, "github"),
           ),
       });
     } else {
@@ -75,7 +75,7 @@ export async function GET(request: Request): Promise<Response> {
 
     if (!existingAccount) {
       await db.insert(accounts).values({
-        provider: "Github",
+        provider: "github",
         providerAccountId: githubUser.id,
         userId: userId,
       });
