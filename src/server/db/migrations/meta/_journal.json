@@ -40,22 +40,8 @@
     {
       "idx": 5,
       "version": "6",
-      "when": 1716407936796,
-      "tag": "0005_naive_the_hand",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1716408419446,
-      "tag": "0006_yellow_mordo",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "6",
       "when": 1716408967800,
-      "tag": "0007_sparkling_dark_beast",
+      "tag": "0005_sparkling_dark_beast",
       "breakpoints": true
     }
   ]
