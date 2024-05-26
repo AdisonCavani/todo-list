@@ -2,6 +2,7 @@ import ProfileMenu from "@components/app/profile-menu";
 import Link from "@components/router/link";
 import { auth } from "@lib/auth";
 import { twindConfig, type ColorRecordType } from "@lib/twind";
+import { getGravatarUrl } from "@lib/utils";
 import { IconChecklist } from "@tabler/icons-react";
 import { buttonVariants } from "@ui/button";
 import type { Viewport } from "next";
@@ -44,7 +45,10 @@ async function Layout({ children }: PropsWithChildren) {
           </Link>
         </div>
 
-        <ProfileMenu {...user!} />
+        <ProfileMenu
+          {...user!}
+          avatar={await getGravatarUrl(user!.email, 30)}
+        />
       </header>
 
       {children}

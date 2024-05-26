@@ -25,9 +25,12 @@ import type { User } from "lucia";
 import { useTheme } from "next-themes";
 import { logout } from "./auth";
 
-function ProfileMenu({ email }: User) {
+interface Props extends User {
+  avatar: string;
+}
+
+function ProfileMenu({ avatar, email }: Props) {
   const name = "Adrian Środoń";
-  const image = undefined;
 
   const { setTheme } = useTheme();
   const initials =
@@ -42,7 +45,7 @@ function ProfileMenu({ email }: User) {
             className="size-8 rounded-full hover:bg-transparent"
           >
             <Avatar>
-              <AvatarImage src={image ?? undefined} alt="User avatar" />
+              <AvatarImage src={avatar} alt="User avatar" />
               <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>
           </Button>

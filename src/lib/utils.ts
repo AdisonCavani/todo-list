@@ -56,3 +56,15 @@ export function getShortDayName(date: Date): string {
     weekday: "short",
   }).format(date);
 }
+
+export async function getGravatarUrl(email: string, size: number) {
+  const hashBuffer = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(email.trim().toLowerCase()),
+  );
+  const hashHex = Array.from(new Uint8Array(hashBuffer))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+
+  return `https://www.gravatar.com/avatar/${hashHex}?s=${size}`;
+}

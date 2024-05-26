@@ -16,6 +16,7 @@
     "db:generate": "cross-env NODE_ENV=production drizzle-kit generate",
     "db:migrate": "node --env-file=.env.local --import tsx ./server/db/migrate.ts",
     "db:push": "drizzle-kit push",
+    "db:check": "cross-env NODE_ENV=production drizzle-kit check",
     "update-pkg": "bunx npm-check-updates --upgrade --interactive",
     "prepare": "cd .. && husky src/.husky"
   },

@@ -1,5 +1,7 @@
 import SettingsCard from "@components/app/settings/card";
 import { auth } from "@lib/auth";
+import { getGravatarUrl } from "@lib/utils";
+import { IconExternalLink } from "@tabler/icons-react";
 
 async function Page() {
   const { user } = await auth();
@@ -13,7 +15,7 @@ async function Page() {
         summary="This is your email address."
         hint="This value cannot be changed. It's your unique identifier."
         inputDisabled
-        inputValue={email!}
+        inputValue={email}
       />
 
       <SettingsCard
@@ -30,8 +32,21 @@ async function Page() {
         title="Your Avatar"
         summary="This is your avatar."
         avatarFallback={name}
-        avatarSrc={undefined} // TODO: use gravatar
-        hint="You can change your avatar in your OAuth2 provider."
+        avatarSrc={await getGravatarUrl(email, 80)}
+        hint={
+          <>
+            You can change your avatar on{" "}
+            <a
+              href="https://www.gravatar.com"
+              rel="noopener"
+              target="_blank"
+              className="inline-flex items-center gap-x-1 text-blue-500 underline-offset-4 hover:underline"
+            >
+              Gravatar.com
+              <IconExternalLink size={14} className="underline" />
+            </a>
+          </>
+        }
       />
     </>
   );
