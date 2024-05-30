@@ -62,7 +62,7 @@ const ContentSecurityPolicy = `
   style-src 'self' 'unsafe-inline';
   font-src 'self';
   img-src 'self' data: https://www.gravatar.com;
-  connect-src 'self' https://insights.k1ng.dev https://*.sentry.io https://www.gravatar.com;
+  connect-src 'self' https://insights.k1ng.dev https://*.sentry.io https://www.gravatar.com https://github.com;
   worker-src 'self' blob:;
   child-src 'self' blob:;
 `;

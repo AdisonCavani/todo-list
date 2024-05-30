@@ -113,6 +113,8 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
 }));
 
 export const providerEnum = pgEnum("provider", ["github", "google"]);
+const providerZodType = z.enum(providerEnum.enumValues)._type;
+export type ProviderEnumType = typeof providerZodType;
 
 export const accounts = createTable(
   "account",

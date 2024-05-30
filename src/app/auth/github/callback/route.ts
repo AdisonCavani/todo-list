@@ -1,9 +1,6 @@
-import { github, lucia } from "@lib/auth";
-import { accounts, users } from "@server/db/schema";
-import { db } from "@server/db/sql";
+import { github, handleCallback } from "@lib/auth";
 import { OAuth2RequestError } from "arctic";
-import { generateIdFromEntropySize } from "lucia";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 export async function GET(request: Request): Promise<Response> {
   const url = new URL(request.url);
@@ -18,76 +15,42 @@ export async function GET(request: Request): Promise<Response> {
   }
 
   try {
+    const header = headers();
     const tokens = await github.validateAuthorizationCode(code);
     const githubUserResponse = await fetch("https://api.github.com/user", {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        "Access-Control-Allow-Origin": header.get("referer")!,
       },
     });
     const githubUser: GitHubUser = await githubUserResponse.json();
 
-    // const emailsResponse = await fetch("https://api.github.com/user/emails", {
-    //   headers: {
-    //     Authorization: `Bearer ${tokens.accessToken}`,
-    //   },
-    // });
-    // const emailsObj: GithubUserEmail[] = await emailsResponse.json();
-
-    // const verifiedEmails = emailsObj
-    //   .filter((obj) => obj.verified)
-    //   .map((obj) => obj.email);
-
-    // if (!verifiedEmails) {
-    //   return new Response("Unverified email", {
-    //     status: 400,
-    //   });
-    // }
-
-    // const existingUser = await db.query.users.findFirst({
-    //   where: (user, { inArray }) => inArray(user.email, verifiedEmails),
-    // });
-
-    const existingUser = await db.query.users.findFirst({
-      where: (user, { inArray }) => inArray(user.email, [githubUser.email]),
+    const emailsResponse = await fetch("https://api.github.com/user/emails", {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+        "Access-Control-Allow-Origin": header.get("referer")!,
+      },
     });
+    const emailsObj: GithubUserEmail[] = await emailsResponse.json();
 
-    let userId, existingAccount;
+    const verifiedEmails = emailsObj.filter((obj) => obj.verified);
 
-    if (existingUser) {
-      userId = existingUser.id;
-
-      existingAccount = await db.query.accounts.findFirst({
-        where: (account, { and, eq }) =>
-          and(
-            eq(account.providerAccountId, githubUser.id),
-            eq(account.provider, "github"),
-          ),
+    if (!verifiedEmails) {
+      return new Response("Unverified email", {
+        status: 400,
       });
-    } else {
-      userId = generateIdFromEntropySize(10);
+    }
 
-      await db.insert(users).values({
-        id: userId,
+    await handleCallback(
+      {
+        id: githubUser.id,
+        verifiedEmails: verifiedEmails.map((emailObj) => emailObj.email),
+        primaryEmail: verifiedEmails.find(
+          (emailObj) => emailObj.primary && emailObj.verified,
+        )!.email,
         name: githubUser.name,
-        email: githubUser.email,
-      });
-    }
-
-    if (!existingAccount) {
-      await db.insert(accounts).values({
-        provider: "github",
-        providerAccountId: githubUser.id,
-        userId: userId,
-      });
-    }
-
-    const session = await lucia.createSession(userId, {});
-    const sessionCookie = lucia.createSessionCookie(session.id);
-
-    cookies().set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes,
+      },
+      "github",
     );
 
     return new Response(null, {
@@ -117,8 +80,8 @@ type GitHubUser = {
   name: string;
 };
 
-// type GithubUserEmail = {
-//   email: string;
-//   primary: boolean;
-//   verified: boolean;
-// };
+type GithubUserEmail = {
+  email: string;
+  primary: boolean;
+  verified: boolean;
+};
