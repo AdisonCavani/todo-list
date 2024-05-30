@@ -10,7 +10,6 @@ import { db } from "@server/db/sql";
 import { GitHub, Google } from "arctic";
 import { generateIdFromEntropySize, Lucia } from "lucia";
 import { cookies } from "next/headers";
-import { getBaseUrl } from "./utils";
 
 const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
 
@@ -142,4 +141,10 @@ export async function handleCallback(
     sessionCookie.value,
     sessionCookie.attributes,
   );
+}
+
+function getBaseUrl() {
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL)
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  return `http://localhost:${process.env.PORT ?? 3000}`;
 }
