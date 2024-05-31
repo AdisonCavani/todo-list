@@ -1,10 +1,16 @@
-import { auth } from "@lib/auth";
+import lucia from "@lib/lucia";
+import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  const { user } = await auth();
+  const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
 
-  if (!user) return NextResponse.redirect(new URL("/auth", request.url));
+  if (!sessionId) return NextResponse.redirect(new URL("/auth", request.url));
+
+  const result = await lucia.validateSession(sessionId);
+
+  if (!result.session)
+    return NextResponse.redirect(new URL("/auth", request.url));
 
   return NextResponse.next();
 }

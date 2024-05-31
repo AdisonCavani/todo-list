@@ -1,44 +1,12 @@
-import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
-import {
-  accounts,
-  sessions,
-  users,
-  type ProviderEnumType,
-  type UserType,
-} from "@server/db/schema";
+import { accounts, users, type ProviderEnumType } from "@server/db/schema";
 import { db } from "@server/db/sql";
 import { GitHub, Google } from "arctic";
-import { generateIdFromEntropySize, Lucia } from "lucia";
+import { generateIdFromEntropySize } from "lucia";
 import { cookies } from "next/headers";
+import { cache } from "react";
+import lucia from "./lucia";
 
-const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
-
-export const lucia = new Lucia(adapter, {
-  sessionCookie: {
-    // This sets cookies with super long expiration
-    // Since Next.js doesn't allow Lucia to extend cookie expiration when rendering pages
-    expires: false,
-    attributes: {
-      secure: process.env.NODE_ENV === "production",
-    },
-  },
-  getUserAttributes: (attributes) => {
-    return {
-      email: attributes.email,
-      name: attributes.name,
-    };
-  },
-});
-
-// IMPORTANT!
-declare module "lucia" {
-  interface Register {
-    Lucia: typeof lucia;
-    DatabaseUserAttributes: Omit<UserType, "id">;
-  }
-}
-
-export const auth = async () => {
+export const auth = cache(async () => {
   const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
 
   if (!sessionId) {
@@ -71,7 +39,7 @@ export const auth = async () => {
   } catch {}
 
   return result;
-};
+});
 
 export const github = new GitHub(
   process.env.AUTH_GITHUB_ID!,

@@ -1,6 +1,7 @@
 "use server";
 
-import { auth, lucia } from "@lib/auth";
+import { auth } from "@lib/auth";
+import lucia from "@lib/lucia";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
