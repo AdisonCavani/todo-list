@@ -5,6 +5,7 @@ import type { MenuEntry } from "@lib/types";
 import type { PropsWithChildren } from "react";
 
 const menuEntries: MenuEntry[] = [
+  { name: "Changelog", href: "/changelog" },
   { name: "Privacy", href: "/privacy" },
   { name: "Terms of Service", href: "/terms-of-service" },
 ];

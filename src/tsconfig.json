@@ -22,6 +22,7 @@
     "baseUrl": ".",
     "paths": {
       "@components/*": ["app/_components/*"],
+      "@changelog/*": [".changelog/*"],
       "@lib/*": ["lib/*"],
       "@images/*": ["public/static/images/*"],
       "@server/*": ["server/*"],
