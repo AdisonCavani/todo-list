@@ -1,7 +1,7 @@
 {
   "scripts": {
     "analyze": "cross-env ANALYZE=true next build",
-    "dev": "next dev --turbo",
+    "dev": "next dev --turbo --experimental-https",
     "dev:ts": "tsc --noEmit --incremental --watch",
     "ts": "tsc --noEmit",
     "build": "next build",

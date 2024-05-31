@@ -114,5 +114,5 @@ export async function handleCallback(
 function getBaseUrl() {
   if (process.env.VERCEL_PROJECT_PRODUCTION_URL)
     return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
-  return `http://localhost:${process.env.PORT ?? 3000}`;
+  return `https://localhost:${process.env.PORT ?? 3000}`;
 }
