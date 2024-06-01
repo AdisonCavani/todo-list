@@ -70,7 +70,7 @@
     "@storybook/addon-links": "^8.1.2",
     "@storybook/blocks": "^8.1.2",
     "@storybook/nextjs": "^8.1.2",
-    "@storybook/react": "^8.1.2",
+    "@storybook/react": "^8.1.5",
     "@storybook/testing-library": "^0.2.2",
     "@tailwindcss/typography": "^0.5.13",
     "@tanstack/react-query-devtools": "^5.37.1",
