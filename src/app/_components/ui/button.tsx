@@ -42,6 +42,7 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   loading?: boolean;
+  loadingIconSize?: number;
   icon?: ReactNode;
 }
 
@@ -56,6 +57,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       variant,
       size,
       asChild = false,
+      loadingIconSize = 20,
       ...props
     },
     ref,
@@ -71,7 +73,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {loading ? (
-          <IconLoader2 className="size-5 animate-spin" />
+          <IconLoader2 size={loadingIconSize} className="animate-spin" />
         ) : (
           <>{icon}</>
         )}

@@ -23,18 +23,18 @@ import {
 } from "@ui/dropdown-menu";
 import type { User } from "lucia";
 import { useTheme } from "next-themes";
+import { useState } from "react";
 import { logout } from "./auth";
 
 interface Props extends User {
   avatar: string;
 }
 
-function ProfileMenu({ avatar, email }: Props) {
-  const name = "Adrian Środoń";
-
+function ProfileMenu({ avatar, email, name }: Props) {
   const { setTheme } = useTheme();
   const initials =
     (name?.split(" ")?.[0]?.[0] ?? "") + (name?.split(" ")?.[1]?.[0] ?? "");
+  const [logoutPending, setLogoutPending] = useState<boolean>(false);
 
   return (
     <div className="flex flex-row items-center gap-x-2">
@@ -91,14 +91,27 @@ function ProfileMenu({ avatar, email }: Props) {
               Settings
             </Link>
           </DropdownMenuItem>
+
+          <form action={logout} onSubmit={() => setLogoutPending(true)}>
+            <DropdownMenuItem
+              asChild
+              onSelect={(event) => event.preventDefault()}
+            >
+              <Button
+                type="submit"
+                size="xs"
+                variant="ghost"
+                loading={logoutPending}
+                loadingIconSize={16}
+                icon={<IconLogout size={16} />}
+                className="w-full select-none justify-normal font-normal hover:text-inherit focus-visible:ring-0"
+              >
+                Logout
+              </Button>
+            </DropdownMenuItem>
+          </form>
         </DropdownMenuContent>
       </DropdownMenu>
-
-      <form action={logout}>
-        <Button type="submit" variant="ghost" size="sm">
-          <IconLogout size={16} />
-        </Button>
-      </form>
     </div>
   );
 }

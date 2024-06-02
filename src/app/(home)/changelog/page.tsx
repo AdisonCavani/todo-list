@@ -1,4 +1,4 @@
-import Change20240531 from "@changelog/2024-05-31.mdx";
+import Changelog from "./changelog.mdx";
 
 function Page() {
   return (
@@ -9,7 +9,7 @@ function Page() {
         be documented here.
       </p>
 
-      <Change20240531 />
+      <Changelog />
     </main>
   );
 }
