@@ -1,7 +1,6 @@
 "use client";
 
-import { api } from "@lib/trpc/react";
-import { toast } from "@lib/use-toast";
+import { useDeleteListMutation } from "@lib/hooks";
 import { IconX } from "@tabler/icons-react";
 import { Button } from "@ui/button";
 import {
@@ -28,28 +27,7 @@ function RemoveList({ listId, listName }: Props) {
   const { push } = useRouter();
   const pathname = usePathname();
 
-  const utils = api.useUtils();
-  const deleteList = api.list.delete.useMutation({
-    async onMutate(input) {
-      await utils.list.get.invalidate();
-
-      const prevData = utils.list.get.getData();
-
-      utils.list.get.setData(undefined, (old) =>
-        old?.filter((list) => list.id !== input.id),
-      );
-
-      return { prevData };
-    },
-    onError(_, __, ctx) {
-      utils.list.get.setData(undefined, ctx?.prevData);
-
-      toast({
-        variant: "destructive",
-        title: "Failed to delete list.",
-      });
-    },
-  });
+  const { mutateAsync, isPending } = useDeleteListMutation();
 
   const [input, setInput] = useState<string>("");
   const submitDisabled = input.trim() !== listName.trim();
@@ -57,7 +35,7 @@ function RemoveList({ listId, listName }: Props) {
   const handleOnSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    await deleteList.mutateAsync({ id: listId });
+    await mutateAsync({ id: listId });
 
     if (pathname === `/app/${listId}`) push("/app");
   };
@@ -65,7 +43,7 @@ function RemoveList({ listId, listName }: Props) {
   const triggerFormSubmission: KeyboardEventHandler<HTMLFormElement> = (
     event,
   ) => {
-    if (event.key === "Enter" && !deleteList.isPending && !submitDisabled)
+    if (event.key === "Enter" && !isPending && !submitDisabled)
       event.currentTarget.dispatchEvent(
         new Event("submit", { bubbles: true, cancelable: true }),
       );
@@ -95,7 +73,7 @@ function RemoveList({ listId, listName }: Props) {
               type="submit"
               variant="destructive"
               disabled={submitDisabled}
-              loading={deleteList.isPending}
+              loading={isPending}
             >
               Delete this list
             </Button>

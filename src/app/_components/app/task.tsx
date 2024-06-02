@@ -1,7 +1,7 @@
 "use client";
 
-import { api } from "@lib/trpc/react";
-import { toast } from "@lib/use-toast";
+import { useDeleteTaskMutation, useUpdateTaskMutation } from "@lib/hooks";
+import type { TaskType } from "@lib/types";
 import {
   addDays,
   cn,
@@ -9,7 +9,7 @@ import {
   getPriorityText,
   getShortDayName,
 } from "@lib/utils";
-import type { TaskPriorityEnum, TaskType } from "@server/db/schema";
+import type { TaskPriorityEnum } from "@server/db/schema";
 import {
   IconCalendar,
   IconCalendarDue,
@@ -67,58 +67,18 @@ import {
 import DateComponent from "./date";
 
 const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
-  const { title, description, dueDate, priority, isCompleted, isImportant } =
-    task;
+  const {
+    listId,
+    title,
+    description,
+    dueDate,
+    priority,
+    isCompleted,
+    isImportant,
+  } = task;
 
-  const utils = api.useUtils();
-  const deleteTask = api.task.delete.useMutation({
-    async onMutate(input) {
-      await utils.task.get.invalidate({
-        listId: task.listId,
-      });
-
-      const prevData = utils.task.get.getData({ listId: task.listId });
-
-      utils.task.get.setData({ listId: task.listId }, (old) =>
-        old?.filter((task) => task.id !== input.id),
-      );
-
-      return { prevData };
-    },
-    onError(_, __, ctx) {
-      utils.task.get.setData({ listId: task.listId }, ctx?.prevData);
-
-      toast({
-        variant: "destructive",
-        title: "Failed to delete task.",
-      });
-    },
-  });
-
-  const updateTask = api.task.update.useMutation({
-    async onMutate(input) {
-      await utils.task.get.invalidate({
-        listId: task.listId,
-      });
-
-      const prevData = utils.task.get.getData({ listId: task.listId });
-
-      utils.task.get.setData({ listId: task.listId }, (old) => [
-        ...old!.filter((task) => task.id !== input.id),
-        input as TaskType,
-      ]);
-
-      return { prevData };
-    },
-    onError(_, __, ctx) {
-      utils.task.get.setData({ listId: task.listId }, ctx?.prevData);
-
-      toast({
-        variant: "destructive",
-        title: "Failed to update task.",
-      });
-    },
-  });
+  const deleteTask = useDeleteTaskMutation(listId);
+  const updateTask = useUpdateTaskMutation();
 
   const formRef = useRef<HTMLFormElement>(null!);
 
@@ -145,13 +105,19 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
   const handleOnSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
+    // TODO: update only changed values
     await updateTask.mutateAsync({
-      ...task,
-      title: dialogTitle,
-      description:
-        dialogDescription.trim().length === 0 ? null : dialogDescription.trim(),
-      dueDate: dialogDate,
-      priority: dialogPriority,
+      updateMask: ["title", "description", "dueDate", "priority"],
+      task: {
+        ...task,
+        title: dialogTitle,
+        description:
+          dialogDescription.trim().length === 0
+            ? null
+            : dialogDescription.trim(),
+        dueDate: dialogDate,
+        priority: dialogPriority,
+      },
     });
 
     setOpen(false);
@@ -178,16 +144,24 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
   const onCompletionChange: MouseEventHandler<HTMLElement> = async (event) => {
     event.stopPropagation();
     updateTask.mutate({
-      ...task,
-      isCompleted: !isCompleted,
+      updateMask: ["isCompleted"],
+      task: {
+        id: task.id,
+        listId: task.listId,
+        isCompleted: !isCompleted,
+      },
     });
   };
 
   const onImportantChange: MouseEventHandler<HTMLElement> = async (event) => {
     event.stopPropagation();
     updateTask.mutate({
-      ...task,
-      isImportant: !isImportant,
+      updateMask: ["isImportant"],
+      task: {
+        id: task.id,
+        listId: task.listId,
+        isImportant: !isImportant,
+      },
     });
   };
 

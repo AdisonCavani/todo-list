@@ -1,5 +1,7 @@
+import type { ListType } from "@lib/types";
 import { createTRPCRouter, protectedProcedure } from "@server/api/trpc";
-import { lists, type ListType } from "@server/db/schema";
+import { lists } from "@server/db/schema";
+import { TRPCError } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 import { v4 } from "uuid";
 import { z } from "zod";
@@ -7,6 +9,13 @@ import { z } from "zod";
 const createRequestSchema = z.object({
   name: z.string().min(1),
 });
+
+const updateRequestSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(1).optional(),
+});
+
+const [firstKey, ...otherKeys] = typedObjectKeys(updateRequestSchema.shape);
 
 export const listRouter = createTRPCRouter({
   create: protectedProcedure
@@ -18,17 +27,29 @@ export const listRouter = createTRPCRouter({
         userId: ctx.session.user.id!,
       };
 
-      await ctx.db.insert(lists).values(entity);
+      const res = await ctx.db.insert(lists).values(entity).returning({
+        createdAt: lists.createdAt,
+      });
+
+      const returnData = res.find(() => true);
+
+      if (!returnData) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+        });
+      }
 
       return {
         ...entity,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      } as ListType;
+        createdAt: returnData.createdAt,
+      } satisfies ListType;
     }),
 
   get: protectedProcedure.query(({ ctx }) => {
     return ctx.db.query.lists.findMany({
+      columns: {
+        updatedAt: false,
+      },
       where: (list, { eq }) => eq(list.userId, ctx.session.user.id!),
     });
   }),
@@ -37,6 +58,9 @@ export const listRouter = createTRPCRouter({
     .input(z.object({ id: z.string().uuid() }))
     .query(({ ctx, input }) => {
       return ctx.db.query.lists.findFirst({
+        columns: {
+          updatedAt: false,
+        },
         where: (list, { and, eq }) =>
           and(eq(list.id, input.id), eq(list.userId, ctx.session.user.id!)),
       });
@@ -44,24 +68,55 @@ export const listRouter = createTRPCRouter({
 
   update: protectedProcedure
     .input(
-      createRequestSchema.extend({
-        id: z.string().uuid(),
+      z.object({
+        updateMask: z
+          .array(z.enum([firstKey!, ...otherKeys]))
+          .min(1)
+          .refine(
+            (properties) => properties.length === new Set(properties).size,
+            {
+              message: "updateMask has duplicate properties",
+            },
+          ),
+        list: updateRequestSchema,
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      await ctx.db
+      const { updateMask, list } = input;
+      const { id, ...writeList } = list;
+
+      const returningSchema = new Map();
+
+      typedObjectKeys(list).forEach((key) => {
+        if (!updateMask.includes(key)) {
+          returningSchema.set(key, lists[key]);
+        }
+      });
+
+      const res = await ctx.db
         .update(lists)
-        .set(input)
+        .set(writeList)
         .where(
-          and(eq(lists.id, input.id), eq(lists.userId, ctx.session.user.id!)),
-        );
+          and(eq(lists.id, list.id), eq(lists.userId, ctx.session.user.id!)),
+        )
+        .returning({
+          createdAt: lists.createdAt,
+          ...Object.fromEntries(returningSchema),
+        });
+
+      const returnData = res.find(() => true);
+
+      if (!returnData) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+        });
+      }
 
       return {
-        ...input,
+        ...(returnData as any),
+        ...list,
         userId: ctx.session.user.id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      } as ListType;
+      } satisfies ListType;
     }),
 
   delete: protectedProcedure
@@ -74,3 +129,10 @@ export const listRouter = createTRPCRouter({
         );
     }),
 });
+
+function typedObjectKeys<T extends object>(object: T) {
+  return Object.keys(object).filter((key) => key !== "id") as (keyof Omit<
+    T,
+    "id"
+  >)[];
+}

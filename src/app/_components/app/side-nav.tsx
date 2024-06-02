@@ -1,8 +1,8 @@
 "use client";
 
+import { useCreateListMutation } from "@lib/hooks";
 import { api } from "@lib/trpc/react";
-import { toast } from "@lib/use-toast";
-import type { ListType } from "@server/db/schema";
+import type { ListType } from "@lib/types";
 import { IconPlus } from "@tabler/icons-react";
 import { Button } from "@ui/button";
 import { Input } from "@ui/input";
@@ -26,25 +26,7 @@ function SideNav({ initialLists }: Props) {
 
   const [name, setName] = useState<string>("");
 
-  const utils = api.useUtils();
-  const { mutate, isPending } = api.list.create.useMutation({
-    onError() {
-      toast({
-        variant: "destructive",
-        title: "Failed to create list.",
-      });
-    },
-
-    onSuccess(data) {
-      utils.list.get.setData(undefined, (lists) => {
-        if (!lists) return [];
-
-        lists.push(data);
-
-        return lists;
-      });
-    },
-  });
+  const { mutate, isPending } = useCreateListMutation();
 
   const handleOnSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();

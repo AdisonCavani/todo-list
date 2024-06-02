@@ -1,5 +1,4 @@
-import { api } from "@lib/trpc/react";
-import { toast } from "@lib/use-toast";
+import { useUpdateListMutation } from "@lib/hooks";
 import { IconX } from "@tabler/icons-react";
 import { Button } from "@ui/button";
 import {
@@ -22,48 +21,28 @@ type Props = {
 };
 
 function RenameList({ listId, listName }: Props) {
-  const utils = api.useUtils();
-  const updateList = api.list.update.useMutation({
-    async onMutate(input) {
-      await utils.list.get.cancel();
-
-      const previousLists = utils.list.get.getData();
-
-      utils.list.get.setData(undefined, (old) =>
-        old?.map((list) =>
-          list.id === input.id ? { ...list, name: input.name } : list,
-        ),
-      );
-
-      return { previousLists };
-    },
-    onError(_, __, context) {
-      utils.list.get.setData(undefined, context?.previousLists);
-
-      toast({
-        variant: "destructive",
-        title: "Failed to update list.",
-      });
-    },
-  });
-
   const [name, setName] = useState<string>("");
   const submitDisabled =
     name.trim().length === 0 || name.trim() === listName.trim();
 
+  const { mutateAsync, isPending } = useUpdateListMutation();
+
   const handleOnSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    await updateList.mutateAsync({
-      id: listId,
-      name: name.trim(),
+    await mutateAsync({
+      updateMask: ["name"],
+      list: {
+        id: listId,
+        name: name.trim(),
+      },
     });
   };
 
   const triggerFormSubmission: KeyboardEventHandler<HTMLFormElement> = (
     event,
   ) => {
-    if (event.key === "Enter" && !updateList.isPending && !submitDisabled)
+    if (event.key === "Enter" && !isPending && !submitDisabled)
       event.currentTarget.dispatchEvent(
         new Event("submit", { bubbles: true, cancelable: true }),
       );
@@ -85,11 +64,7 @@ function RenameList({ listId, listName }: Props) {
           />
 
           <DialogClose asChild>
-            <Button
-              type="submit"
-              disabled={submitDisabled}
-              loading={updateList.isPending}
-            >
+            <Button type="submit" disabled={submitDisabled} loading={isPending}>
               Save changes
             </Button>
           </DialogClose>

@@ -47,7 +47,7 @@ export const tasksRelations = relations(tasks, ({ one }) => ({
   list: one(lists, { fields: [tasks.listId], references: [lists.id] }),
 }));
 
-export type TaskType = InferSelectModel<typeof tasks>;
+export type TaskDbType = InferSelectModel<typeof tasks>;
 
 export const lists = createTable(
   "list",
@@ -72,7 +72,7 @@ export const listsRelations = relations(lists, ({ one }) => ({
   user: one(users, { fields: [lists.userId], references: [users.id] }),
 }));
 
-export type ListType = InferSelectModel<typeof lists>;
+export type ListDbType = InferSelectModel<typeof lists>;
 
 export const users = createTable("user", {
   id: text("id").primaryKey(),

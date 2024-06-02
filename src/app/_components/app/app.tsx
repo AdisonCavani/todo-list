@@ -2,8 +2,7 @@
 
 import { sortMethods, type SortingOptions } from "@lib/sort";
 import { api } from "@lib/trpc/react";
-import type { TaskRenderType } from "@lib/types";
-import type { TaskType } from "@server/db/schema";
+import type { TaskRenderType, TaskType } from "@lib/types";
 import {
   Accordion,
   AccordionContent,

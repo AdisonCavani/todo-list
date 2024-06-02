@@ -1,4 +1,7 @@
-import type { TaskType } from "@server/db/schema";
+import type { ListDbType, TaskDbType } from "@server/db/schema";
+
+export type ListType = Omit<ListDbType, "updatedAt">;
+export type TaskType = Omit<TaskDbType, "updatedAt">;
 
 export interface TaskRenderType extends TaskType {
   renderId?: string;
