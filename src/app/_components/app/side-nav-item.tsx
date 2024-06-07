@@ -20,9 +20,10 @@ import RenameList from "./rename-list";
 type Props = {
   id: string;
   name: string;
+  count: number;
 };
 
-function SideNavItem({ id, name }: Props) {
+function SideNavItem({ id, name, count }: Props) {
   const pathname = usePathname();
 
   const [open, setOpen] = useState<boolean>(false);
@@ -51,7 +52,7 @@ function SideNavItem({ id, name }: Props) {
               size="xxs"
               variant="ghost"
               icon={<IconDots size={18} />}
-              className="invisible text-muted-foreground group-hover:visible"
+              className="invisible text-muted-foreground transition-none group-hover:visible"
               onClick={(event) => event.preventDefault()}
             />
           </DropdownMenuTrigger>
@@ -92,6 +93,10 @@ function SideNavItem({ id, name }: Props) {
           <RemoveList listId={id} listName={name} />
         )}
       </Dialog>
+
+      <span className="mr-1 block text-muted-foreground group-hover:hidden">
+        {count}
+      </span>
     </Link>
   );
 }

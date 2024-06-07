@@ -16,7 +16,7 @@ import { useState, type FormEventHandler } from "react";
 import SideNavItem from "./side-nav-item";
 
 type Props = {
-  initialLists: ListType[];
+  initialLists: (ListType & { count: number })[];
 };
 
 function SideNav({ initialLists }: Props) {
@@ -91,8 +91,8 @@ function SideNav({ initialLists }: Props) {
       <div className="flex max-h-[calc(100vh-120px)] w-full flex-col gap-y-3 overflow-y-auto p-0.5">
         {lists
           .sort((a, b) => a.name.localeCompare(b.name))
-          .map(({ id, name }) => (
-            <SideNavItem key={id} id={id} name={name} />
+          .map(({ id, name, count }) => (
+            <SideNavItem key={id} id={id} name={name} count={count} />
           ))}
       </div>
     </nav>

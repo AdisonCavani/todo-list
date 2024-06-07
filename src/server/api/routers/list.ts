@@ -1,8 +1,8 @@
 import type { ListType } from "@lib/types";
 import { createTRPCRouter, protectedProcedure } from "@server/api/trpc";
-import { lists } from "@server/db/schema";
+import { lists, tasks } from "@server/db/schema";
 import { TRPCError } from "@trpc/server";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { v4 } from "uuid";
 import { z } from "zod";
 
@@ -45,13 +45,22 @@ export const listRouter = createTRPCRouter({
       } satisfies ListType;
     }),
 
-  get: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.query.lists.findMany({
-      columns: {
-        updatedAt: false,
-      },
-      where: (list, { eq }) => eq(list.userId, ctx.session.user.id!),
-    });
+  get: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.db
+      .select({
+        id: lists.id,
+        userId: lists.userId,
+        name: lists.name,
+        count: sql<number>`
+        (SELECT COUNT(*)
+         FROM ${tasks}
+         WHERE ${tasks.listId} = ${lists.id} AND ${tasks.isCompleted} = FALSE)
+      `,
+      })
+      .from(lists)
+      .where((obj) => eq(obj.userId, ctx.session.user.id!))
+      .groupBy(lists.id)
+      .innerJoin(tasks, eq(lists.id, tasks.listId));
   }),
 
   getById: protectedProcedure

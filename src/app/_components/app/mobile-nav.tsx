@@ -58,7 +58,7 @@ function MobileNav({ initialLists }: Props) {
 
       {lists
         .sort((a, b) => a.name.localeCompare(b.name))
-        .map(({ id, name }) => (
+        .map(({ id, name, count }) => (
           <Fragment key={id}>
             <Dialog open={open} onOpenChange={setOpen}>
               <ContextMenu>
@@ -69,6 +69,10 @@ function MobileNav({ initialLists }: Props) {
                   >
                     <IconList size={20} className="min-w-5" />
                     <p className="truncate">{name}</p>
+
+                    <span className="ml-auto mr-2 text-muted-foreground">
+                      {count}
+                    </span>
                   </Link>
                 </ContextMenuTrigger>
 

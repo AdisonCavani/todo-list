@@ -18,7 +18,10 @@ function useCreateListMutation() {
       utils.list.get.setData(undefined, (lists) => {
         if (!lists) return [];
 
-        lists.push(data);
+        lists.push({
+          ...data,
+          count: 0,
+        });
 
         return lists;
       });
@@ -120,7 +123,7 @@ function useCreateTaskMutation() {
         title: "Failed to create task.",
       });
     },
-    onSuccess(data, input, context) {
+    async onSuccess(data, input, context) {
       utils.task.get.setData({ listId: input.listId }, (old) => {
         if (!old) return [];
 
@@ -136,6 +139,8 @@ function useCreateTaskMutation() {
 
         return updatedTasks;
       });
+
+      await utils.list.get.invalidate();
     },
   });
 }
@@ -169,6 +174,9 @@ function useUpdateTaskMutation() {
         title: "Failed to update task.",
       });
     },
+    async onSuccess() {
+      await utils.list.get.invalidate();
+    },
   });
 }
 
@@ -196,6 +204,9 @@ function useDeleteTaskMutation(listId: string) {
         variant: "destructive",
         title: "Failed to delete task.",
       });
+    },
+    async onSuccess() {
+      await utils.list.get.invalidate();
     },
   });
 }
