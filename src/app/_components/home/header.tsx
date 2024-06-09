@@ -1,22 +1,19 @@
-"use client";
-
 import Link from "@components/router/link";
+import { Button } from "@components/ui/button";
 import type { MenuEntry } from "@lib/types";
 import { cn } from "@lib/utils";
 import styles from "@styles/header.module.css";
-import { IconChecklist, IconMenu } from "@tabler/icons-react";
-import { useState } from "react";
+import { IconChecklist } from "@tabler/icons-react";
+import { Suspense } from "react";
 import HeaderLink from "./header-link";
 import MobileMenu from "./mobile-menu";
+import SignInWrapper from "./sign-in-wrapper";
 
 type Props = {
   menuEntries: MenuEntry[];
-  session: any | null;
 };
 
-function Header({ menuEntries, session }: Props) {
-  const [open, setOpen] = useState<boolean>(false);
-
+function Header({ menuEntries }: Props) {
   return (
     <header className="sticky inset-0 z-10 flex h-12">
       <div className={styles.overlay} />
@@ -42,31 +39,20 @@ function Header({ menuEntries, session }: Props) {
           ))}
 
           <li className="ml-auto">
-            <Link
-              href={session ? "/app" : "/auth"}
-              className="flex h-8 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-violet-600 px-4 text-sm font-medium"
+            <Suspense
+              fallback={
+                <Button
+                  loading
+                  className="flex h-8 w-[6.5rem] rounded-full bg-gradient-to-r from-blue-600 to-violet-600 px-4 text-sm font-medium text-white"
+                />
+              }
             >
-              {session ? "Open app" : "Sign in"}
-            </Link>
+              <SignInWrapper />
+            </Suspense>
           </li>
-          <li className="flex sm:hidden">
-            <button
-              aria-label="Toggle mobile menu"
-              onClick={() => {
-                setOpen((prev) => !prev);
-              }}
-            >
-              <IconMenu />
-            </button>
-          </li>
-        </ul>
 
-        {open && (
-          <MobileMenu
-            menuEntries={menuEntries}
-            onClick={() => setOpen(false)}
-          />
-        )}
+          <MobileMenu menuEntries={menuEntries} />
+        </ul>
       </nav>
     </header>
   );

@@ -3,7 +3,7 @@
 import Link from "@components/router/link";
 import { useCreateListMutation } from "@lib/hooks";
 import { api } from "@lib/trpc/react";
-import type { ListType } from "@lib/types";
+import type { ListWithCountType } from "@lib/types";
 import { IconEdit, IconList, IconPlus, IconTrash } from "@tabler/icons-react";
 import { Button } from "@ui/button";
 import {
@@ -21,7 +21,7 @@ import RemoveList from "./remove-list";
 import RenameList from "./rename-list";
 
 type Props = {
-  initialLists: ListType[];
+  initialLists: ListWithCountType[];
 };
 
 function MobileNav({ initialLists }: Props) {

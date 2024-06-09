@@ -24,6 +24,7 @@ let nextConfig = {
   },
   experimental: {
     instrumentationHook: true,
+    ppr: "incremental",
   },
   headers() {
     return [

@@ -1,8 +1,10 @@
 import Footer from "@components/home/footer";
 import Header from "@components/home/header";
-import { auth } from "@lib/auth";
 import type { MenuEntry } from "@lib/types";
-import type { PropsWithChildren } from "react";
+import { type PropsWithChildren } from "react";
+
+export const runtime = "nodejs";
+export const experimental_ppr = true;
 
 const menuEntries: MenuEntry[] = [
   { name: "Changelog", href: "/changelog" },
@@ -10,12 +12,10 @@ const menuEntries: MenuEntry[] = [
   { name: "Terms of Service", href: "/terms-of-service" },
 ];
 
-async function Layout({ children }: PropsWithChildren) {
-  const { user } = await auth();
-
+function Layout({ children }: PropsWithChildren) {
   return (
     <>
-      <Header menuEntries={menuEntries} session={user} />
+      <Header menuEntries={menuEntries} />
       {children}
       <Footer menuEntries={menuEntries} />
     </>
