@@ -10,8 +10,8 @@ document.body.classList.add("antialiased");
 document.body.classList.add(fontInter.variable);
 
 const preview: Preview = {
+  tags: ["autodocs"],
   parameters: {
-    actions: { argTypesRegex: "^on[A-Z].*" },
     controls: {
       matchers: {
         date: /Date$/,
