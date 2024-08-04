@@ -1,0 +1,9 @@
+Dockerfile
+.dockerignore
+node_modules
+.next
+!.next/static
+!.next/standalone
+.git
+.env.example
+.husky

@@ -25,6 +25,7 @@ let nextConfig = {
   experimental: {
     instrumentationHook: true,
   },
+  output: "standalone",
   headers() {
     return [
       {

@@ -1,7 +1,5 @@
 import type { MetadataRoute } from "next";
 
-export const runtime = "edge";
-
 function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     "",
