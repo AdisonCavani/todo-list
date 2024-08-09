@@ -5,7 +5,7 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 
 const config: Config = {
   darkMode: ["class"],
-  content: ["./app/**/*.tsx", "./components/**/*.tsx"],
+  content: ["./app/**/*.tsx"],
   theme: {
     extend: {
       boxShadow: {

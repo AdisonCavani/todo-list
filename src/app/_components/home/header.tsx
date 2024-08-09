@@ -43,7 +43,7 @@ function Header({ menuEntries, session }: Props) {
 
           <li className="ml-auto">
             <Link
-              href={session ? "/app" : "/auth"}
+              href={session ? "/dash" : "/auth"}
               className="flex h-8 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-violet-600 px-4 text-sm font-medium"
             >
               {session ? "Open app" : "Sign in"}

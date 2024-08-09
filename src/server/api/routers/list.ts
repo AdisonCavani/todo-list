@@ -27,22 +27,7 @@ export const listRouter = createTRPCRouter({
         userId: ctx.session.user.id!,
       };
 
-      const res = await ctx.db.insert(lists).values(entity).returning({
-        createdAt: lists.createdAt,
-      });
-
-      const returnData = res.find(() => true);
-
-      if (!returnData) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-        });
-      }
-
-      return {
-        ...entity,
-        createdAt: returnData.createdAt,
-      } satisfies ListType;
+      await ctx.db.insert(lists).values(entity);
     }),
 
   get: protectedProcedure.query(async ({ ctx }) => {
@@ -60,7 +45,7 @@ export const listRouter = createTRPCRouter({
       .from(lists)
       .where((obj) => eq(obj.userId, ctx.session.user.id!))
       .groupBy(lists.id)
-      .innerJoin(tasks, eq(lists.id, tasks.listId));
+      .leftJoin(tasks, eq(lists.id, tasks.listId));
   }),
 
   getById: protectedProcedure

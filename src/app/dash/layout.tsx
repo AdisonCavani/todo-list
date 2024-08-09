@@ -33,7 +33,7 @@ async function Layout({ children }: PropsWithChildren) {
       <header className="sticky top-0 z-20 mr-[calc(var(--removed-body-scroll-bar-size)*(-1))] flex w-[-webkit-fill-available] items-center justify-between border-b bg-blue-600 py-2 pl-4 pr-[calc(24px+var(--removed-body-scroll-bar-size,0px))] dark:bg-neutral-800">
         <div className="flex items-center gap-x-2">
           <Link
-            href="/app"
+            href="/dash"
             prefetch={false}
             className={buttonVariants({
               variant: "link",

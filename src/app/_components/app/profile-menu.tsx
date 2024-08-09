@@ -53,7 +53,7 @@ function ProfileMenu({ avatar, email, name }: Props) {
 
         <DropdownMenuContent align="end" sideOffset={12}>
           <DropdownMenuItem asChild alignLeft>
-            <Link className="flex-col" href="/app/settings/profile">
+            <Link className="flex-col" href="/dash/settings/profile">
               <p className="font-medium">{name}</p>
               <p className="text-muted-foreground">{email}</p>
             </Link>
@@ -86,7 +86,7 @@ function ProfileMenu({ avatar, email, name }: Props) {
           </DropdownMenuSub>
 
           <DropdownMenuItem asChild>
-            <Link href="/app/settings">
+            <Link href="/dash/settings">
               <IconSettings size={16} />
               Settings
             </Link>

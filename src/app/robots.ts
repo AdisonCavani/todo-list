@@ -5,7 +5,7 @@ function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: "/app",
+      disallow: "/dash",
     },
     sitemap: "https://todo.k1ng.dev/sitemap.xml",
     host: "https://todo.k1ng.dev",

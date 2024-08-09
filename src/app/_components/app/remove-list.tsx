@@ -37,7 +37,7 @@ function RemoveList({ listId, listName }: Props) {
 
     await mutateAsync({ id: listId });
 
-    if (pathname === `/app/${listId}`) push("/app");
+    if (pathname === `/dash/${listId}`) push("/dash");
   };
 
   const triggerFormSubmission: KeyboardEventHandler<HTMLFormElement> = (

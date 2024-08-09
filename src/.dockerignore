@@ -6,4 +6,6 @@ node_modules
 !.next/standalone
 .git
 .env.example
+.env.local
 .husky
+docker-compose.yml

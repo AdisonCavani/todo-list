@@ -42,16 +42,16 @@ export const auth = cache(async () => {
 });
 
 export const github = new GitHub(
-  process.env.AUTH_GITHUB_ID!,
-  process.env.AUTH_GITHUB_SECRET!,
+  process.env.AUTH_GITHUB_ID,
+  process.env.AUTH_GITHUB_SECRET,
   {
     redirectURI: getBaseUrl() + "/auth/github/callback",
   },
 );
 
 export const google = new Google(
-  process.env.AUTH_GOOGLE_ID!,
-  process.env.AUTH_GOOGLE_SECRET!,
+  process.env.AUTH_GOOGLE_ID,
+  process.env.AUTH_GOOGLE_SECRET,
   getBaseUrl() + "/auth/google/callback",
 );
 

@@ -5,8 +5,6 @@ dotenv.config({
   path: ".env.local",
 });
 
-const dbPrefix = process.env.NODE_ENV === "production" ? "prod" : "dev";
-
 export default defineConfig({
   dialect: "postgresql",
   strict: true,
@@ -15,6 +13,4 @@ export default defineConfig({
   dbCredentials: {
     url: process.env.DATABASE_CONNECTION_STRING,
   },
-  schemaFilter: ["public"],
-  tablesFilter: [`todo-list-${dbPrefix}_*`],
 });
