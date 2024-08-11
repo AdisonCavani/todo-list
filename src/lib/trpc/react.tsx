@@ -46,6 +46,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
 
 function getBaseUrl() {
   if (typeof window !== "undefined") return window.location.origin;
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  if (process.env.PRODUCTION_URL)
+    return `https://${process.env.PRODUCTION_URL}`;
   return `https://localhost:${process.env.PORT ?? 3000}`;
 }
