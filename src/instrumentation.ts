@@ -1,7 +1,8 @@
 import * as Sentry from "@sentry/nextjs";
+import { env } from "config";
 
 const options: Parameters<typeof Sentry.init>[0] = {
-  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  dsn: env.NEXT_PUBLIC_SENTRY_DSN,
   tracesSampleRate: 1,
   debug: false,
 };
