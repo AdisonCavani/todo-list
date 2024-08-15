@@ -49,3 +49,8 @@ spec:
                 secretKeyRef:
                   name: next-public-sentry-dsn
                   key: NEXT_PUBLIC_SENTRY_DSN
+            - name: PRODUCTION_URL
+              valueFrom:
+                secretKeyRef:
+                  name: production-url
+                  key: PRODUCTION_URL
