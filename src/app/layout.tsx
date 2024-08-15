@@ -8,6 +8,7 @@ import { cn, fontInter } from "@lib/utils";
 import { Toaster } from "@ui/toaster";
 import type { Viewport } from "next";
 import { AxiomWebVitals } from "next-axiom";
+import { PublicEnvScript } from "next-runtime-env";
 import Script from "next/script";
 import type { PropsWithChildren } from "react";
 
@@ -61,6 +62,7 @@ function RootLayout({ children }: PropsWithChildren) {
       suppressHydrationWarning
     >
       <head>
+        <PublicEnvScript />
         {process.env.NODE_ENV === "production" && (
           <>
             <Script

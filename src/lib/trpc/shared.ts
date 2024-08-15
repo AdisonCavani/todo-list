@@ -1,12 +1,13 @@
 import { type AppRouter } from "@server/api/root";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
+import { env } from "next-runtime-env";
 import superjson from "superjson";
 
 export const transformer = superjson;
 
 function getBaseUrl() {
   if (typeof window !== "undefined") return "";
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  if (env("PRODUCTION_URL")) return `https://${env("PRODUCTION_URL")}`;
   return `https://localhost:${process.env.PORT ?? 3000}`;
 }
 

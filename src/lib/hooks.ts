@@ -4,26 +4,11 @@ import type { TaskRenderType } from "./types";
 import { toast } from "./use-toast";
 
 function useCreateListMutation() {
-  const utils = api.useUtils();
-
   return api.list.create.useMutation({
     onError() {
       toast({
         variant: "destructive",
         title: "Failed to create list.",
-      });
-    },
-
-    onSuccess(data) {
-      utils.list.get.setData(undefined, (lists) => {
-        if (!lists) return [];
-
-        lists.push({
-          ...data,
-          count: 0,
-        });
-
-        return lists;
       });
     },
   });

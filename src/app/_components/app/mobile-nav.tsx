@@ -21,7 +21,7 @@ import RemoveList from "./remove-list";
 import RenameList from "./rename-list";
 
 type Props = {
-  initialLists: ListType[];
+  initialLists: (ListType & { count: number })[];
 };
 
 function MobileNav({ initialLists }: Props) {
@@ -39,7 +39,7 @@ function MobileNav({ initialLists }: Props) {
 
   const { mutate, isPending } = useCreateListMutation();
 
-  if (pathname !== "/app") return;
+  if (pathname !== "/dash") return;
 
   const handleOnSubmit: FormEventHandler = (event) => {
     event.preventDefault();
@@ -64,7 +64,7 @@ function MobileNav({ initialLists }: Props) {
               <ContextMenu>
                 <ContextMenuTrigger asChild>
                   <Link
-                    href={`/app/${id}`}
+                    href={`/dash/${id}`}
                     className="z-10 flex items-center gap-x-5 p-4 font-medium transition-all duration-300 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:bg-accent active:text-accent-foreground"
                   >
                     <IconList size={20} className="min-w-5" />

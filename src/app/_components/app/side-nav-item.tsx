@@ -32,10 +32,10 @@ function SideNavItem({ id, name, count }: Props) {
   return (
     <Link
       key={id}
-      href={`/app/${id}`}
+      href={`/dash/${id}`}
       className={cn(
         "group inline-flex items-center justify-between rounded-md px-3 text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        pathname === `/app/${id}`
+        pathname === `/dash/${id}`
           ? "bg-neutral-100 font-semibold text-neutral-900 hover:bg-neutral-200 dark:bg-neutral-600 dark:text-neutral-100 dark:hover:bg-neutral-700"
           : "hover:bg-accent hover:text-accent-foreground",
       )}

@@ -3,23 +3,18 @@ import {
   boolean,
   index,
   pgEnum,
-  pgTableCreator,
+  pgTable,
   primaryKey,
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
 import { z } from "zod";
 
-const tablePrefix = process.env.NODE_ENV === "production" ? "prod" : "dev";
-export const createTable = pgTableCreator(
-  (name) => `todo-list-${tablePrefix}_${name}`,
-);
-
 const taskPriorityEnum = pgEnum("priority", ["P1", "P2", "P3", "P4"]);
 const taskPriorityEnumSchema = z.enum(taskPriorityEnum.enumValues)._type;
 export type TaskPriorityEnum = typeof taskPriorityEnumSchema;
 
-export const tasks = createTable(
+export const tasks = pgTable(
   "task",
   {
     id: text("id").primaryKey().notNull(),
@@ -49,7 +44,7 @@ export const tasksRelations = relations(tasks, ({ one }) => ({
 
 export type TaskDbType = InferSelectModel<typeof tasks>;
 
-export const lists = createTable(
+export const lists = pgTable(
   "list",
   {
     id: text("id").primaryKey().notNull(),
@@ -74,7 +69,7 @@ export const listsRelations = relations(lists, ({ one }) => ({
 
 export type ListDbType = InferSelectModel<typeof lists>;
 
-export const users = createTable("user", {
+export const users = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull(),
@@ -91,7 +86,7 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 export type UserType = InferSelectModel<typeof users>;
 
-export const sessions = createTable(
+export const sessions = pgTable(
   "session",
   {
     id: text("id").primaryKey(),
@@ -116,7 +111,7 @@ export const providerEnum = pgEnum("provider", ["github", "google"]);
 const providerZodType = z.enum(providerEnum.enumValues)._type;
 export type ProviderEnumType = typeof providerZodType;
 
-export const accounts = createTable(
+export const accounts = pgTable(
   "account",
   {
     providerAccountId: text("providerAccountId").notNull(),

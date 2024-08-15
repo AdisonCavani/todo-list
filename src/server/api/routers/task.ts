@@ -147,5 +147,5 @@ export const taskRouter = createTRPCRouter({
 function typedObjectKeys<T extends object>(object: T) {
   return Object.keys(object).filter(
     (key) => key !== "id" && key !== "listId",
-  ) as (keyof Omit<Omit<T, "id">, "listId">)[];
+  ) as (keyof Omit<T, "id" | "listId">)[];
 }

@@ -2,6 +2,7 @@ import { accounts, users, type ProviderEnumType } from "@server/db/schema";
 import { db } from "@server/db/sql";
 import { GitHub, Google } from "arctic";
 import { generateIdFromEntropySize } from "lucia";
+import { env } from "next-runtime-env";
 import { cookies } from "next/headers";
 import { cache } from "react";
 import lucia from "./lucia";
@@ -42,16 +43,16 @@ export const auth = cache(async () => {
 });
 
 export const github = new GitHub(
-  process.env.AUTH_GITHUB_ID!,
-  process.env.AUTH_GITHUB_SECRET!,
+  env("AUTH_GITHUB_ID")!,
+  env("AUTH_GITHUB_SECRET")!,
   {
     redirectURI: getBaseUrl() + "/auth/github/callback",
   },
 );
 
 export const google = new Google(
-  process.env.AUTH_GOOGLE_ID!,
-  process.env.AUTH_GOOGLE_SECRET!,
+  env("AUTH_GOOGLE_ID")!,
+  env("AUTH_GOOGLE_SECRET")!,
   getBaseUrl() + "/auth/google/callback",
 );
 
@@ -112,7 +113,6 @@ export async function handleCallback(
 }
 
 function getBaseUrl() {
-  if (process.env.VERCEL_PROJECT_PRODUCTION_URL)
-    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  if (env("PRODUCTION_URL")) return `https://${env("PRODUCTION_URL")}`;
   return `https://localhost:${process.env.PORT ?? 3000}`;
 }

@@ -20,7 +20,7 @@ async function Page() {
       email: user.email,
       username: user.name,
     });
-    redirect("/app");
+    redirect("/dash");
   }
 
   return (

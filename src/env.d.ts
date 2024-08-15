@@ -4,10 +4,4 @@ declare global {
   interface Window {
     workbox: Workbox;
   }
-
-  declare namespace NodeJS {
-    interface ProcessEnv {
-      DATABASE_CONNECTION_STRING: string;
-    }
-  }
 }
