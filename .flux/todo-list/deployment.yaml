@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   name: todo-list
   namespace: default
+  annotations:
+    fluxcd.io/automated: "true"
+    fluxcd.io/tag.app: glob:latest
 spec:
   replicas: 1
   selector:
