@@ -1,13 +1,13 @@
 apiVersion: image.toolkit.fluxcd.io/v1beta1
 kind: ImagePolicy
 metadata:
-  name: todo-list-policy
+  name: todo-list
   namespace: default
 spec:
   filterTags:
     pattern: "^latest$"
   imageRepositoryRef:
-    name: todo-list-repo
+    name: todo-list
   policy:
     alphabetical:
       order: asc
