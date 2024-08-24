@@ -1,4 +1,5 @@
 import { google, handleCallback } from "@lib/auth";
+import { logger } from "@lib/logger";
 import { OAuth2RequestError } from "arctic";
 import { cookies, headers } from "next/headers";
 
@@ -57,7 +58,7 @@ export async function GET(request: Request): Promise<Response> {
         Location: "/dash",
       },
     });
-  } catch (e) {
+  } catch (e: any) {
     if (
       e instanceof OAuth2RequestError &&
       e.message === "bad_verification_code"
@@ -65,6 +66,12 @@ export async function GET(request: Request): Promise<Response> {
       return new Response("Invalid code", {
         status: 400,
       });
+
+    if (e instanceof Error && e.message !== "") {
+      logger.error(e.message);
+    } else {
+      logger.error(JSON.stringify(e));
+    }
 
     return new Response("Internal server error", {
       status: 500,

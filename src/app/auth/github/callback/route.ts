@@ -1,4 +1,5 @@
 import { github, handleCallback } from "@lib/auth";
+import { logger } from "@lib/logger";
 import { OAuth2RequestError } from "arctic";
 import { cookies, headers } from "next/headers";
 
@@ -68,7 +69,11 @@ export async function GET(request: Request): Promise<Response> {
         status: 400,
       });
 
-    console.error(e.message);
+    if (e instanceof Error && e.message !== "") {
+      logger.error(e.message);
+    } else {
+      logger.error(JSON.stringify(e));
+    }
 
     return new Response("Internal server error", {
       status: 500,
