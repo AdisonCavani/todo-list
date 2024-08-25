@@ -2,7 +2,7 @@
 
 import { useCreateListMutation } from "@lib/hooks";
 import { api } from "@lib/trpc/react";
-import type { ListType } from "@lib/types";
+import type { ListWithCountType } from "@lib/types";
 import { IconPlus } from "@tabler/icons-react";
 import { Button } from "@ui/button";
 import { Input } from "@ui/input";
@@ -16,7 +16,7 @@ import { useState, type FormEventHandler } from "react";
 import SideNavItem from "./side-nav-item";
 
 type Props = {
-  initialLists: (ListType & { count: number })[];
+  initialLists: ListWithCountType[];
 };
 
 function SideNav({ initialLists }: Props) {
