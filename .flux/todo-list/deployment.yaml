@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: todo-list
-          image: ghcr.io/adisoncavani/todo-list # {"$imagepolicy": "default:todo-list"}
+          image: ghcr.io/adisoncavani/todo-list:0.0.1
           ports:
             - containerPort: 3000
           env:
