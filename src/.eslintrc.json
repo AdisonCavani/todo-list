@@ -5,10 +5,13 @@
     "plugin:tailwindcss/recommended",
     "plugin:storybook/recommended"
   ],
-  "plugins": ["tailwindcss"],
+  "plugins": ["eslint-plugin-react-compiler", "tailwindcss"],
   "settings": {
     "tailwindcss": {
       "callees": ["cn"]
     }
+  },
+  "rules": {
+    "react-compiler/react-compiler": "error"
   }
 }
