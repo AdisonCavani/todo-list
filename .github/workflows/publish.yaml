@@ -1,8 +1,16 @@
 name: Create and publish a Docker image
 
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
+    inputs:
+      type:
+        type: choice
+        required: true
+        description: Choose publish semver
+        options:
+          - patch
+          - minor
+          - major
 
 env:
   REGISTRY: ghcr.io
@@ -25,6 +33,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-tags: true
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3
@@ -33,11 +43,46 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Create new semver
+        id: version
+        run: |
+          LATEST_TAG_COMMIT=$(git rev-list --tags --max-count=1)
+
+          if [ -n "$LATEST_TAG_COMMIT" ]; then
+            LATEST_TAG=$(git describe --tags $LATEST_TAG_COMMIT)
+          fi
+
+          if [ -z "$LATEST_TAG" ]; then
+            echo "0.0.0" > LATEST_TAG
+          fi
+
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${LATEST_TAG#v}"
+
+          case "${{ github.event.inputs.type }}" in
+            patch)
+              PATCH=$((PATCH + 1))
+              ;;
+            minor)
+              MINOR=$((MINOR + 1))
+              PATCH=0
+              ;;
+            major)
+              MAJOR=$((MAJOR + 1))
+              MINOR=0
+              PATCH=0
+              ;;
+          esac
+
+          echo "version=$MAJOR.$MINOR.$PATCH" >> $GITHUB_OUTPUT
+
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest
+            type=semver,pattern={{version}},value=${{ steps.version.outputs.version }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
