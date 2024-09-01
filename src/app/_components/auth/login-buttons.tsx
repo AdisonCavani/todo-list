@@ -8,13 +8,14 @@ function LoginButtons() {
   return (
     <>
       {/* Github */}
-      <Link href="/auth/github" className={buttonVariants()}>
+      <Link prefetch={false} href="/auth/github" className={buttonVariants()}>
         <IconBrandGithub size={20} />
         Continue with Github
       </Link>
 
       {/* Google */}
       <Link
+        prefetch={false}
         href="/auth/google"
         className={buttonVariants({ variant: "outline" })}
       >

@@ -1,6 +1,6 @@
 "use client";
 
-import { useDeleteListMutation } from "@lib/hooks";
+import { useDeleteListMutation } from "@hooks/query";
 import { IconX } from "@tabler/icons-react";
 import { Button } from "@ui/button";
 import {

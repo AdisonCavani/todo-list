@@ -1,8 +1,10 @@
 import "@styles/globals.css";
+import AuthProvider from "@components/auth-provider";
 import NProgressWrapper from "@components/nprogress-wrapper";
 import PWALifeCycle from "@components/pwa-lifecycle";
 import SentryProvider from "@components/sentry-provider";
 import NextThemeProvider from "@components/theme-provider";
+import { auth } from "@lib/auth";
 import { twindConfig, type ColorRecordType } from "@lib/twind";
 import { cn, fontInter } from "@lib/utils";
 import { Toaster } from "@ui/toaster";
@@ -54,7 +56,9 @@ export const metadata = {
   },
 };
 
-function RootLayout({ children }: PropsWithChildren) {
+async function RootLayout({ children }: PropsWithChildren) {
+  const session = await auth();
+
   return (
     <html
       lang="en"
@@ -77,9 +81,11 @@ function RootLayout({ children }: PropsWithChildren) {
       <body className="flex min-h-dvh flex-col">
         <NextThemeProvider>
           <NProgressWrapper>
-            {children}
-            <Toaster />
-            {process.env.NODE_ENV === "production" && <SentryProvider />}
+            <AuthProvider {...session}>
+              {children}
+              <Toaster />
+              {process.env.NODE_ENV === "production" && <SentryProvider />}
+            </AuthProvider>
           </NProgressWrapper>
         </NextThemeProvider>
 

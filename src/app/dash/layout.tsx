@@ -1,11 +1,13 @@
 import ProfileMenu from "@components/app/profile-menu";
 import Link from "@components/router/link";
-import { auth } from "@lib/auth";
+import lucia from "@lib/lucia";
 import { twindConfig, type ColorRecordType } from "@lib/twind";
 import { getGravatarUrl } from "@lib/utils";
 import { IconChecklist } from "@tabler/icons-react";
 import { buttonVariants } from "@ui/button";
 import type { Viewport } from "next";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import type { PropsWithChildren } from "react";
 
 export const metadata = {
@@ -26,7 +28,13 @@ export const viewport: Viewport = {
 };
 
 async function Layout({ children }: PropsWithChildren) {
-  const { user } = await auth();
+  const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+
+  if (!sessionId) redirect("/auth");
+
+  const { user, session } = await lucia.validateSession(sessionId);
+
+  if (!session) redirect("/auth");
 
   return (
     <>

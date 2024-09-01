@@ -1,6 +1,6 @@
 "use client";
 
-import { useDeleteTaskMutation, useUpdateTaskMutation } from "@lib/hooks";
+import { useDeleteTaskMutation, useUpdateTaskMutation } from "@hooks/query";
 import type { TaskType } from "@lib/types";
 import {
   addDays,

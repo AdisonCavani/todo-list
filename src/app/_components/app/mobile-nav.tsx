@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "@components/router/link";
-import { useCreateListMutation } from "@lib/hooks";
+import { useCreateListMutation } from "@hooks/query";
 import { api } from "@lib/trpc/react";
 import type { ListWithCountType } from "@lib/types";
 import { IconEdit, IconList, IconPlus, IconTrash } from "@tabler/icons-react";

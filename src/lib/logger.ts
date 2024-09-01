@@ -1,16 +1,12 @@
-import winston from "winston";
+export const logger = {
+  error: (message: string) => {
+    console.log(getTimestamp(), "[\x1b[31merror\x1b[0m]", message);
+  },
+  info: (message: string) => {
+    console.log(getTimestamp(), "[\x1b[32minfo\x1b[0m]", message);
+  },
+};
 
-export const logger = winston.createLogger({
-  level: "info",
-  transports: [
-    new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.timestamp(),
-        winston.format.printf(({ level, message, timestamp }) => {
-          return `[${(timestamp as string).replace("T", " ").replace("Z", "")} ${level}] ${message}`;
-        }),
-      ),
-    }),
-  ],
-});
+function getTimestamp() {
+  return new Date().toISOString().replace("T", " ").replace("Z", "");
+}

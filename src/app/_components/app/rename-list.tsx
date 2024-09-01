@@ -1,4 +1,4 @@
-import { useUpdateListMutation } from "@lib/hooks";
+import { useUpdateListMutation } from "@hooks/query";
 import { IconX } from "@tabler/icons-react";
 import { Button } from "@ui/button";
 import {

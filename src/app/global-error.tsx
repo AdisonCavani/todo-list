@@ -5,7 +5,7 @@ import Error from "next/error";
 import { useEffect } from "react";
 
 type Props = {
-  error: Error;
+  error: Error & { digest?: string };
 };
 
 function GlobalError({ error }: Props) {

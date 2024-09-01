@@ -1,6 +1,6 @@
 "use client";
 
-import { useCreateTaskMutation } from "@lib/hooks";
+import { useCreateTaskMutation } from "@hooks/query";
 import { toast } from "@lib/use-toast";
 import {
   addDays,
