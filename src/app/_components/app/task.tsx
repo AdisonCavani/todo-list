@@ -57,7 +57,6 @@ import { Input } from "@ui/input";
 import { Textarea } from "@ui/textarea";
 import {
   createRef,
-  forwardRef,
   useRef,
   useState,
   type FormEventHandler,
@@ -66,7 +65,12 @@ import {
 } from "react";
 import DateComponent from "./date";
 
-const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
+type Props = {
+  flippedProps: object;
+  task: TaskType;
+};
+
+function Task({ flippedProps, task }: Props) {
   const {
     listId,
     title,
@@ -183,7 +187,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
         <ContextMenuTrigger asChild>
           <DialogTrigger asChild>
             <li
-              ref={ref}
+              {...flippedProps}
               tabIndex={0}
               onKeyDown={(event) => {
                 if (event.key === "Enter" || event.key === " ") {
@@ -526,7 +530,7 @@ const Task = forwardRef<HTMLLIElement, TaskType>((task, ref) => {
       </DialogContent>
     </Dialog>
   );
-});
+}
 
 Task.displayName = "Task";
 

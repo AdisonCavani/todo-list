@@ -10,7 +10,7 @@ import {
   AccordionTrigger,
 } from "@ui/accordion";
 import { useState } from "react";
-import FlipMove from "react-flip-move";
+import { Flipped, Flipper } from "react-flip-toolkit";
 import Form from "./form";
 import MobileForm from "./mobile-form";
 import Sort from "./sort";
@@ -65,13 +65,24 @@ function App({ initialTasks, listId }: Props) {
       </div>
 
       <div className="scrollbar flex flex-1 flex-col overflow-x-hidden overflow-y-scroll px-3 pb-24 sm:pb-8 sm:pl-6 sm:pr-3">
-        <ul className="relative flex flex-col gap-y-2 px-0.5 first:mt-4">
-          <FlipMove typeName={null}>
-            {notFinishedTasks.map((task: TaskRenderType) => (
-              <Task key={task.renderId ?? task.id} {...task} />
-            ))}
-          </FlipMove>
-        </ul>
+        <Flipper
+          element="ul"
+          className="relative flex flex-col gap-y-2 px-0.5 first:mt-4"
+          flipKey={notFinishedTasks
+            .map((task: TaskRenderType) => task.id)
+            .join("")}
+        >
+          {notFinishedTasks.map((task: TaskRenderType) => (
+            <Flipped
+              key={task.renderId ?? task.id}
+              flipId={task.renderId ?? task.id}
+            >
+              {(flippedProps) => (
+                <Task flippedProps={flippedProps} task={task} />
+              )}
+            </Flipped>
+          ))}
+        </Flipper>
 
         {finishedTasks.length > 0 && (
           <Accordion type="single" collapsible className="mt-4">
@@ -85,13 +96,24 @@ function App({ initialTasks, listId }: Props) {
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <ul className="relative flex flex-col gap-y-2 px-0.5">
-                  <FlipMove typeName={null}>
-                    {finishedTasks.map((task: TaskRenderType) => (
-                      <Task key={task.renderId ?? task.id} {...task} />
-                    ))}
-                  </FlipMove>
-                </ul>
+                <Flipper
+                  element="ul"
+                  className="relative flex flex-col gap-y-2 px-0.5"
+                  flipKey={finishedTasks
+                    .map((task: TaskRenderType) => task.id)
+                    .join("")}
+                >
+                  {finishedTasks.map((task: TaskRenderType) => (
+                    <Flipped
+                      key={task.renderId ?? task.id}
+                      flipId={task.renderId ?? task.id}
+                    >
+                      {(flippedProps) => (
+                        <Task flippedProps={flippedProps} task={task} />
+                      )}
+                    </Flipped>
+                  ))}
+                </Flipper>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
