@@ -25,7 +25,7 @@ let nextConfig = {
   experimental: {
     instrumentationHook: true,
   },
-  output: "standalone",
+  output: process.env.DEV === "true" ? undefined : "standalone",
   headers() {
     return [
       {
