@@ -5,6 +5,7 @@
     "dev:ts": "tsc --noEmit --incremental --watch",
     "ts": "tsc --noEmit",
     "build": "next build",
+    "build-dev": "cross-env DEV=true next build",
     "start": "next start",
     "lint": "next lint",
     "format:check": "prettier --check . --cache",

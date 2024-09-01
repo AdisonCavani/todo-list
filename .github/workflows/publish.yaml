@@ -6,7 +6,7 @@ on:
       type:
         type: choice
         required: true
-        description: Choose publish semver
+        description: Release type
         options:
           - patch
           - minor
@@ -25,9 +25,8 @@ jobs:
         working-directory: ./src
 
     permissions:
-      contents: read
+      contents: write
       packages: write
-      attestations: write
       id-token: write
 
     steps:
@@ -98,9 +97,13 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@v1
+      - name: Create tag
+        uses: actions/github-script@v7
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
-          subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/${{ steps.version.outputs.version }}`,
+              sha: context.sha
+            })

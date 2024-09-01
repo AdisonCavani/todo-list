@@ -26,7 +26,7 @@ let nextConfig = {
     instrumentationHook: true,
     reactCompiler: true,
   },
-  output: process.env.DOCKER === "true" ? "standalone" : undefined,
+  output: process.env.DEV === "true" ? undefined : "standalone",
   headers() {
     return [
       {
